@@ -49,16 +49,20 @@ public abstract class AbstractDDClient
   @Nonnull
   private static BDXRClientReadOnly _getSMPClient (@Nonnull final IParticipantIdentifier aRecipientID) throws SMPDNSResolutionException
   {
+    final BDXRClientReadOnly ret;
     if (TCConfig.R2D2.isR2D2UseDNS ())
     {
       ValueEnforcer.notNull (aRecipientID, "RecipientID");
 
       // Use dynamic lookup via DNS - can throw exception
-      return new BDXRClientReadOnly (BDXLURLProvider.INSTANCE, aRecipientID, TCConfig.R2D2.getR2D2SML ());
+      ret = new BDXRClientReadOnly (BDXLURLProvider.INSTANCE, aRecipientID, TCConfig.R2D2.getR2D2SML ());
     }
-
-    // Use a constant SMP URL
-    return new BDXRClientReadOnly (TCConfig.R2D2.getR2D2SMPUrl ());
+    else
+    {
+      // Use a constant SMP URL
+      ret = new BDXRClientReadOnly (TCConfig.R2D2.getR2D2SMPUrl ());
+    }
+    return ret;
   }
 
   @Nonnull
