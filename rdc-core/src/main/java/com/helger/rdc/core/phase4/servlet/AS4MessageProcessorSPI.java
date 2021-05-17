@@ -120,7 +120,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     return aIF.createParticipantIdentifier (sType, sValue);
   }
 
-  private ITODOWritableObject _parseAndFindTodo (final InputStream aSourceStream)
+  private static ITODOWritableObject _parseAndFindTodo (final InputStream aSourceStream)
   {
     // TODO
     return null;
