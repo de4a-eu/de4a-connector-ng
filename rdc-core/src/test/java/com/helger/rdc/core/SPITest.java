@@ -14,18 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api.error;
+package com.helger.rdc.core;
 
-import java.io.Serializable;
+import org.junit.Test;
 
-import com.helger.commons.id.IHasID;
+import com.helger.commons.mock.SPITestHelper;
 
 /**
- * Base interface for all kind of DE4A error code enums.
+ * Test SPI definitions
  *
  * @author Philip Helger
  */
-public interface IToopErrorCode extends IHasID <String>, Serializable
+public final class SPITest
 {
-  /* empty */
+  @Test
+  public void testBasic () throws Exception
+  {
+    SPITestHelper.testIfAllSPIImplementationsAreValid ();
+  }
 }

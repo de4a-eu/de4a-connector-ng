@@ -14,18 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api.error;
+package com.helger.rdc.core;
 
-import java.io.Serializable;
+import static org.junit.Assert.assertNotEquals;
 
-import com.helger.commons.id.IHasID;
+import org.junit.Test;
+
+import com.helger.rdc.core.CTCVersion;
 
 /**
- * Base interface for all kind of DE4A error code enums.
+ * Test class for class {@link CTCVersion}
  *
  * @author Philip Helger
  */
-public interface IToopErrorCode extends IHasID <String>, Serializable
+public final class CTCVersionTest
 {
-  /* empty */
+  @Test
+  public void testBasic ()
+  {
+    assertNotEquals ("undefined", CTCVersion.BUILD_VERSION);
+    assertNotEquals ("undefined", CTCVersion.BUILD_TIMESTAMP);
+  }
 }

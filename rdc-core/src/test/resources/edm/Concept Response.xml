@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2021 Philip Helger (www.helger.com)
+    philip[at]helger[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<query:QueryResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:4.0"
+    xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:4.0"
+    xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:4.0"
+    requestId="c4369c4d-740e-4b64-80f0-7b209a66d629"
+    status="urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success">
+   
+    <!-- SPECIFICATION IDENTIFIER -->
+    <rim:Slot name="SpecificationIdentifier">
+        <rim:SlotValue xsi:type="rim:StringValueType">
+            <rim:Value>toop-edm:v2.1</rim:Value>
+        </rim:SlotValue>
+    </rim:Slot>
+   
+    <!-- ISSUE DATE / TIME  -->
+    <rim:Slot name="IssueDateTime">
+        <rim:SlotValue xsi:type="rim:DateTimeValueType">
+            <rim:Value>2020-02-14T19:20:30+01:00</rim:Value>
+        </rim:SlotValue>
+    </rim:Slot>
+    
+    <!--   Data Provider Metadata  -->
+    <rim:Slot name="DataProvider">
+        <rim:SlotValue xsi:type="rim:AnyValueType">
+            <!--   Expression of DP information using Agent class of CAGV   -->
+            <cagv:Agent xmlns:cagv="https://semic.org/sa/cv/cagv/agent-2.0.0#"
+                xmlns:cbc="https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#"
+                xmlns:locn="http://www.w3.org/ns/locn#">
+                <cbc:id schemeID="VAT">12345678</cbc:id>
+                <cbc:name>DPName</cbc:name>
+            </cagv:Agent>  
+        </rim:SlotValue>
+    </rim:Slot>
+    
+    <rim:RegistryObjectList>
+        <rim:RegistryObject id="341341341-740e-4b64-80f0-3153513529">
+            <rim:Slot name="ConceptValues">
+                <rim:SlotValue xsi:type="rim:CollectionValueType"
+                    collectionType="urn:oasis:names:tc:ebxml-regrep:CollectionType:Set">
+                    <rim:Element xsi:type="rim:AnyValueType">
+                        <cccev:concept xmlns:cccev = "https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0#"
+                            xmlns:cbc="https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#"
+                            xmlns:toop="http://toop.eu/registered-organization"
+                            xsi:schemaLocation="https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0# ../../../../xsd/cccev/2.0.0/xml/xsd/cccev-2.0.0.xsd">  
+                            <cbc:id>ConceptID-1</cbc:id>
+                            <cbc:qName>toop:CompanyData</cbc:qName>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-2</cbc:id>
+                                <cbc:qName>toop:Concept-Name-2</cbc:qName>
+                                <cccev:value>
+                                    <cccev:amountValue currencyID="EUR">1000001</cccev:amountValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-3</cbc:id>
+                                    <cbc:qName>toop:Concept-Name-3</cbc:qName>
+                                <cccev:value>
+                                    <cccev:textValue>ConceptID-3 Value</cccev:textValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-4</cbc:id>
+                                <cbc:qName>toop:Concept-Name-4</cbc:qName>
+                                <cccev:value>
+                                    <cccev:codeValue>code</cccev:codeValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-5</cbc:id>
+                                <cbc:qName>toop:Concept-Name-5</cbc:qName>
+                                <cccev:value>
+                                    <cccev:indicatorValue>true</cccev:indicatorValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-6</cbc:id>
+                                <cbc:qName>toop:Concept-Name-6</cbc:qName>
+                                <cccev:value>
+                                   <cccev:periodValue>
+                                       <cbc:startDate>2020-01-02</cbc:startDate>
+                                       <cbc:endDate>2022-05-05</cbc:endDate>
+                                   </cccev:periodValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-7</cbc:id>
+                                <cbc:qName>toop:Concept-Name-7</cbc:qName>
+                                <cccev:value>
+                                    <cccev:dateValue>2020-05-05</cccev:dateValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <cccev:concept>
+                                <cbc:id>ConceptID-8</cbc:id>
+                                <cbc:qName>toop:Concept-Name-8</cbc:qName>
+                                <cccev:value>
+                                    <cccev:numericValue>55</cccev:numericValue>
+                                </cccev:value>
+                            </cccev:concept>
+                            <!--  example of concept error: DP_ELE_001 (not found) -->
+                            <cccev:concept>
+                                <cbc:id>ConceptID-9</cbc:id>
+                                <cbc:qName>toop:Concept-Name-9</cbc:qName>
+                                <cccev:value>
+                                    <cccev:error>DP_ELE_001</cccev:error>
+                                </cccev:value>
+                            </cccev:concept>
+                        </cccev:concept>
+                    </rim:Element>
+                </rim:SlotValue>
+            </rim:Slot>
+        </rim:RegistryObject>
+    </rim:RegistryObjectList>
+</query:QueryResponse>

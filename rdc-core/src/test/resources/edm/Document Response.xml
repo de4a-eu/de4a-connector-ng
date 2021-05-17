@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2021 Philip Helger (www.helger.com)
+    philip[at]helger[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<query:QueryResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:4.0"
+    xmlns:rim="urn:oasis:names:tc:ebxml-regrep:xsd:rim:4.0"
+    xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:4.0"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:toop="urn:oasis:names:tc:ebxml-regrep:xsd:rim:4.0:toop"
+    requestId="c4369c4d-740e-4b64-80f0-7b209a66d629"
+    status="urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success">
+
+    <!-- SPECIFICATION IDENTIFIER -->
+    <rim:Slot name="SpecificationIdentifier">
+        <rim:SlotValue xsi:type="rim:StringValueType">
+            <rim:Value>toop-edm:v2.1</rim:Value>
+        </rim:SlotValue>
+    </rim:Slot>
+
+    <!-- ISSUE DATE / TIME  -->
+    <rim:Slot name="IssueDateTime">
+        <rim:SlotValue xsi:type="rim:DateTimeValueType">
+            <rim:Value>2020-02-14T19:20:30+01:00</rim:Value>
+        </rim:SlotValue>
+    </rim:Slot>
+
+    <!--   Data Provider Metadata  -->
+    <rim:Slot name="DataProvider">
+        <rim:SlotValue xsi:type="rim:AnyValueType">
+            <!--   Expression of DP information using Agent class of CAGV   -->
+            <cagv:Agent xmlns:cagv="https://semic.org/sa/cv/cagv/agent-2.0.0#"
+                xmlns:cbc="https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#"
+                xmlns:locn="http://www.w3.org/ns/locn#">
+                <cbc:id schemeID="VAT">12345678</cbc:id>
+                <cbc:name>DPName</cbc:name>
+            </cagv:Agent>  
+        </rim:SlotValue>
+    </rim:Slot>
+
+    <rim:RegistryObjectList>
+        <rim:RegistryObject xsi:type="rim:ExtrinsicObjectType" id="555555-740e-4b64-80f0-2462462462">
+            <rim:Slot name="DocumentMetadata">
+                <rim:SlotValue xsi:type="rim:AnyValueType">
+                    <dcat:Dataset
+                        xmlns:cccev="https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0#"
+                        xmlns:dcat="http://data.europa.eu/r5r/"
+                        xmlns:cbc="https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#"
+                        xsi:schemaLocation="http://data.europa.eu/r5r/ ../../../../xsd/dcat-ap/2.0.0/xml/dcat-ap.xsd
+                        https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0# ../../../../xsd/common/2.0.0/xml/CV-CommonBasicComponents.xsd
+                        https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0# ../../../../xsd/cccev/2.0.0/xml/xsd/cccev-2.0.0.xsd">
+                        <description xmlns="http://purl.org/dc/terms/">Extract from the Commercial register that contains details of all tradespeople and legal entities in the district of the register.</description>
+                        <title xmlns="http://purl.org/dc/terms/">Name</title>
+                        <!-- DocumentReference-->
+                        <dcat:distribution xmlns:cccev="https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0#"
+                            xsi:schemaLocation="https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0# ../../../../xsd/cccev/2.0.0/xml/xsd/cccev-2.0.0.xsd"
+                            xsi:type="cccev:DocumentReferenceType"
+                            xmlns:dct="http://purl.org/dc/terms/">
+                            <dcat:accessURL>URI</dcat:accessURL>
+                            <dct:description>DocumentDescription</dct:description>
+                            <dcat:mediaType>application/xml</dcat:mediaType>
+                        </dcat:distribution>
+                        <!-- Creator is an Agent OrganizationType-->
+                        <creator xmlns:cagv="https://semic.org/sa/cv/cagv/agent-2.0.0#"
+                            xsi:schemaLocation="https://semic.org/sa/cv/cagv/agent-2.0.0# ../../../../xsd/cagv/2.0.0/xml/xsd/CV-Agent.xsd"
+                            xmlns="http://purl.org/dc/terms/" xsi:type="cagv:OrganizationType">
+                            <!--AgentIdentifier-->
+                            <cbc:id>5555</cbc:id>
+                            <cbc:name>Creator Name</cbc:name>
+                            <cagv:location>
+                                <!-- WARNING: edited locn.xsd made fullAddress element optional
+                                    AgentHasAddress: Only PostName needed according to EDM model BUT fullAddress is mandatory.-->
+                                <locn:address xmlns:locn="http://www.w3.org/ns/locn#">
+                                    <locn:postName>postname</locn:postName>   
+                                </locn:address>
+                            </cagv:location>
+                        </creator>
+                        <identifier xmlns="http://purl.org/dc/terms/">RE238918378</identifier>
+                          <!-- DocumentNumber -->
+                        <identifier xmlns="http://purl.org/dc/terms/">DOC-555</identifier>
+                        <!-- Release date -->
+                        <issued xmlns="http://purl.org/dc/terms/">2019-05-15T10:20:15</issued>
+                        <language xmlns="http://purl.org/dc/terms/">DE</language>                      
+                        <modified xmlns="http://purl.org/dc/terms/">2020-05-15T10:20:15</modified>
+                        <!-- PeriodofTime is now temporal-->
+                        <temporal xmlns="http://purl.org/dc/terms/">
+                            <startDate xmlns="http://purl.org/dc/terms/">2020-01-02</startDate>
+                            <endDate xmlns="http://purl.org/dc/terms/">2022-05-05</endDate>
+                        </temporal>
+                        <!-- LegalResource ReferenceFramework-->
+                        <dcat:qualifiedRelation>
+                            <relation xmlns="http://purl.org/dc/terms/" xsi:type="cccev:ReferenceFrameworkType">
+                                <description>LegalResourceDesc</description>
+                                <title>Name</title>
+                                <identifier>RE238918378</identifier>
+                            </relation>
+                        </dcat:qualifiedRelation> 
+                    </dcat:Dataset>
+                </rim:SlotValue>
+            </rim:Slot>
+            <!-- The attached Document Provided as Evidence. Points to an AS4 attachment -->
+            <rim:RepositoryItemRef xlink:href="cid:attachment123@example.toop.eu"
+                xlink:title="Company Registration Document"/>
+        </rim:RegistryObject>
+    </rim:RegistryObjectList>
+</query:QueryResponse>

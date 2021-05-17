@@ -118,6 +118,12 @@ public final class TCConfig
     {
       return getConfig ().getAsBoolean ("global.production", GlobalDebug.isProductionMode ());
     }
+
+    @Nullable
+    public static String getToopInstanceName ()
+    {
+      return getConfig ().getAsString ("global.instancename");
+    }
   }
 
   public static final class Tracker

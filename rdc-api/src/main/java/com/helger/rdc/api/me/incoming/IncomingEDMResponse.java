@@ -42,12 +42,12 @@ import com.helger.rdc.api.me.model.MEPayload;
 public class IncomingEDMResponse implements IIncomingEDMResponse
 {
   // TODO type
-  private final Object m_aResponse;
+  private final IWritableObject m_aResponse;
   private final String m_sTopLevelContentID;
   private final ICommonsOrderedMap <String, MEPayload> m_aAttachments = new CommonsLinkedHashMap <> ();
   private final IMEIncomingTransportMetadata m_aMetadata;
 
-  public IncomingEDMResponse (@Nonnull final Object aResponse,
+  public IncomingEDMResponse (@Nonnull final IWritableObject aResponse,
                               @Nonnull @Nonempty final String sTopLevelContentID,
                               @Nullable final List <MEPayload> aAttachments,
                               @Nonnull final IMEIncomingTransportMetadata aMetadata)
@@ -69,7 +69,7 @@ public class IncomingEDMResponse implements IIncomingEDMResponse
    *         <code>null</code>.
    */
   @Nonnull
-  public Object getResponse ()
+  public IWritableObject getResponse ()
   {
     return m_aResponse;
   }
@@ -118,13 +118,18 @@ public class IncomingEDMResponse implements IIncomingEDMResponse
       return false;
 
     final IncomingEDMResponse rhs = (IncomingEDMResponse) o;
-    return m_aResponse.equals (rhs.m_aResponse) && m_aAttachments.equals (rhs.m_aAttachments) && m_aMetadata.equals (rhs.m_aMetadata);
+    return m_aResponse.equals (rhs.m_aResponse) &&
+           m_aAttachments.equals (rhs.m_aAttachments) &&
+           m_aMetadata.equals (rhs.m_aMetadata);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aResponse).append (m_aAttachments).append (m_aMetadata).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aResponse)
+                                       .append (m_aAttachments)
+                                       .append (m_aMetadata)
+                                       .getHashCode ();
   }
 
   @Override

@@ -34,11 +34,11 @@ import com.helger.commons.string.ToStringGenerator;
 public class IncomingEDMRequest implements IIncomingEDMRequest
 {
   // TODO type
-  private final Object m_aRequest;
+  private final IWritableObject m_aRequest;
   private final String m_sTopLevelContentID;
   private final IMEIncomingTransportMetadata m_aMetadata;
 
-  public IncomingEDMRequest (@Nonnull final Object aRequest,
+  public IncomingEDMRequest (@Nonnull final IWritableObject aRequest,
                              @Nonnull @Nonempty final String sTopLevelContentID,
                              @Nonnull final IMEIncomingTransportMetadata aMetadata)
   {
@@ -55,7 +55,7 @@ public class IncomingEDMRequest implements IIncomingEDMRequest
    *         <code>null</code>.
    */
   @Nonnull
-  public Object getRequest ()
+  public IWritableObject getRequest ()
   {
     return m_aRequest;
   }

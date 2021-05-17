@@ -54,32 +54,28 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.helger.commons</groupId>
-      <artifactId>ph-commons</artifactId>
+      <groupId>com.helger</groupId>
+      <artifactId>rdc-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger.commons</groupId>
-      <artifactId>ph-config</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.commons</groupId>
-      <artifactId>ph-jaxb</artifactId>
+      <groupId>eu.de4a</groupId>
+      <artifactId>de4a-kafka-client</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.web</groupId>
-      <artifactId>ph-httpclient</artifactId>
+      <artifactId>ph-xservlet</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.peppol</groupId>
-      <artifactId>peppol-id</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.peppol</groupId>
-      <artifactId>peppol-commons</artifactId>
+      <artifactId>peppol-smp-client</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.phive</groupId>
-      <artifactId>phive-api</artifactId>
+      <artifactId>phive-engine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-regrep</artifactId>
     </dependency>
     
     <dependency>
@@ -102,6 +98,25 @@
   </dependencies>
   
   <build>
+    <resources>
+      <!-- Don't specify the targetPath because this leads to a broken JAR file 
+        in combination with the bundle plugin (absolute file paths in ZIP file) -->
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.properties</exclude>
+        </excludes>  
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
