@@ -1,0 +1,87 @@
+/**
+ * Copyright (C) 2021 Philip Helger (www.helger.com)
+ * philip[at]helger[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.helger.rdc.api.me.outgoing;
+
+import java.security.cert.X509Certificate;
+
+import javax.annotation.Nonnull;
+
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.string.ToStringGenerator;
+import com.helger.peppolid.IDocumentTypeIdentifier;
+import com.helger.peppolid.IParticipantIdentifier;
+import com.helger.peppolid.IProcessIdentifier;
+
+/**
+ * Default implementation of {@link IMERoutingInformation}.
+ *
+ * @author Philip Helger
+ */
+public class MERoutingInformation extends MERoutingInformationInput implements IMERoutingInformation
+{
+  private final String m_sEndpointURL;
+  private final X509Certificate m_aCert;
+
+  public MERoutingInformation (@Nonnull final MERoutingInformationInput aOther,
+                               @Nonnull @Nonempty final String sEndpointURL,
+                               @Nonnull final X509Certificate aCert)
+  {
+    this (aOther.getSenderID (),
+          aOther.getReceiverID (),
+          aOther.getDocumentTypeID (),
+          aOther.getProcessID (),
+          aOther.getTransportProtocol (),
+          sEndpointURL,
+          aCert);
+  }
+
+  public MERoutingInformation (@Nonnull final IParticipantIdentifier aSenderID,
+                               @Nonnull final IParticipantIdentifier aReceiverID,
+                               @Nonnull final IDocumentTypeIdentifier aDocTypeID,
+                               @Nonnull final IProcessIdentifier aProcessID,
+                               @Nonnull @Nonempty final String sTransportProtocol,
+                               @Nonnull @Nonempty final String sEndpointURL,
+                               @Nonnull final X509Certificate aCert)
+  {
+    super (aSenderID, aReceiverID, aDocTypeID, aProcessID, sTransportProtocol);
+    ValueEnforcer.notEmpty (sEndpointURL, "EndpointURL");
+    ValueEnforcer.notNull (aCert, "Cert");
+
+    m_sEndpointURL = sEndpointURL;
+    m_aCert = aCert;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getEndpointURL ()
+  {
+    return m_sEndpointURL;
+  }
+
+  @Nonnull
+  public X509Certificate getCertificate ()
+  {
+    return m_aCert;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return ToStringGenerator.getDerived (super.toString ()).append ("EndpointURL", m_sEndpointURL).append ("Cert", m_aCert).getToString ();
+  }
+}

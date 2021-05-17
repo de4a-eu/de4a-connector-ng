@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    This work is protected under copyrights held by the members of the
+    TOOP Project Consortium as indicated at
+    http://wiki.ds.unipi.gr/display/TOOP/Contributors
+    (c) 2018-2021. All rights reserved.
+
+    This work is licensed under the EUPL 1.2.
+
+     = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+    Licensed under the EUPL, Version 1.2 or – as soon they will be approved
+    by the European Commission - subsequent versions of the EUPL
+    (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+
+            https://joinup.ec.europa.eu/software/page/eupl
+
+-->
+<xs:schema attributeFormDefault="unqualified" 
+           elementFormDefault="qualified" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="urn:com.helger/de4a/connector/exchange/2021/05/"
+           xmlns="urn:com.helger/de4a/connector/exchange/2021/05/">
+  <xs:annotation>
+    <xs:documentation>
+      DE4A shared XML Schema
+      
+      Version: 2021-05-05
+      
+      Author: Philip Helger
+      
+      Contents:
+      * Types used for input to the REST API
+      * Types used for output of the REST API
+    </xs:documentation>
+  </xs:annotation>
+  
+  <!-- generic stuff -->
+           
+  <xs:complexType name="TCIdentifierType">
+    <xs:annotation>
+      <xs:documentation>Generic 2-part identifier for participants, document types and processes</xs:documentation>
+    </xs:annotation>
+    <!-- attributes only -->
+    <xs:attribute name="scheme" type="xs:string" use="optional" />
+    <xs:attribute name="value" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="TCPayload">
+    <xs:simpleContent>
+      <xs:extension base="xs:base64Binary">
+        <xs:attribute name="ContentID" type="xs:string" use="optional" />
+        <xs:attribute name="MimeType" type="xs:string" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <!-- outgoing (from DC/DP) stuff -->
+  
+  <xs:complexType name="TCOutgoingMetadata">
+    <xs:sequence>
+      <xs:element name="SenderID" type="TCIdentifierType" />
+      <xs:element name="ReceiverID" type="TCIdentifierType" />
+      <xs:element name="DocTypeID" type="TCIdentifierType" />
+      <xs:element name="ProcessID" type="TCIdentifierType" />
+      <xs:element name="TransportProtocol" type="xs:string" />
+      <xs:element name="EndpointURL" type="xs:string" minOccurs="0"/>
+      <xs:element name="ReceiverCertificate" type="xs:base64Binary" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="TCOutgoingMessage">
+    <xs:sequence>
+      <xs:element name="Metadata" type="TCOutgoingMetadata" />
+      <xs:element name="Payload" type="TCPayload" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:element name="OutgoingMessage" type="TCOutgoingMessage">
+    <xs:annotation>
+      <xs:documentation>Element to be used for sending an AS4 message from DC/DP</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <!-- incoming (to DC/DP) stuff -->
+
+  <xs:simpleType name="TCPayloadType" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Request" />
+      <xs:enumeration value="Response" />
+      <xs:enumeration value="ErrorResponse" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="TCIncomingMetadata">
+    <xs:sequence>
+      <xs:element name="SenderID" type="TCIdentifierType" />
+      <xs:element name="ReceiverID" type="TCIdentifierType" />
+      <xs:element name="DocTypeID" type="TCIdentifierType" />
+      <xs:element name="ProcessID" type="TCIdentifierType" />
+      <xs:element name="PayloadType" type="TCPayloadType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TCIncomingMessage">
+    <xs:sequence>
+      <xs:element name="Metadata" type="TCIncomingMetadata" />
+      <xs:element name="Payload" type="TCPayload" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="IncomingMessage" type="TCIncomingMessage">
+    <xs:annotation>
+      <xs:documentation>Element to be used for receiving an AS4 message at DC/DP</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
