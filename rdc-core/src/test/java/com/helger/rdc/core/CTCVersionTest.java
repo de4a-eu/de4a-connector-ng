@@ -20,8 +20,6 @@ import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
-import com.helger.rdc.core.CTCVersion;
-
 /**
  * Test class for class {@link CTCVersion}
  *

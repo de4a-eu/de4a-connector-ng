@@ -50,10 +50,10 @@ public final class TCStatusHelper
   public static IJsonObject getDefaultStatusData ()
   {
     final IJsonObject aStatusData = new JsonObject ();
+    aStatusData.add ("build.version", CTCVersion.BUILD_VERSION);
+    aStatusData.add ("build.datetime", CTCVersion.BUILD_TIMESTAMP);
     aStatusData.add ("status.datetime", PDTWebDateHelper.getAsStringXSD (PDTFactory.getCurrentZonedDateTimeUTC ()));
-    aStatusData.add ("version.toop-connector", CTCVersion.BUILD_VERSION);
-    aStatusData.add ("version.build-datetime", CTCVersion.BUILD_TIMESTAMP);
-    aStatusData.add ("version.java", SystemProperties.getJavaVersion ());
+    aStatusData.add ("java.version", SystemProperties.getJavaVersion ());
     aStatusData.add ("global.debug", GlobalDebug.isDebugMode ());
     aStatusData.add ("global.production", GlobalDebug.isProductionMode ());
 

@@ -16,7 +16,6 @@
  */
 package com.helger.rdc.api.me.model;
 
-import java.io.Serializable;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
@@ -35,9 +34,9 @@ import com.helger.peppolid.IProcessIdentifier;
 /**
  * List of {@link MEPayload} objects.
  *
- * @author myildiz at 12.02.2018.
+ * @author Philip Helger
  */
-public class MEMessage implements Serializable
+public class MEMessage
 {
   private final IParticipantIdentifier m_aSenderID;
   private final IParticipantIdentifier m_aReceiverID;

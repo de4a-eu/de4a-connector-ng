@@ -42,12 +42,12 @@ import com.helger.rdc.api.me.model.MEPayload;
 public class IncomingEDMResponse implements IIncomingEDMResponse
 {
   // TODO type
-  private final IWritableObject m_aResponse;
+  private final ITODOWritableObject m_aResponse;
   private final String m_sTopLevelContentID;
   private final ICommonsOrderedMap <String, MEPayload> m_aAttachments = new CommonsLinkedHashMap <> ();
   private final IMEIncomingTransportMetadata m_aMetadata;
 
-  public IncomingEDMResponse (@Nonnull final IWritableObject aResponse,
+  public IncomingEDMResponse (@Nonnull final ITODOWritableObject aResponse,
                               @Nonnull @Nonempty final String sTopLevelContentID,
                               @Nullable final List <MEPayload> aAttachments,
                               @Nonnull final IMEIncomingTransportMetadata aMetadata)
@@ -69,7 +69,7 @@ public class IncomingEDMResponse implements IIncomingEDMResponse
    *         <code>null</code>.
    */
   @Nonnull
-  public IWritableObject getResponse ()
+  public ITODOWritableObject getResponse ()
   {
     return m_aResponse;
   }

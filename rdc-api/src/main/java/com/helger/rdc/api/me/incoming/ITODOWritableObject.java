@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import eu.de4a.iem.xml.IVersatileWriter;
 
-public interface IWritableObject
+public interface ITODOWritableObject
 {
   @Nonnull
   default IVersatileWriter <?> getWriter ()
@@ -12,4 +12,10 @@ public interface IWritableObject
     // TODO
     return null;
   }
+
+  public static class TodoRequest implements ITODOWritableObject
+  {}
+
+  public static class TodoResponse implements ITODOWritableObject
+  {}
 }

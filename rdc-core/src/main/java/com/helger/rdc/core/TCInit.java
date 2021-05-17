@@ -49,7 +49,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
 import eu.de4a.kafkaclient.DE4AKafkaSettings;
 
 /**
- * Contains TOOP Connector global init and shutdown methods.
+ * Contains DE4A Connector global init and shutdown methods.
  *
  * @author Philip Helger
  */
@@ -64,7 +64,7 @@ public final class TCInit
   {}
 
   /**
-   * Globally init the TOOP Connector. Calling it, if it is already initialized
+   * Globally init the DE4A Connector. Calling it, if it is already initialized
    * will thrown an exception.
    *
    * @param aServletContext
@@ -74,18 +74,17 @@ public final class TCInit
    *        The incoming handler to be used. If <code>null</code> the default of
    *        {@link TCIncomingHandlerViaHttp} will be used.
    * @throws IllegalStateException
-   *         If the TOOP Connector is already initialized
+   *         If the DE4A Connector is already initialized
    * @throws InitializationException
    *         If any of the settings are totally bogus
-   * @since 2.0.0-rc4
    */
   public static void initGlobally (@Nonnull final ServletContext aServletContext,
                                    @Nullable final IMEIncomingHandler aIncomingHandler)
   {
     if (!INITED.compareAndSet (false, true))
-      throw new IllegalStateException ("TOOP Connector NG is already initialized");
+      throw new IllegalStateException ("DE4A Connector is already initialized");
 
-    GlobalIDFactory.setPersistentStringIDFactory (new StringIDFromGlobalPersistentLongIDFactory ("toop-tc-"));
+    GlobalIDFactory.setPersistentStringIDFactory (new StringIDFromGlobalPersistentLongIDFactory ("rdc-"));
     GlobalDebug.setDebugModeDirect (TCConfig.Global.isGlobalDebug ());
     GlobalDebug.setProductionModeDirect (TCConfig.Global.isGlobalProduction ());
 
@@ -172,11 +171,11 @@ public final class TCInit
                           .registerIncomingHandler (aServletContext, aRealIncomingHandler);
 
     DE4AKafkaClient.send (EErrorLevel.INFO,
-                          () -> s_sLogPrefix + "DE4A Connector NG WebApp " + CTCVersion.BUILD_VERSION + " started");
+                          () -> s_sLogPrefix + "DE4A Connector WebApp " + CTCVersion.BUILD_VERSION + " started");
   }
 
   /**
-   * @return <code>true</code> if the TOOP Connector was initialized (or is
+   * @return <code>true</code> if the DE4A Connector was initialized (or is
    *         currently initializing or is currently shutdown),
    *         <code>false</code> if not.
    */
@@ -186,21 +185,21 @@ public final class TCInit
   }
 
   /**
-   * Globally shutdown the TOOP Connector. Calling it, if it was not already
+   * Globally shutdown the DE4A Connector. Calling it, if it was not already
    * initialized will thrown an exception.
    *
    * @param aServletContext
    *        The servlet context used for shutdown. May not be <code>null</code>
    *        but maybe a mocked one.
    * @throws IllegalStateException
-   *         If the TOOP Connector is not initialized
+   *         If the DE4A Connector is not initialized
    */
   public static void shutdownGlobally (@Nonnull final ServletContext aServletContext)
   {
     if (!isInitialized ())
-      throw new IllegalStateException ("TOOP Connector NG is not initialized");
+      throw new IllegalStateException ("DE4A Connector is not initialized");
 
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "TOOP Connector NG shutting down");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector shutting down");
 
     // Shutdown message exchange
     MessageExchangeManager.getConfiguredImplementation ().shutdown (aServletContext);
@@ -211,6 +210,6 @@ public final class TCInit
     s_sLogPrefix = null;
 
     if (!INITED.compareAndSet (true, false))
-      throw new IllegalStateException ("TOOP Connector NG was already shutdown");
+      throw new IllegalStateException ("DE4A Connector was already shutdown");
   }
 }
