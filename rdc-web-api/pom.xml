@@ -24,11 +24,11 @@
     <artifactId>rdc-parent-pom</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>rdc-core</artifactId>
+  <artifactId>rdc-web-api</artifactId>
   <packaging>bundle</packaging>
-  <name>rdc-core</name>
-  <description>Contains the DE4A Connector Core</description>
-  <url>https://github.com/phax/rdc/rdc-core</url>
+  <name>rdc-web-api</name>
+  <description>Contains the RDC REST API implementations</description>
+  <url>https://github.com/phax/rdc/rdc-web-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
@@ -54,40 +54,24 @@
   
   <dependencies>
     <dependency>
+      <groupId>com.helger.photon</groupId>
+      <artifactId>ph-oton-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.helger.rdc</groupId>
       <artifactId>rdc-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>eu.de4a</groupId>
-      <artifactId>de4a-kafka-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.web</groupId>
-      <artifactId>ph-xservlet</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.peppol</groupId>
-      <artifactId>peppol-smp-client</artifactId>
+      <groupId>com.helger.rdc</groupId>
+      <artifactId>rdc-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.phive</groupId>
-      <artifactId>phive-engine</artifactId>
+      <artifactId>phive-json</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger</groupId>
-      <artifactId>ph-regrep</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.phase4</groupId>
-      <artifactId>phase4-lib</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.phase4</groupId>
-      <artifactId>phase4-profile-cef</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger.phase4</groupId>
-      <artifactId>phase4-cef-client</artifactId>
+      <groupId>eu.de4a</groupId>
+      <artifactId>de4a-kafka-client</artifactId>
     </dependency>
     
     <dependency>
@@ -102,41 +86,17 @@
       <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   
   <build>
-    <resources>
-      <!-- Don't specify the targetPath because this leads to a broken JAR file 
-        in combination with the bundle plugin (absolute file paths in ZIP file) -->
-      <resource>
-        <directory>${basedir}/src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>**/*.properties</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>${basedir}/src/main/resources</directory>
-        <filtering>false</filtering>
-        <excludes>
-          <exclude>**/*.properties</exclude>
-        </excludes>  
-      </resource>
-    </resources>
-
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Automatic-Module-Name>com.helger.rdc.core</Automatic-Module-Name>
-            <Export-Package>com.helger.rdc.core.*</Export-Package>
+            <Automatic-Module-Name>com.helger.rdc.webapi</Automatic-Module-Name>
+            <Export-Package>com.helger.rdc.webapi.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>

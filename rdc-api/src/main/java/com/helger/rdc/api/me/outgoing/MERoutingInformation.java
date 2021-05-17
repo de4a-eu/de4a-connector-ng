@@ -16,6 +16,7 @@
  */
 package com.helger.rdc.api.me.outgoing;
 
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.annotation.Nonnull;
@@ -26,6 +27,8 @@ import com.helger.commons.string.ToStringGenerator;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
+import com.helger.rdc.api.rest.TCOutgoingMetadata;
+import com.helger.security.certificate.CertificateHelper;
 
 /**
  * Default implementation of {@link IMERoutingInformation}.
@@ -88,5 +91,14 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
                                      aOther.getTransportProtocol (),
                                      sEndpointURL,
                                      aCert);
+  }
+
+  @Nonnull
+  public static MERoutingInformation createFrom (@Nonnull final TCOutgoingMetadata aMetadata) throws CertificateException
+  {
+    ValueEnforcer.notNull (aMetadata, "Metadata");
+    return create (MERoutingInformationInput.createForInput (aMetadata),
+                   aMetadata.getEndpointURL (),
+                   CertificateHelper.convertByteArrayToCertficateDirect (aMetadata.getReceiverCertificate ()));
   }
 }

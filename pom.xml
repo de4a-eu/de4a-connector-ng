@@ -24,12 +24,12 @@
     <artifactId>parent-pom</artifactId>
     <version>1.11.3</version>
   </parent>
-  <groupId>com.helger</groupId>
+  <groupId>com.helger.rdc</groupId>
   <artifactId>rdc-parent-pom</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>rdc-parent-pom</name>
-  <description>Base POM to build the DE4A Connector projects</description>
+  <description>Base POM to build the Real DE4A Connector (RDC) projects</description>
   <url>https://github.com/phax/rdc</url>
   <inceptionYear>2021</inceptionYear>
 
@@ -49,8 +49,8 @@
   </scm>
 
   <organization>
-    <name>toop.eu</name>
-    <url>http://www.toop.eu</url>
+    <name>de4a.eu</name>
+    <url>http://www.de4a.eu</url>
   </organization>
 
   <developers>
@@ -147,22 +147,22 @@
 
       <!-- The sub-projects of this project have a constant version -->
       <dependency>
-        <groupId>com.helger</groupId>
+        <groupId>com.helger.rdc</groupId>
         <artifactId>rdc-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.helger</groupId>
+        <groupId>com.helger.rdc</groupId>
         <artifactId>rdc-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.helger</groupId>
+        <groupId>com.helger.rdc</groupId>
         <artifactId>rdc-web-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.helger</groupId>
+        <groupId>com.helger.rdc</groupId>
         <artifactId>rdc-webapp</artifactId>
         <version>${project.version}</version>
         <classifier>classes</classifier>
@@ -183,8 +183,8 @@
   <modules>
     <module>rdc-api</module>
     <module>rdc-core</module>
-    <!-- 
     <module>rdc-web-api</module>
+    <!-- 
     <module>rdc-webapp</module>
      -->
   </modules>
