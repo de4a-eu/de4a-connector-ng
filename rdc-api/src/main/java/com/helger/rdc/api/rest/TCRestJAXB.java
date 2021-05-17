@@ -36,9 +36,10 @@ import com.helger.peppolid.IIdentifier;
 @Immutable
 public final class TCRestJAXB
 {
-  public static final ClassPathResource XSD_RES = new ClassPathResource ("/schemas/rdc-rest.xsd", TCRestJAXB.class.getClassLoader ());
-  public static final String NS_URI = "urn:eu.toop/toop-connector-ng/2020/05/";
-  public static final String DEFAULT_NAMESPACE_PREFIX = "tc";
+  public static final ClassPathResource XSD_RES = new ClassPathResource ("/schemas/rdc-rest.xsd",
+                                                                         TCRestJAXB.class.getClassLoader ());
+  public static final String NS_URI = "urn:com.helger/de4a/connector/exchange/2021/05/";
+  public static final String DEFAULT_NAMESPACE_PREFIX = "de4a";
 
   private TCRestJAXB ()
   {}

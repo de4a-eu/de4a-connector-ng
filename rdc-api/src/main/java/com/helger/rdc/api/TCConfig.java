@@ -169,7 +169,6 @@ public final class TCConfig
      *
      * @return The static endpoint URL to use. May be <code>null</code>.
      * @see #getR2D2StaticCertificate()
-     * @since 2.1.0
      */
     @Nullable
     public static String getR2D2StaticEndpointURL ()
@@ -187,7 +186,6 @@ public final class TCConfig
      *
      * @return The static endpoint URL to use. May be <code>null</code>.
      * @see #getR2D2StaticEndpointURL()
-     * @since 2.1.0
      */
     @Nullable
     public static X509Certificate getR2D2StaticCertificate ()
@@ -239,7 +237,11 @@ public final class TCConfig
           final String sManagementServiceURL = getConfig ().getAsString ("de4a.r2d2.sml.serviceurl");
           final boolean bClientCertificateRequired = getConfig ().getAsBoolean ("de4a.r2d2.sml.clientcert", false);
           // No need for a persistent ID here
-          ret = new SMLInfo (GlobalIDFactory.getNewStringID (), sDisplayName, sDNSZone, sManagementServiceURL, bClientCertificateRequired);
+          ret = new SMLInfo (GlobalIDFactory.getNewStringID (),
+                             sDisplayName,
+                             sDNSZone,
+                             sManagementServiceURL,
+                             bClientCertificateRequired);
         }
         // Remember in cache
         s_aCachedSMLInfo = ret;
@@ -312,7 +314,6 @@ public final class TCConfig
 
     /**
      * @return The <code>To/PartyId/@type</code> for receiving party id
-     * @since 2.0.2
      */
     @Nullable
     public static String getToPartyIdType ()

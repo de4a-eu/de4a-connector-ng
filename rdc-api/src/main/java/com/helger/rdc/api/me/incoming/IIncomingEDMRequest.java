@@ -20,7 +20,6 @@ package com.helger.rdc.api.me.incoming;
  * Marker interface for incoming requests.
  *
  * @author Philip Helger
- * @since 2.0.0-rc4
  */
 public interface IIncomingEDMRequest extends IIncomingEDMObject
 {

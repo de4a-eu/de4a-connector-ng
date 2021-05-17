@@ -30,7 +30,6 @@ import com.helger.commons.error.list.ErrorList;
  * Collecting implementation of {@link ITCErrorHandler}
  *
  * @author Philip Helger
- * @since 2.0.0-rc1
  */
 public class WrappedTCErrorHandler implements ITCErrorHandler
 {

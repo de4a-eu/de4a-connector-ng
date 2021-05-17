@@ -69,7 +69,6 @@ public interface IDDServiceMetadataProvider
    * @return <code>null</code> if no such endpoint was found
    * @see #getServiceMetadata(IParticipantIdentifier, IDocumentTypeIdentifier,
    *      IProcessIdentifier, String)
-   * @since 2.0.0-rc1
    */
   @Nullable
   default EndpointType getEndpoint (@Nonnull final IParticipantIdentifier aParticipantID,
@@ -93,7 +92,6 @@ public interface IDDServiceMetadataProvider
    * @return <code>null</code> if no such endpoint was found
    * @see #getServiceMetadata(IParticipantIdentifier, IDocumentTypeIdentifier,
    *      IProcessIdentifier, String)
-   * @since 2.0.0-rc4
    */
   @Nullable
   static EndpointType getEndpoint (@Nullable final ServiceMetadataType aSM,

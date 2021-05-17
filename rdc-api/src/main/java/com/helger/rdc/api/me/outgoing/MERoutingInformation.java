@@ -37,19 +37,6 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
   private final String m_sEndpointURL;
   private final X509Certificate m_aCert;
 
-  public MERoutingInformation (@Nonnull final MERoutingInformationInput aOther,
-                               @Nonnull @Nonempty final String sEndpointURL,
-                               @Nonnull final X509Certificate aCert)
-  {
-    this (aOther.getSenderID (),
-          aOther.getReceiverID (),
-          aOther.getDocumentTypeID (),
-          aOther.getProcessID (),
-          aOther.getTransportProtocol (),
-          sEndpointURL,
-          aCert);
-  }
-
   public MERoutingInformation (@Nonnull final IParticipantIdentifier aSenderID,
                                @Nonnull final IParticipantIdentifier aReceiverID,
                                @Nonnull final IDocumentTypeIdentifier aDocTypeID,
@@ -82,6 +69,24 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
   @Override
   public String toString ()
   {
-    return ToStringGenerator.getDerived (super.toString ()).append ("EndpointURL", m_sEndpointURL).append ("Cert", m_aCert).getToString ();
+    return ToStringGenerator.getDerived (super.toString ())
+                            .append ("EndpointURL", m_sEndpointURL)
+                            .append ("Cert", m_aCert)
+                            .getToString ();
+  }
+
+  @Nonnull
+  public static MERoutingInformation create (@Nonnull final MERoutingInformationInput aOther,
+                                             @Nonnull @Nonempty final String sEndpointURL,
+                                             @Nonnull final X509Certificate aCert)
+  {
+    ValueEnforcer.notNull (aOther, "Other");
+    return new MERoutingInformation (aOther.getSenderID (),
+                                     aOther.getReceiverID (),
+                                     aOther.getDocumentTypeID (),
+                                     aOther.getProcessID (),
+                                     aOther.getTransportProtocol (),
+                                     sEndpointURL,
+                                     aCert);
   }
 }
