@@ -24,7 +24,7 @@ import com.helger.phive.api.executorset.VESID;
 import com.helger.phive.api.result.ValidationResultList;
 
 /**
- * TC Validation Service
+ * RDC Validation Service
  *
  * @author Philip Helger
  */
