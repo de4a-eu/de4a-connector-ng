@@ -43,7 +43,7 @@ import com.helger.commons.url.URLProtocolRegistry;
 import com.helger.rdc.api.TCConfig;
 import com.helger.rdc.api.me.MessageExchangeManager;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
-import com.helger.xservlet.requesttrack.RequestTracker;
+import com.helger.xservlet.requesttrack.RequestTrackerSettings;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 import eu.de4a.kafkaclient.DE4AKafkaSettings;
@@ -78,8 +78,7 @@ public final class TCInit
    * @throws InitializationException
    *         If any of the settings are totally bogus
    */
-  public static void initGlobally (@Nonnull final ServletContext aServletContext,
-                                   @Nullable final IMEIncomingHandler aIncomingHandler)
+  public static void initGlobally (@Nonnull final ServletContext aServletContext, @Nullable final IMEIncomingHandler aIncomingHandler)
   {
     if (!INITED.compareAndSet (false, true))
       throw new IllegalStateException ("DE4A Connector is already initialized");
@@ -113,8 +112,8 @@ public final class TCInit
     s_sLogPrefix = sLogPrefix;
 
     // Disable RequestTracker
-    RequestTracker.getInstance ().getRequestTrackingMgr ().setLongRunningCheckEnabled (false);
-    RequestTracker.getInstance ().getRequestTrackingMgr ().setParallelRunningRequestCheckEnabled (false);
+    RequestTrackerSettings.setLongRunningRequestsCheckEnabled (false);
+    RequestTrackerSettings.setParallelRunningRequestsCheckEnabled (false);
 
     {
       // Init tracker client
@@ -128,9 +127,7 @@ public final class TCInit
         // Consistency check - no protocol like "http://" or so may be present
         final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sToopTrackerUrl);
         if (aProtocol != null)
-          throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" +
-                                             aProtocol.getProtocol () +
-                                             "'!");
+          throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" + aProtocol.getProtocol () + "'!");
         DE4AKafkaSettings.defaultProperties ().put (ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, sToopTrackerUrl);
 
         // Set the topic
@@ -167,11 +164,9 @@ public final class TCInit
     // Init incoming message handler
     final IMEIncomingHandler aRealIncomingHandler = aIncomingHandler != null ? aIncomingHandler
                                                                              : new TCIncomingHandlerViaHttp (s_sLogPrefix);
-    MessageExchangeManager.getConfiguredImplementation ()
-                          .registerIncomingHandler (aServletContext, aRealIncomingHandler);
+    MessageExchangeManager.getConfiguredImplementation ().registerIncomingHandler (aServletContext, aRealIncomingHandler);
 
-    DE4AKafkaClient.send (EErrorLevel.INFO,
-                          () -> s_sLogPrefix + "DE4A Connector WebApp " + CTCVersion.BUILD_VERSION + " started");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector WebApp " + CTCVersion.BUILD_VERSION + " started");
   }
 
   /**

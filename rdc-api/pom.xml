@@ -144,8 +144,6 @@ osgi.serviceloader; filter:="(osgi.serviceloader=com.helger.rdc.api.me.IMessageE
             <arg>-Xph-annotate</arg>
             <arg>-Xph-fields-private</arg>
             <arg>-Xph-code-quality</arg>
-            <arg>-Xph-implements</arg>
-            <arg>java.io.Serializable</arg>
             <arg>-Xph-equalshashcode</arg>
             <arg>-Xph-tostring</arg>
             <arg>-Xph-list-extension</arg>
@@ -173,25 +171,6 @@ osgi.serviceloader; filter:="(osgi.serviceloader=com.helger.rdc.api.me.IMessageE
             <version>2.3.3.3</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <!-- Delete the directory with only ObjectFactory 
-           Source: http://stackoverflow.com/questions/32635137
-      -->
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <delete dir="${basedir}/target/generated-sources/xjc/com/" />
-              </target>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
