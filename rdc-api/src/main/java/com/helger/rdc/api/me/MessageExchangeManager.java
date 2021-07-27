@@ -26,17 +26,17 @@ import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.commons.exception.InitializationException;
 import com.helger.commons.lang.ServiceLoaderHelper;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 
 public class MessageExchangeManager
 {
-  private static final SimpleReadWriteLock s_aRWLock = new SimpleReadWriteLock ();
-  @GuardedBy ("s_aRWLock")
+  private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
+  @GuardedBy ("RW_LOCK")
   private static ICommonsMap <String, IMessageExchangeSPI> s_aMap = new CommonsLinkedHashMap <> ();
 
   public static void reinitialize ()
   {
-    s_aRWLock.writeLocked ( () -> {
+    RW_LOCK.writeLocked ( () -> {
       s_aMap.clear ();
       for (final IMessageExchangeSPI aImpl : ServiceLoaderHelper.getAllSPIImplementations (IMessageExchangeSPI.class))
       {
@@ -65,13 +65,13 @@ public class MessageExchangeManager
   public static IMessageExchangeSPI getImplementationOfID (@Nullable final String sID)
   {
     // Fallback to default
-    return s_aRWLock.readLockedGet ( () -> s_aMap.get (sID));
+    return RW_LOCK.readLockedGet ( () -> s_aMap.get (sID));
   }
 
   @Nonnull
   public static IMessageExchangeSPI getConfiguredImplementation ()
   {
-    final String sID = TCConfig.MEM.getMEMImplementationID ();
+    final String sID = RDCConfig.MEM.getMEMImplementationID ();
     final IMessageExchangeSPI ret = getImplementationOfID (sID);
     if (ret == null)
       throw new IllegalStateException ("Failed to resolve MEM implementation with ID '" + sID + "'");
@@ -81,6 +81,6 @@ public class MessageExchangeManager
   @Nonnegative
   public static ICommonsMap <String, IMessageExchangeSPI> getAll ()
   {
-    return s_aRWLock.readLockedGet ( () -> s_aMap.getClone ());
+    return RW_LOCK.readLockedGet ( () -> s_aMap.getClone ());
   }
 }

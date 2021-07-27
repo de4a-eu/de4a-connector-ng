@@ -27,7 +27,7 @@ import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.peppolid.factory.BDXR1IdentifierFactory;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 import com.helger.smpclient.bdxr1.BDXRClientReadOnly;
 import com.helger.smpclient.bdxr1.IBDXRServiceGroupProvider;
 import com.helger.smpclient.bdxr1.IBDXRServiceMetadataProvider;
@@ -50,17 +50,17 @@ public abstract class AbstractDDClient
   private static BDXRClientReadOnly _getSMPClient (@Nonnull final IParticipantIdentifier aRecipientID) throws SMPDNSResolutionException
   {
     final BDXRClientReadOnly ret;
-    if (TCConfig.R2D2.isR2D2UseDNS ())
+    if (RDCConfig.R2D2.isR2D2UseDNS ())
     {
       ValueEnforcer.notNull (aRecipientID, "RecipientID");
 
       // Use dynamic lookup via DNS - can throw exception
-      ret = new BDXRClientReadOnly (BDXLURLProvider.INSTANCE, aRecipientID, TCConfig.R2D2.getR2D2SML ());
+      ret = new BDXRClientReadOnly (BDXLURLProvider.INSTANCE, aRecipientID, RDCConfig.R2D2.getR2D2SML ());
     }
     else
     {
       // Use a constant SMP URL
-      ret = new BDXRClientReadOnly (TCConfig.R2D2.getR2D2SMPUrl ());
+      ret = new BDXRClientReadOnly (RDCConfig.R2D2.getR2D2SMPUrl ());
     }
     return ret;
   }
@@ -77,10 +77,10 @@ public abstract class AbstractDDClient
                                                                          @Nonnull final IProcessIdentifier aProcessID,
                                                                          @Nonnull final String sTransportProfile) throws SMPDNSResolutionException
   {
-    if (!TCConfig.R2D2.isR2D2UseDNS ())
+    if (!RDCConfig.R2D2.isR2D2UseDNS ())
     {
-      final String sStaticEndpoint = TCConfig.R2D2.getR2D2StaticEndpointURL ();
-      final X509Certificate aStaticCert = TCConfig.R2D2.getR2D2StaticCertificate ();
+      final String sStaticEndpoint = RDCConfig.R2D2.getR2D2StaticEndpointURL ();
+      final X509Certificate aStaticCert = RDCConfig.R2D2.getR2D2StaticCertificate ();
       if (URLHelper.getAsURL (sStaticEndpoint) != null && aStaticCert != null)
       {
         // Create a static service metadata

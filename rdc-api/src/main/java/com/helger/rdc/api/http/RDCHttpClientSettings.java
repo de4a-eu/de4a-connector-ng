@@ -22,7 +22,7 @@ import org.apache.http.HttpHost;
 
 import com.helger.commons.exception.InitializationException;
 import com.helger.httpclient.HttpClientSettings;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 
 /**
  * Common DE4A Connector {@link HttpClientSettings} based on the configuration
@@ -30,21 +30,21 @@ import com.helger.rdc.api.TCConfig;
  *
  * @author Philip Helger
  */
-public class TCHttpClientSettings extends HttpClientSettings
+public class RDCHttpClientSettings extends HttpClientSettings
 {
-  public TCHttpClientSettings ()
+  public RDCHttpClientSettings ()
   {
     // Add settings from configuration file here centrally
-    if (TCConfig.HTTP.isProxyServerEnabled ())
+    if (RDCConfig.HTTP.isProxyServerEnabled ())
     {
-      setProxyHost (new HttpHost (TCConfig.HTTP.getProxyServerAddress (), TCConfig.HTTP.getProxyServerPort ()));
+      setProxyHost (new HttpHost (RDCConfig.HTTP.getProxyServerAddress (), RDCConfig.HTTP.getProxyServerPort ()));
 
       // Non-proxy hosts
-      addNonProxyHostsFromPipeString (TCConfig.HTTP.getProxyServerNonProxyHosts ());
+      addNonProxyHostsFromPipeString (RDCConfig.HTTP.getProxyServerNonProxyHosts ());
     }
 
     // Disable SSL checks?
-    if (TCConfig.HTTP.isTLSTrustAll ())
+    if (RDCConfig.HTTP.isTLSTrustAll ())
       try
       {
         setSSLContextTrustAll ();
@@ -55,11 +55,11 @@ public class TCHttpClientSettings extends HttpClientSettings
         throw new InitializationException (ex);
       }
 
-    final int nConnectionTimeoutMS = TCConfig.HTTP.getConnectionTimeoutMS ();
+    final int nConnectionTimeoutMS = RDCConfig.HTTP.getConnectionTimeoutMS ();
     if (nConnectionTimeoutMS >= 0)
       setConnectionTimeoutMS (nConnectionTimeoutMS);
 
-    final int nReadTimeoutMS = TCConfig.HTTP.getReadTimeoutMS ();
+    final int nReadTimeoutMS = RDCConfig.HTTP.getReadTimeoutMS ();
     if (nReadTimeoutMS >= 0)
       setSocketTimeoutMS (nReadTimeoutMS);
   }

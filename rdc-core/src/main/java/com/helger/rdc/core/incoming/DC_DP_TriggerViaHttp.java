@@ -34,8 +34,8 @@ import com.helger.commons.url.IURLProtocol;
 import com.helger.commons.url.URLProtocolRegistry;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.response.ResponseHandlerByteArray;
-import com.helger.rdc.api.TCConfig;
-import com.helger.rdc.api.http.TCHttpClientSettings;
+import com.helger.rdc.api.RDCConfig;
+import com.helger.rdc.api.http.RDCHttpClientSettings;
 import com.helger.rdc.api.me.incoming.IMEIncomingTransportMetadata;
 import com.helger.rdc.api.me.incoming.IncomingEDMRequest;
 import com.helger.rdc.api.me.incoming.IncomingEDMResponse;
@@ -44,7 +44,7 @@ import com.helger.rdc.api.rest.TCIncomingMessage;
 import com.helger.rdc.api.rest.TCIncomingMetadata;
 import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.TCPayloadType;
-import com.helger.rdc.api.rest.TCRestJAXB;
+import com.helger.rdc.api.rest.RDCRestJAXB;
 import com.helger.regrep.CRegRep4;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
@@ -75,7 +75,7 @@ public final class DC_DP_TriggerViaHttp
       throw new IllegalStateException ("The URL for handling inbound messages '" + sDestURL + "' is invalid.");
 
     // Convert XML to bytes
-    final byte [] aPayload = TCRestJAXB.incomingMessage ().getAsBytes (aMsg);
+    final byte [] aPayload = RDCRestJAXB.incomingMessage ().getAsBytes (aMsg);
     if (aPayload == null)
       throw new IllegalStateException ();
 
@@ -83,7 +83,7 @@ public final class DC_DP_TriggerViaHttp
                           () -> "Sending inbound message to '" + sDestURL + "' with " + aPayload.length + " bytes");
 
     // Main sending, using TC http settings
-    try (final HttpClientManager aHCM = HttpClientManager.create (new TCHttpClientSettings ()))
+    try (final HttpClientManager aHCM = HttpClientManager.create (new RDCHttpClientSettings ()))
     {
       final HttpPost aPost = new HttpPost (sDestURL);
       aPost.setEntity (new ByteArrayEntity (aPayload));
@@ -107,10 +107,10 @@ public final class DC_DP_TriggerViaHttp
                                                      @Nonnull final TCPayloadType ePayloadType)
   {
     final TCIncomingMetadata ret = new TCIncomingMetadata ();
-    ret.setSenderID (TCRestJAXB.createTCID (aMD.getSenderID ()));
-    ret.setReceiverID (TCRestJAXB.createTCID (aMD.getReceiverID ()));
-    ret.setDocTypeID (TCRestJAXB.createTCID (aMD.getDocumentTypeID ()));
-    ret.setProcessID (TCRestJAXB.createTCID (aMD.getProcessID ()));
+    ret.setSenderID (RDCRestJAXB.createTCID (aMD.getSenderID ()));
+    ret.setReceiverID (RDCRestJAXB.createTCID (aMD.getReceiverID ()));
+    ret.setDocTypeID (RDCRestJAXB.createTCID (aMD.getDocumentTypeID ()));
+    ret.setProcessID (RDCRestJAXB.createTCID (aMD.getProcessID ()));
     ret.setPayloadType (ePayloadType);
     return ret;
   }
@@ -131,7 +131,7 @@ public final class DC_DP_TriggerViaHttp
   @Nonempty
   private static String _getConfiguredDestURL ()
   {
-    final String ret = TCConfig.MEM.getMEMIncomingURL ();
+    final String ret = RDCConfig.MEM.getMEMIncomingURL ();
     if (StringHelper.hasNoText (ret))
       throw new IllegalStateException ("The MEM incoming URL for forwarding to DC/DP is not configured.");
     return ret;

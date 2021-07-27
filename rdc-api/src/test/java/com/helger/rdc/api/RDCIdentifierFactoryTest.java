@@ -27,12 +27,12 @@ import com.helger.peppolid.IParticipantIdentifier;
  *
  * @author Philip Helger
  */
-public final class TCIdentifierFactoryTest
+public final class RDCIdentifierFactoryTest
 {
   @Test
   public void testBasic ()
   {
-    final TCIdentifierFactory aIF = TCIdentifierFactory.INSTANCE_TC;
+    final RDCIdentifierFactory aIF = RDCIdentifierFactory.INSTANCE;
 
     final IParticipantIdentifier aPI1 = aIF.createParticipantIdentifier (null, "iso6523-actorid-upis::9999:elonia");
     final IParticipantIdentifier aPI2 = aIF.createParticipantIdentifier ("iso6523-actorid-upis", "9999:elonia");

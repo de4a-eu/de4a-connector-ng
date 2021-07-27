@@ -31,7 +31,7 @@ import com.helger.commons.system.SystemProperties;
 import com.helger.config.source.res.IConfigurationSourceResource;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 
 /**
  * Helper to create the TOOP Connector status reachable via the "/tc-status/"
@@ -59,7 +59,7 @@ public final class TCStatusHelper
 
     // add all configuration items to status (all except passwords)
     final ICommonsOrderedMap <String, String> aVals = new CommonsLinkedHashMap <> ();
-    TCConfig.getConfig ().forEachConfigurationValueProvider ( (aCVP, nPriority) -> {
+    RDCConfig.getConfig ().forEachConfigurationValueProvider ( (aCVP, nPriority) -> {
       if (aCVP instanceof IConfigurationSourceResource)
       {
         final ICommonsOrderedMap <String, String> aAll = ((IConfigurationSourceResource) aCVP).getAllConfigItems ();

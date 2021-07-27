@@ -40,7 +40,7 @@ import com.helger.commons.string.StringHelper;
 import com.helger.commons.url.IURLProtocol;
 import com.helger.commons.url.URLHelper;
 import com.helger.commons.url.URLProtocolRegistry;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.api.me.MessageExchangeManager;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.xservlet.requesttrack.RequestTrackerSettings;
@@ -84,10 +84,10 @@ public final class TCInit
       throw new IllegalStateException ("DE4A Connector is already initialized");
 
     GlobalIDFactory.setPersistentStringIDFactory (new StringIDFromGlobalPersistentLongIDFactory ("rdc-"));
-    GlobalDebug.setDebugModeDirect (TCConfig.Global.isGlobalDebug ());
-    GlobalDebug.setProductionModeDirect (TCConfig.Global.isGlobalProduction ());
+    GlobalDebug.setDebugModeDirect (RDCConfig.Global.isGlobalDebug ());
+    GlobalDebug.setProductionModeDirect (RDCConfig.Global.isGlobalProduction ());
 
-    String sLogPrefix = TCConfig.Global.getToopInstanceName ();
+    String sLogPrefix = RDCConfig.Global.getDE4AInstanceName ();
     if (StringHelper.hasNoText (sLogPrefix))
     {
       // Get my IP address for debugging as default
@@ -117,11 +117,11 @@ public final class TCInit
 
     {
       // Init tracker client
-      DE4AKafkaSettings.setKafkaEnabled (TCConfig.Tracker.isToopTrackerEnabled ());
-      if (TCConfig.Tracker.isToopTrackerEnabled ())
+      DE4AKafkaSettings.setKafkaEnabled (RDCConfig.Tracker.isDE4ATrackerEnabled ());
+      if (RDCConfig.Tracker.isDE4ATrackerEnabled ())
       {
         // Set tracker URL
-        final String sToopTrackerUrl = TCConfig.Tracker.getToopTrackerUrl ();
+        final String sToopTrackerUrl = RDCConfig.Tracker.getDE4ATrackerUrl ();
         if (StringHelper.hasNoText (sToopTrackerUrl))
           throw new InitializationException ("If the tracker is enabled, the tracker URL MUST be provided in the configuration file!");
         // Consistency check - no protocol like "http://" or so may be present
@@ -131,17 +131,17 @@ public final class TCInit
         DE4AKafkaSettings.defaultProperties ().put (ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, sToopTrackerUrl);
 
         // Set the topic
-        final String sToopTrackerTopic = TCConfig.Tracker.getToopTrackerTopic ();
+        final String sToopTrackerTopic = RDCConfig.Tracker.getDE4ATrackerTopic ();
         DE4AKafkaSettings.setKafkaTopic (sToopTrackerTopic);
       }
     }
 
     {
       // Check R2D2 configuration
-      if (!TCConfig.R2D2.isR2D2UseDNS ())
+      if (!RDCConfig.R2D2.isR2D2UseDNS ())
       {
-        final String sStaticEndpoint = TCConfig.R2D2.getR2D2StaticEndpointURL ();
-        final X509Certificate aStaticCert = TCConfig.R2D2.getR2D2StaticCertificate ();
+        final String sStaticEndpoint = RDCConfig.R2D2.getR2D2StaticEndpointURL ();
+        final X509Certificate aStaticCert = RDCConfig.R2D2.getR2D2StaticCertificate ();
         if (URLHelper.getAsURL (sStaticEndpoint) != null && aStaticCert != null)
         {
           if (LOGGER.isInfoEnabled ())
@@ -149,7 +149,7 @@ public final class TCInit
         }
         else
         {
-          final URI aSMPURI = TCConfig.R2D2.getR2D2SMPUrl ();
+          final URI aSMPURI = RDCConfig.R2D2.getR2D2SMPUrl ();
           if (aSMPURI != null)
           {
             if (LOGGER.isInfoEnabled ())

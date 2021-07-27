@@ -31,7 +31,7 @@ import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.photon.api.IAPIDescriptor;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.core.api.TCAPIHelper;
 import com.helger.rdc.webapi.APIParamException;
 import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
@@ -55,7 +55,7 @@ public class ApiGetSmpEndpoints extends AbstractTCAPIInvoker
                                 @Nonnull final Map <String, String> aPathVariables,
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    final IIdentifierFactory aIF = TCConfig.getIdentifierFactory ();
+    final IIdentifierFactory aIF = RDCConfig.getIdentifierFactory ();
 
     // Get participant ID
     final String sParticipantID = aPathVariables.get ("pid");

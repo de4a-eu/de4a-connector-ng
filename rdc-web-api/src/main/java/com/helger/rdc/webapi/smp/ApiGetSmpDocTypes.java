@@ -30,7 +30,7 @@ import com.helger.json.JsonObject;
 import com.helger.peppol.sml.ESMPAPIType;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.photon.api.IAPIDescriptor;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.core.api.TCAPIHelper;
 import com.helger.rdc.webapi.APIParamException;
 import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
@@ -54,7 +54,7 @@ public class ApiGetSmpDocTypes extends AbstractTCAPIInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     final String sParticipantID = aPathVariables.get ("pid");
-    final IParticipantIdentifier aParticipantID = TCConfig.getIdentifierFactory ()
+    final IParticipantIdentifier aParticipantID = RDCConfig.getIdentifierFactory ()
                                                           .parseParticipantIdentifier (sParticipantID);
     if (aParticipantID == null)
       throw new APIParamException ("Invalid participant ID '" + sParticipantID + "' provided.");
@@ -72,7 +72,7 @@ public class ApiGetSmpDocTypes extends AbstractTCAPIInvoker
                      SMPJsonResponse.convert (ESMPAPIType.OASIS_BDXR_V1,
                                               aParticipantID,
                                               aSGHrefs,
-                                              TCConfig.getIdentifierFactory ()));
+                                              RDCConfig.getIdentifierFactory ()));
     });
 
     return aJson;

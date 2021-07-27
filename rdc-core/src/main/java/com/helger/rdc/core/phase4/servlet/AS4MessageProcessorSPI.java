@@ -49,7 +49,7 @@ import com.helger.phase4.servlet.IAS4MessageState;
 import com.helger.phase4.servlet.spi.AS4MessageProcessorResult;
 import com.helger.phase4.servlet.spi.AS4SignalMessageProcessorResult;
 import com.helger.phase4.servlet.spi.IAS4ServletMessageProcessorSPI;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.incoming.ITODOWritableObject;
 import com.helger.rdc.api.me.incoming.ITODOWritableObject.TodoRequest;
@@ -91,7 +91,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     if (aProp == null)
       return null;
 
-    final IIdentifierFactory aIF = TCConfig.getIdentifierFactory ();
+    final IIdentifierFactory aIF = RDCConfig.getIdentifierFactory ();
     final String sType = aProp.getType ();
     final String sValue = aProp.getValue ();
     if (sType == null)
@@ -155,7 +155,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
       final WSS4JAttachment aMainPayload = aIncomingAttachments.getFirst ();
       try
       {
-        final IIdentifierFactory aIF = TCConfig.getIdentifierFactory ();
+        final IIdentifierFactory aIF = RDCConfig.getIdentifierFactory ();
         final ICommonsList <Ebms3Property> aProps = new CommonsArrayList <> (aUserMessage.getMessageProperties ()
                                                                                          .getProperty ());
         final Ebms3Property aPropOS = aProps.findFirst (x -> x.getName ().equals (CAS4.ORIGINAL_SENDER));

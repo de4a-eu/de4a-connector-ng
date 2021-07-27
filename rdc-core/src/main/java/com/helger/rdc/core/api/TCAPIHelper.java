@@ -28,7 +28,7 @@ import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.phive.api.executorset.VESID;
 import com.helger.phive.api.result.ValidationResultList;
-import com.helger.rdc.api.error.LoggingTCErrorHandler;
+import com.helger.rdc.api.error.LoggingRDCErrorHandler;
 import com.helger.rdc.api.me.IMessageExchangeSPI;
 import com.helger.rdc.api.me.MessageExchangeManager;
 import com.helger.rdc.api.me.model.MEMessage;
@@ -62,7 +62,7 @@ public final class TCAPIHelper
   public static ICommonsSortedMap <String, String> querySMPServiceGroups (@Nonnull final IParticipantIdentifier aParticipantID)
   {
     return TCAPIConfig.getDDServiceGroupHrefProvider ()
-                      .getAllServiceGroupHrefs (aParticipantID, LoggingTCErrorHandler.INSTANCE);
+                      .getAllServiceGroupHrefs (aParticipantID, LoggingRDCErrorHandler.INSTANCE);
   }
 
   /**

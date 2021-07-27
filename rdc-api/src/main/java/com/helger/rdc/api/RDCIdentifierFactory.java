@@ -29,15 +29,15 @@ import com.helger.peppolid.simple.process.SimpleProcessIdentifier;
  *
  * @author Philip Helger
  */
-public final class TCIdentifierFactory implements IIdentifierFactory
+public final class RDCIdentifierFactory implements IIdentifierFactory
 {
   public static final String DOCTYPE_SCHEME = "urn:de4a-eu:CanonicalEvidenceType";
   public static final String PARTICIPANT_SCHEME = "iso6523-actorid-upis";
   public static final String PROCESS_SCHEME = "urn:de4a-eu:MessageType";
 
-  static final TCIdentifierFactory INSTANCE_TC = new TCIdentifierFactory ();
+  static final RDCIdentifierFactory INSTANCE = new RDCIdentifierFactory ();
 
-  private TCIdentifierFactory ()
+  private RDCIdentifierFactory ()
   {}
 
   @Nullable

@@ -14,34 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api.rest;
+package com.helger.rdc.api.error;
 
-import javax.annotation.Nonnull;
+import java.io.Serializable;
 
-import com.helger.commons.annotation.Singleton;
-import com.helger.xml.namespace.MapBasedNamespaceContext;
+import com.helger.commons.id.IHasID;
 
 /**
- * The namespace context to be used as the namespace prefix mapper.
+ * Base interface for all kind of DE4A error code enums.
  *
  * @author Philip Helger
  */
-@Singleton
-public class TCRestNamespaceContext extends MapBasedNamespaceContext
+public interface IRDCErrorCode extends IHasID <String>, Serializable
 {
-  private static final class SingletonHolder
-  {
-    static final TCRestNamespaceContext s_aInstance = new TCRestNamespaceContext ();
-  }
-
-  protected TCRestNamespaceContext ()
-  {
-    addMapping (TCRestJAXB.DEFAULT_NAMESPACE_PREFIX, TCRestJAXB.NS_URI);
-  }
-
-  @Nonnull
-  public static TCRestNamespaceContext getInstance ()
-  {
-    return SingletonHolder.s_aInstance;
-  }
+  /* empty */
 }

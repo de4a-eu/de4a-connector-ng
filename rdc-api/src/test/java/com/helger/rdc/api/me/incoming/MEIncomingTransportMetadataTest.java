@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.helger.commons.mock.CommonsTestHelper;
 import com.helger.peppolid.factory.IIdentifierFactory;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 
 /**
  * Test class for class {@link MEIncomingTransportMetadata}.
@@ -32,7 +32,7 @@ public final class MEIncomingTransportMetadataTest
   @Test
   public void testEqualsHashcode ()
   {
-    final IIdentifierFactory aIF = TCConfig.getIdentifierFactory ();
+    final IIdentifierFactory aIF = RDCConfig.getIdentifierFactory ();
 
     MEIncomingTransportMetadata m = new MEIncomingTransportMetadata (null, null, null, null);
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, new MEIncomingTransportMetadata (null, null, null, null));

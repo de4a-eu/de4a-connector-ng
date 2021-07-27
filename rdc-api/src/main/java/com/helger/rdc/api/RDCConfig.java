@@ -51,9 +51,9 @@ import com.helger.security.certificate.CertificateHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class TCConfig
+public final class RDCConfig
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (TCConfig.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RDCConfig.class);
   private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
 
   @GuardedBy ("RW_LOCK")
@@ -64,7 +64,7 @@ public final class TCConfig
     setDefaultConfig ();
   }
 
-  private TCConfig ()
+  private RDCConfig ()
   {}
 
   /**
@@ -101,7 +101,7 @@ public final class TCConfig
   @Nonnull
   public static IIdentifierFactory getIdentifierFactory ()
   {
-    return TCIdentifierFactory.INSTANCE_TC;
+    return RDCIdentifierFactory.INSTANCE;
   }
 
   public static final class Global
@@ -120,7 +120,7 @@ public final class TCConfig
     }
 
     @Nullable
-    public static String getToopInstanceName ()
+    public static String getDE4AInstanceName ()
     {
       return getConfig ().getAsString ("global.instancename");
     }
@@ -129,29 +129,29 @@ public final class TCConfig
   public static final class Tracker
   {
     public static final boolean DEFAULT_TOOP_TRACKER_ENABLED = false;
-    public static final String DEFAULT_TOOP_TRACKER_TOPIC = "toop";
+    public static final String DEFAULT_TOOP_TRACKER_TOPIC = "de4a";
 
     private Tracker ()
     {}
 
-    public static boolean isToopTrackerEnabled ()
+    public static boolean isDE4ATrackerEnabled ()
     {
       return getConfig ().getAsBoolean ("de4a.tracker.enabled", DEFAULT_TOOP_TRACKER_ENABLED);
     }
 
     @Nullable
-    public static String getToopTrackerUrl ()
+    public static String getDE4ATrackerUrl ()
     {
       return getConfig ().getAsString ("de4a.tracker.url");
     }
 
     @Nullable
-    public static String getToopTrackerTopic ()
+    public static String getDE4ATrackerTopic ()
     {
       return getConfig ().getAsString ("de4a.tracker.topic", DEFAULT_TOOP_TRACKER_TOPIC);
     }
 
-    public boolean isToopTrackerViaHttp ()
+    public boolean isDE4ATrackerViaHttp ()
     {
       return getConfig ().getAsBoolean ("de4a.tracker.viahttp", false);
     }
@@ -243,11 +243,7 @@ public final class TCConfig
           final String sManagementServiceURL = getConfig ().getAsString ("de4a.r2d2.sml.serviceurl");
           final boolean bClientCertificateRequired = getConfig ().getAsBoolean ("de4a.r2d2.sml.clientcert", false);
           // No need for a persistent ID here
-          ret = new SMLInfo (GlobalIDFactory.getNewStringID (),
-                             sDisplayName,
-                             sDNSZone,
-                             sManagementServiceURL,
-                             bClientCertificateRequired);
+          ret = new SMLInfo (GlobalIDFactory.getNewStringID (), sDisplayName, sDNSZone, sManagementServiceURL, bClientCertificateRequired);
         }
         // Remember in cache
         s_aCachedSMLInfo = ret;

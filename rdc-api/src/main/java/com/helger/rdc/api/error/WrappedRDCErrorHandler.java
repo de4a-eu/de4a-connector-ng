@@ -31,7 +31,7 @@ import com.helger.commons.error.list.ErrorList;
  *
  * @author Philip Helger
  */
-public class WrappedTCErrorHandler implements ITCErrorHandler
+public class WrappedRDCErrorHandler implements IRDCErrorHandler
 {
   private final ErrorList m_aErrorList;
   private final Predicate <? super IError> m_aFilter;
@@ -42,7 +42,7 @@ public class WrappedTCErrorHandler implements ITCErrorHandler
    * @param aErrorList
    *        The error list to be filled. May not be <code>null</code>.
    */
-  public WrappedTCErrorHandler (@Nonnull final ErrorList aErrorList)
+  public WrappedRDCErrorHandler (@Nonnull final ErrorList aErrorList)
   {
     this (aErrorList, null);
   }
@@ -56,7 +56,7 @@ public class WrappedTCErrorHandler implements ITCErrorHandler
    *        The filter to be used. May be <code>null</code> to collect all
    *        errors.
    */
-  public WrappedTCErrorHandler (@Nonnull final ErrorList aErrorList, @Nullable final Predicate <? super IError> aFilter)
+  public WrappedRDCErrorHandler (@Nonnull final ErrorList aErrorList, @Nullable final Predicate <? super IError> aFilter)
   {
     m_aErrorList = aErrorList;
     m_aFilter = aFilter;
@@ -65,7 +65,7 @@ public class WrappedTCErrorHandler implements ITCErrorHandler
   public void onMessage (@Nonnull final EErrorLevel eErrorLevel,
                          @Nonnull final String sMsg,
                          @Nullable final Throwable t,
-                         @Nonnull final IToopErrorCode eCode)
+                         @Nonnull final IRDCErrorCode eCode)
   {
     final IError aError = SingleError.builder ()
                                      .errorLevel (eErrorLevel)

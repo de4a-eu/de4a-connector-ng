@@ -19,7 +19,7 @@ package com.helger.rdc.api.me.outgoing;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.rdc.api.error.IToopErrorCode;
+import com.helger.rdc.api.error.IRDCErrorCode;
 import com.helger.rdc.api.me.MEException;
 
 /**
@@ -29,9 +29,9 @@ import com.helger.rdc.api.me.MEException;
  */
 public class MEOutgoingException extends MEException
 {
-  private final IToopErrorCode m_aErrorCode;
+  private final IRDCErrorCode m_aErrorCode;
 
-  protected MEOutgoingException (@Nullable final String sMsg, @Nullable final Throwable aCause, @Nullable final IToopErrorCode aErrorCode)
+  protected MEOutgoingException (@Nullable final String sMsg, @Nullable final Throwable aCause, @Nullable final IRDCErrorCode aErrorCode)
   {
     super (sMsg, aCause);
     m_aErrorCode = aErrorCode;
@@ -47,18 +47,18 @@ public class MEOutgoingException extends MEException
     this (sMsg, aCause, null);
   }
 
-  public MEOutgoingException (@Nonnull final IToopErrorCode aErrorCode, @Nullable final Throwable aCause)
+  public MEOutgoingException (@Nonnull final IRDCErrorCode aErrorCode, @Nullable final Throwable aCause)
   {
     this ("TOOP Error " + aErrorCode.getID (), aCause, aErrorCode);
   }
 
-  public MEOutgoingException (@Nonnull final IToopErrorCode aErrorCode, @Nullable final String sMsg)
+  public MEOutgoingException (@Nonnull final IRDCErrorCode aErrorCode, @Nullable final String sMsg)
   {
     this ("TOOP Error " + aErrorCode.getID () + " - " + sMsg, null, aErrorCode);
   }
 
   @Nullable
-  public final IToopErrorCode getToopErrorCode ()
+  public final IRDCErrorCode getToopErrorCode ()
   {
     return m_aErrorCode;
   }

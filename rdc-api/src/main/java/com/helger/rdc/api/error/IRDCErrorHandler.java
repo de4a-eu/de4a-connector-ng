@@ -26,7 +26,7 @@ import com.helger.commons.error.level.EErrorLevel;
  *
  * @author Philip Helger
  */
-public interface ITCErrorHandler
+public interface IRDCErrorHandler
 {
   /**
    * The main error handler method to be implemented
@@ -40,24 +40,24 @@ public interface ITCErrorHandler
    * @param eCode
    *        The TOOP specific error code. Never <code>null</code>.
    */
-  void onMessage (@Nonnull EErrorLevel eErrorLevel, @Nonnull String sMsg, @Nullable Throwable t, @Nonnull IToopErrorCode eCode);
+  void onMessage (@Nonnull EErrorLevel eErrorLevel, @Nonnull String sMsg, @Nullable Throwable t, @Nonnull IRDCErrorCode eCode);
 
-  default void onWarning (@Nonnull final String sMsg, @Nonnull final IToopErrorCode eCode)
+  default void onWarning (@Nonnull final String sMsg, @Nonnull final IRDCErrorCode eCode)
   {
     onMessage (EErrorLevel.WARN, sMsg, null, eCode);
   }
 
-  default void onWarning (@Nonnull final String sMsg, @Nullable final Throwable t, @Nonnull final IToopErrorCode eCode)
+  default void onWarning (@Nonnull final String sMsg, @Nullable final Throwable t, @Nonnull final IRDCErrorCode eCode)
   {
     onMessage (EErrorLevel.WARN, sMsg, t, eCode);
   }
 
-  default void onError (@Nonnull final String sMsg, @Nonnull final IToopErrorCode eCode)
+  default void onError (@Nonnull final String sMsg, @Nonnull final IRDCErrorCode eCode)
   {
     onMessage (EErrorLevel.ERROR, sMsg, null, eCode);
   }
 
-  default void onError (@Nonnull final String sMsg, @Nullable final Throwable t, @Nonnull final IToopErrorCode eCode)
+  default void onError (@Nonnull final String sMsg, @Nullable final Throwable t, @Nonnull final IRDCErrorCode eCode)
   {
     onMessage (EErrorLevel.ERROR, sMsg, t, eCode);
   }

@@ -24,8 +24,8 @@ import com.helger.commons.collection.impl.ICommonsSortedMap;
 import com.helger.peppolid.CIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.rdc.api.dd.IDDServiceGroupHrefProvider;
-import com.helger.rdc.api.error.EToopErrorCode;
-import com.helger.rdc.api.error.ITCErrorHandler;
+import com.helger.rdc.api.error.ERDCErrorCode;
+import com.helger.rdc.api.error.IRDCErrorHandler;
 import com.helger.smpclient.bdxr1.IBDXRServiceGroupProvider;
 import com.helger.smpclient.exception.SMPClientException;
 import com.helger.smpclient.url.SMPDNSResolutionException;
@@ -39,7 +39,7 @@ public class DDServiceGroupHrefProviderSMP extends AbstractDDClient implements I
 
   @Nonnull
   public ICommonsSortedMap <String, String> getAllServiceGroupHrefs (@Nonnull final IParticipantIdentifier aParticipantID,
-                                                                     @Nonnull final ITCErrorHandler aErrorHandler)
+                                                                     @Nonnull final IRDCErrorHandler aErrorHandler)
   {
     ValueEnforcer.notNull (aParticipantID, "ParticipantID");
     ValueEnforcer.notNull (aErrorHandler, "ErrorHandler");
@@ -62,7 +62,7 @@ public class DDServiceGroupHrefProviderSMP extends AbstractDDClient implements I
           final String sHref = CIdentifier.createPercentDecoded (aSMR.getHref ());
           if (ret.put (sHref, aSMR.getHref ()) != null)
             aErrorHandler.onWarning ("The SMP ServiceGroup list contains the duplicate URL '" + sHref + "'",
-                                     EToopErrorCode.GEN);
+                                     ERDCErrorCode.GEN);
         }
       }
       return ret;

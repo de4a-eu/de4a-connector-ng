@@ -14,24 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api;
+package com.helger.rdc.api.rest;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import javax.annotation.Nonnull;
 
-import org.junit.Test;
+import com.helger.commons.annotation.Singleton;
+import com.helger.xml.namespace.MapBasedNamespaceContext;
 
 /**
- * Test class for class {@link TCConfig}.
+ * The namespace context to be used as the namespace prefix mapper.
  *
  * @author Philip Helger
  */
-public final class TCConfigTest
+@Singleton
+public class RDCRestNamespaceContext extends MapBasedNamespaceContext
 {
-  @Test
-  public void testBasic ()
+  private static final class SingletonHolder
   {
-    assertFalse (TCConfig.R2D2.isR2D2UseDNS ());
-    assertNotNull (TCConfig.getIdentifierFactory ());
+    static final RDCRestNamespaceContext INSTANCE = new RDCRestNamespaceContext ();
+  }
+
+  protected RDCRestNamespaceContext ()
+  {
+    addMapping (RDCRestJAXB.DEFAULT_NAMESPACE_PREFIX, RDCRestJAXB.NS_URI);
+  }
+
+  @Nonnull
+  public static RDCRestNamespaceContext getInstance ()
+  {
+    return SingletonHolder.INSTANCE;
   }
 }

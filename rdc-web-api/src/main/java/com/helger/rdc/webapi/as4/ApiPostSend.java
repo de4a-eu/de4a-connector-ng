@@ -35,7 +35,7 @@ import com.helger.rdc.api.me.outgoing.IMERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
-import com.helger.rdc.api.rest.TCRestJAXB;
+import com.helger.rdc.api.rest.RDCRestJAXB;
 import com.helger.rdc.core.api.TCAPIHelper;
 import com.helger.rdc.webapi.APIParamException;
 import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
@@ -57,7 +57,7 @@ public class ApiPostSend extends AbstractTCAPIInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final TCOutgoingMessage aOutgoingMsg = TCRestJAXB.outgoingMessage ()
+    final TCOutgoingMessage aOutgoingMsg = RDCRestJAXB.outgoingMessage ()
                                                      .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new APIParamException ("Failed to interpret the message body as an 'OutgoingMessage'");

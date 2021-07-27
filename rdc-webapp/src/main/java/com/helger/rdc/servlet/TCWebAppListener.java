@@ -24,7 +24,7 @@ import com.helger.photon.audit.AuditHelper;
 import com.helger.photon.audit.DoNothingAuditor;
 import com.helger.photon.core.servlet.WebAppListener;
 import com.helger.photon.security.login.LoggedInUserManager;
-import com.helger.rdc.api.TCConfig;
+import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.core.TCInit;
 import com.helger.rdc.webapi.TCAPIInit;
@@ -44,7 +44,7 @@ public class TCWebAppListener extends WebAppListener
   @Override
   protected String getDataPath (@Nonnull final ServletContext aSC)
   {
-    String ret = TCConfig.WebApp.getDataPath ();
+    String ret = RDCConfig.WebApp.getDataPath ();
     if (ret == null)
     {
       // Fall back to servlet context path

@@ -28,7 +28,7 @@ import com.helger.commons.lang.EnumHelper;
  *
  * @author Philip Helger
  */
-public enum EToopErrorCode implements IToopErrorCode
+public enum ERDCErrorCode implements IRDCErrorCode
 {
   /** Uncategorized error */
   GEN ("GEN"),
@@ -60,7 +60,7 @@ public enum EToopErrorCode implements IToopErrorCode
 
   private final String m_sID;
 
-  EToopErrorCode (@Nonnull @Nonempty final String sID)
+  ERDCErrorCode (@Nonnull @Nonempty final String sID)
   {
     m_sID = sID;
   }
@@ -73,8 +73,8 @@ public enum EToopErrorCode implements IToopErrorCode
   }
 
   @Nullable
-  public static EToopErrorCode getFromIDOrNull (@Nullable final String sID)
+  public static ERDCErrorCode getFromIDOrNull (@Nullable final String sID)
   {
-    return EnumHelper.getFromIDOrNull (EToopErrorCode.class, sID);
+    return EnumHelper.getFromIDOrNull (ERDCErrorCode.class, sID);
   }
 }

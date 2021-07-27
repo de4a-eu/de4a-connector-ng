@@ -34,14 +34,14 @@ import com.helger.peppolid.IIdentifier;
  * @author Philip Helger
  */
 @Immutable
-public final class TCRestJAXB
+public final class RDCRestJAXB
 {
   public static final ClassPathResource XSD_RES = new ClassPathResource ("/schemas/rdc-rest.xsd",
-                                                                         TCRestJAXB.class.getClassLoader ());
+                                                                         RDCRestJAXB.class.getClassLoader ());
   public static final String NS_URI = "urn:com.helger/de4a/connector/exchange/2021/05/";
   public static final String DEFAULT_NAMESPACE_PREFIX = "de4a";
 
-  private TCRestJAXB ()
+  private RDCRestJAXB ()
   {}
 
   @Nonnull
@@ -64,7 +64,7 @@ public final class TCRestJAXB
                                                                                         getAllXSDResources (),
                                                                                         new ObjectFactory ()::createOutgoingMessage);
     ret.setFormattedOutput (true);
-    ret.setNamespaceContext (TCRestNamespaceContext.getInstance ());
+    ret.setNamespaceContext (RDCRestNamespaceContext.getInstance ());
     return ret;
   }
 
@@ -79,7 +79,7 @@ public final class TCRestJAXB
                                                                                         getAllXSDResources (),
                                                                                         new ObjectFactory ()::createIncomingMessage);
     ret.setFormattedOutput (true);
-    ret.setNamespaceContext (TCRestNamespaceContext.getInstance ());
+    ret.setNamespaceContext (RDCRestNamespaceContext.getInstance ());
     return ret;
   }
 

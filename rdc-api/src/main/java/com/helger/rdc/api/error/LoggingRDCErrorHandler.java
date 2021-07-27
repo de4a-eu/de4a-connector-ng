@@ -30,15 +30,15 @@ import com.helger.commons.log.LogHelper;
  * 
  * @author Philip Helger
  */
-public class LoggingTCErrorHandler implements ITCErrorHandler
+public class LoggingRDCErrorHandler implements IRDCErrorHandler
 {
-  public static final LoggingTCErrorHandler INSTANCE = new LoggingTCErrorHandler ();
-  private static final Logger LOGGER = LoggerFactory.getLogger (LoggingTCErrorHandler.class);
+  public static final LoggingRDCErrorHandler INSTANCE = new LoggingRDCErrorHandler ();
+  private static final Logger LOGGER = LoggerFactory.getLogger (LoggingRDCErrorHandler.class);
 
   public void onMessage (@Nonnull final EErrorLevel eErrorLevel,
                          @Nonnull final String sMsg,
                          @Nullable final Throwable t,
-                         @Nonnull final IToopErrorCode eCode)
+                         @Nonnull final IRDCErrorCode eCode)
   {
     LogHelper.log (LOGGER, eErrorLevel, sMsg, t);
   }
