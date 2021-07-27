@@ -26,7 +26,7 @@ import com.helger.rdc.webapi.as4.ApiPostSend;
 import com.helger.rdc.webapi.smp.ApiGetSmpDocTypes;
 import com.helger.rdc.webapi.smp.ApiGetSmpEndpoints;
 import com.helger.rdc.webapi.user.ApiPostUserSubmitEdm;
-import com.helger.rdc.webapi.validation.ApiPostValidateEdm;
+import com.helger.rdc.webapi.validation.ApiPostValidateIem;
 
 /**
  * Register all APIs
@@ -34,9 +34,9 @@ import com.helger.rdc.webapi.validation.ApiPostValidateEdm;
  * @author Philip Helger
  */
 @Immutable
-public final class TCAPIInit
+public final class RDCAPIInit
 {
-  private TCAPIInit ()
+  private RDCAPIInit ()
   {}
 
   public static void initAPI (@Nonnull final IAPIRegistry aAPIRegistry)
@@ -48,17 +48,17 @@ public final class TCAPIInit
 
     // Validation stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/request"),
-                                                 new ApiPostValidateEdm (ETCEdmType.REQUEST)));
+                                                 new ApiPostValidateIem (ERDCIemType.REQUEST)));
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/response"),
-                                                 new ApiPostValidateEdm (ETCEdmType.RESPONSE)));
+                                                 new ApiPostValidateIem (ERDCIemType.RESPONSE)));
 
     // AS4 stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
 
     // User stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/request"),
-                                                 new ApiPostUserSubmitEdm (ETCEdmType.REQUEST)));
+                                                 new ApiPostUserSubmitEdm (ERDCIemType.REQUEST)));
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/response"),
-                                                 new ApiPostUserSubmitEdm (ETCEdmType.RESPONSE)));
+                                                 new ApiPostUserSubmitEdm (ERDCIemType.RESPONSE)));
   }
 }

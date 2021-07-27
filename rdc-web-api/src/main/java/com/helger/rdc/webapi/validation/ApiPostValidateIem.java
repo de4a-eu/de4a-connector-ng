@@ -35,8 +35,8 @@ import com.helger.phive.json.PhiveJsonHelper;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.core.api.RDCAPIHelper;
 import com.helger.rdc.core.validation.RDCValidator;
-import com.helger.rdc.webapi.ETCEdmType;
-import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
+import com.helger.rdc.webapi.ERDCIemType;
+import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
 import com.helger.rdc.webapi.helper.CommonAPIInvoker;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 
@@ -45,13 +45,13 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
  *
  * @author Philip Helger
  */
-public class ApiPostValidateEdm extends AbstractTCAPIInvoker
+public class ApiPostValidateIem extends AbstractRDCAPIInvoker
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostValidateEdm.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostValidateIem.class);
 
-  private final ETCEdmType m_eType;
+  private final ERDCIemType m_eType;
 
-  public ApiPostValidateEdm (@Nonnull final ETCEdmType eType)
+  public ApiPostValidateIem (@Nonnull final ERDCIemType eType)
   {
     m_eType = eType;
   }

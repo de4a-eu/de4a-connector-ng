@@ -46,8 +46,8 @@ import com.helger.rdc.api.rest.RDCRestJAXB;
 import com.helger.rdc.core.api.RDCAPIHelper;
 import com.helger.rdc.core.validation.RDCValidator;
 import com.helger.rdc.webapi.APIParamException;
-import com.helger.rdc.webapi.ETCEdmType;
-import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
+import com.helger.rdc.webapi.ERDCIemType;
+import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
 import com.helger.rdc.webapi.helper.CommonAPIInvoker;
 import com.helger.security.certificate.CertificateHelper;
 import com.helger.smpclient.json.SMPJsonResponse;
@@ -60,13 +60,13 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  *
  * @author Philip Helger
  */
-public class ApiPostUserSubmitEdm extends AbstractTCAPIInvoker
+public class ApiPostUserSubmitEdm extends AbstractRDCAPIInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitEdm.class);
 
-  private final ETCEdmType m_eType;
+  private final ERDCIemType m_eType;
 
-  public ApiPostUserSubmitEdm (@Nonnull final ETCEdmType eType)
+  public ApiPostUserSubmitEdm (@Nonnull final ERDCIemType eType)
   {
     m_eType = eType;
   }

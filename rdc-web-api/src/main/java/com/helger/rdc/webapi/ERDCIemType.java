@@ -28,7 +28,7 @@ import com.helger.rdc.api.rest.TCPayloadType;
  *
  * @author Philip Helger
  */
-public enum ETCEdmType
+public enum ERDCIemType
 {
   REQUEST ("req", null, TCPayloadType.REQUEST),
   RESPONSE ("resp", null, TCPayloadType.RESPONSE);
@@ -37,7 +37,7 @@ public enum ETCEdmType
   private final VESID m_aVESID;
   private final TCPayloadType m_ePayloadType;
 
-  ETCEdmType (@Nonnull @Nonempty final String sID,
+  ERDCIemType (@Nonnull @Nonempty final String sID,
               @Nullable final VESID aVESID,
               @Nonnull final TCPayloadType ePayloadType)
   {

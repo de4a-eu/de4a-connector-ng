@@ -38,7 +38,7 @@ import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RDCRestJAXB;
 import com.helger.rdc.core.api.RDCAPIHelper;
 import com.helger.rdc.webapi.APIParamException;
-import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
+import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
 import com.helger.rdc.webapi.helper.CommonAPIInvoker;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
@@ -48,7 +48,7 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
  *
  * @author Philip Helger
  */
-public class ApiPostSend extends AbstractTCAPIInvoker
+public class ApiPostSend extends AbstractRDCAPIInvoker
 {
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,

@@ -27,7 +27,7 @@ import com.helger.photon.security.login.LoggedInUserManager;
 import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.core.RDCInit;
-import com.helger.rdc.webapi.TCAPIInit;
+import com.helger.rdc.webapi.RDCAPIInit;
 
 /**
  * Global startup etc. listener.
@@ -80,7 +80,7 @@ public class TCWebAppListener extends WebAppListener
   @Override
   protected void initAPI (@Nonnull final IAPIRegistry aAPIRegistry)
   {
-    TCAPIInit.initAPI (aAPIRegistry);
+    RDCAPIInit.initAPI (aAPIRegistry);
   }
 
   @Override

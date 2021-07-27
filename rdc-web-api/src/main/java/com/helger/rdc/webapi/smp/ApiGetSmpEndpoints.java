@@ -34,7 +34,7 @@ import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.core.api.RDCAPIHelper;
 import com.helger.rdc.webapi.APIParamException;
-import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
+import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
 import com.helger.rdc.webapi.helper.CommonAPIInvoker;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
@@ -45,7 +45,7 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  *
  * @author Philip Helger
  */
-public class ApiGetSmpEndpoints extends AbstractTCAPIInvoker
+public class ApiGetSmpEndpoints extends AbstractRDCAPIInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiGetSmpEndpoints.class);
 

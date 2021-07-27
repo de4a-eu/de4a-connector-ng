@@ -42,7 +42,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public abstract class AbstractTCAPIInvoker implements IAPIExecutor
+public abstract class AbstractRDCAPIInvoker implements IAPIExecutor
 {
   protected static final String JSON_SUCCESS = "success";
 
