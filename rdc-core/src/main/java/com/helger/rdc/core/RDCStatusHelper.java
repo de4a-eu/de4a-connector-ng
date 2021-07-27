@@ -40,9 +40,9 @@ import com.helger.rdc.api.RDCConfig;
  * @author Philip Helger
  */
 @Immutable
-public final class TCStatusHelper
+public final class RDCStatusHelper
 {
-  private TCStatusHelper ()
+  private RDCStatusHelper ()
   {}
 
   @Nonnull
@@ -50,8 +50,8 @@ public final class TCStatusHelper
   public static IJsonObject getDefaultStatusData ()
   {
     final IJsonObject aStatusData = new JsonObject ();
-    aStatusData.add ("build.version", CTCVersion.BUILD_VERSION);
-    aStatusData.add ("build.datetime", CTCVersion.BUILD_TIMESTAMP);
+    aStatusData.add ("build.version", CRDCVersion.BUILD_VERSION);
+    aStatusData.add ("build.datetime", CRDCVersion.BUILD_TIMESTAMP);
     aStatusData.add ("status.datetime", PDTWebDateHelper.getAsStringXSD (PDTFactory.getCurrentZonedDateTimeUTC ()));
     aStatusData.add ("java.version", SystemProperties.getJavaVersion ());
     aStatusData.add ("global.debug", GlobalDebug.isDebugMode ());

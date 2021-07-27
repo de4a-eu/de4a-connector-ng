@@ -64,7 +64,7 @@ import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.api.me.outgoing.IMERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MEOutgoingException;
-import com.helger.rdc.core.phase4.config.TOOPPMode;
+import com.helger.rdc.core.phase4.config.RDC_PMode;
 import com.helger.rdc.core.phase4.servlet.AS4MessageProcessorSPI;
 import com.helger.servlet.ServletHelper;
 
@@ -172,7 +172,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = TOOPPMode.createTOOPMode ("AnyInitiatorID",
+      final PMode aPMode = RDC_PMode.createTOOPMode ("AnyInitiatorID",
                                                      "AnyResponderID",
                                                      "AnyResponderAddress",
                                                      "TOOP_PMODE",

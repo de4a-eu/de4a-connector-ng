@@ -26,7 +26,7 @@ import com.helger.photon.core.servlet.WebAppListener;
 import com.helger.photon.security.login.LoggedInUserManager;
 import com.helger.rdc.api.RDCConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
-import com.helger.rdc.core.TCInit;
+import com.helger.rdc.core.RDCInit;
 import com.helger.rdc.webapi.TCAPIInit;
 
 /**
@@ -71,7 +71,7 @@ public class TCWebAppListener extends WebAppListener
   protected void afterContextInitialized (final ServletContext aSC)
   {
     // Use default handler
-    TCInit.initGlobally (aSC, (IMEIncomingHandler) null);
+    RDCInit.initGlobally (aSC, (IMEIncomingHandler) null);
 
     // Don't write audit logs
     AuditHelper.setAuditor (new DoNothingAuditor (LoggedInUserManager.getInstance ()));
@@ -86,6 +86,6 @@ public class TCWebAppListener extends WebAppListener
   @Override
   protected void beforeContextDestroyed (final ServletContext aSC)
   {
-    TCInit.shutdownGlobally (aSC);
+    RDCInit.shutdownGlobally (aSC);
   }
 }

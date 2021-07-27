@@ -54,13 +54,13 @@ import eu.de4a.kafkaclient.DE4AKafkaSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class TCInit
+public final class RDCInit
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (TCInit.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RDCInit.class);
   private static final AtomicBoolean INITED = new AtomicBoolean (false);
   private static String s_sLogPrefix;
 
-  private TCInit ()
+  private RDCInit ()
   {}
 
   /**
@@ -72,7 +72,7 @@ public final class TCInit
    *        <code>null</code> but maybe a mocked one.
    * @param aIncomingHandler
    *        The incoming handler to be used. If <code>null</code> the default of
-   *        {@link TCIncomingHandlerViaHttp} will be used.
+   *        {@link RDCIncomingHandlerViaHttp} will be used.
    * @throws IllegalStateException
    *         If the DE4A Connector is already initialized
    * @throws InitializationException
@@ -163,10 +163,10 @@ public final class TCInit
 
     // Init incoming message handler
     final IMEIncomingHandler aRealIncomingHandler = aIncomingHandler != null ? aIncomingHandler
-                                                                             : new TCIncomingHandlerViaHttp (s_sLogPrefix);
+                                                                             : new RDCIncomingHandlerViaHttp (s_sLogPrefix);
     MessageExchangeManager.getConfiguredImplementation ().registerIncomingHandler (aServletContext, aRealIncomingHandler);
 
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector WebApp " + CTCVersion.BUILD_VERSION + " started");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector WebApp " + CRDCVersion.BUILD_VERSION + " started");
   }
 
   /**

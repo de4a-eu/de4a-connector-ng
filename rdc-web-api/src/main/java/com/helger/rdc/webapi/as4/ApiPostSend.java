@@ -36,7 +36,7 @@ import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RDCRestJAXB;
-import com.helger.rdc.core.api.TCAPIHelper;
+import com.helger.rdc.core.api.RDCAPIHelper;
 import com.helger.rdc.webapi.APIParamException;
 import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
 import com.helger.rdc.webapi.helper.CommonAPIInvoker;
@@ -103,7 +103,7 @@ public class ApiPostSend extends AbstractTCAPIInvoker
 
     CommonAPIInvoker.invoke (aJson, () -> {
       // Main sending - throws Exception on error
-      TCAPIHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
+      RDCAPIHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
       aJson.add (JSON_SUCCESS, true);
     });
 

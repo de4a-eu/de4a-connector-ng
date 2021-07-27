@@ -33,8 +33,8 @@ import com.helger.phive.api.executorset.VESID;
 import com.helger.phive.api.result.ValidationResultList;
 import com.helger.phive.json.PhiveJsonHelper;
 import com.helger.photon.api.IAPIDescriptor;
-import com.helger.rdc.core.api.TCAPIHelper;
-import com.helger.rdc.core.validation.TCValidator;
+import com.helger.rdc.core.api.RDCAPIHelper;
+import com.helger.rdc.core.validation.RDCValidator;
 import com.helger.rdc.webapi.ETCEdmType;
 import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
 import com.helger.rdc.webapi.helper.CommonAPIInvoker;
@@ -72,15 +72,15 @@ public class ApiPostValidateEdm extends AbstractTCAPIInvoker
     CommonAPIInvoker.invoke (aJson, () -> {
       // Main validation
       final StopWatch aSW = StopWatch.createdStarted ();
-      final ValidationResultList aValidationResultList = TCAPIHelper.validateBusinessDocument (aVESID, aPayload);
+      final ValidationResultList aValidationResultList = RDCAPIHelper.validateBusinessDocument (aVESID, aPayload);
       aSW.stop ();
 
       // Build response
       aJson.add (JSON_SUCCESS, true);
       PhiveJsonHelper.applyValidationResultList (aJson,
-                                                 TCValidator.getVES (aVESID),
+                                                 RDCValidator.getVES (aVESID),
                                                  aValidationResultList,
-                                                 TCAPIHelper.DEFAULT_LOCALE,
+                                                 RDCAPIHelper.DEFAULT_LOCALE,
                                                  aSW.getMillis (),
                                                  null,
                                                  null);

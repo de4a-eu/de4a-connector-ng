@@ -42,11 +42,11 @@ import com.helger.phase4.model.pmode.leg.PModeLegReliability;
 import com.helger.phase4.model.pmode.leg.PModeLegSecurity;
 import com.helger.phase4.wss.EWSSVersion;
 
-public class TOOPPMode
+public class RDC_PMode
 {
   private static final String DEFAULT_AGREEMENT_ID = "urn:as4:agreement";
 
-  private TOOPPMode ()
+  private RDC_PMode ()
   {}
 
   @Nonnull

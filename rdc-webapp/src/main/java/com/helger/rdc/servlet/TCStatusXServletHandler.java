@@ -29,7 +29,7 @@ import com.helger.commons.mime.MimeType;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
 import com.helger.rdc.api.RDCConfig;
-import com.helger.rdc.core.TCStatusHelper;
+import com.helger.rdc.core.RDCStatusHelper;
 import com.helger.servlet.response.UnifiedResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 import com.helger.xservlet.handler.simple.IXServletSimpleHandler;
@@ -53,7 +53,7 @@ final class TCStatusXServletHandler implements IXServletSimpleHandler
     // Build data to provide
     final IJsonObject aStatusData;
     if (RDCConfig.WebApp.isStatusEnabled ())
-      aStatusData = TCStatusHelper.getDefaultStatusData ();
+      aStatusData = RDCStatusHelper.getDefaultStatusData ();
     else
     {
       // Status is disabled in the configuration

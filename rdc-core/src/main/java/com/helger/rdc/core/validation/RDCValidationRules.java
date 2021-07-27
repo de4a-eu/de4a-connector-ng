@@ -29,22 +29,22 @@ import com.helger.phive.engine.source.IValidationSourceXML;
 import com.helger.ubl23.UBL23NamespaceContext;
 
 /**
- * Generic TOOP EDM 2.1.0 validation configuration
+ * Generic DE4A IEM validation configuration
  *
  * @author Philip Helger
  */
 @Immutable
-public final class TCValidationRules
+public final class RDCValidationRules
 {
   public static final String GROUP_ID = "eu.de4a";
 
-  private TCValidationRules ()
+  private RDCValidationRules ()
   {}
 
   @Nonnull
   private static ClassLoader _getCL ()
   {
-    return TCValidationRules.class.getClassLoader ();
+    return RDCValidationRules.class.getClassLoader ();
   }
 
   @Nonnull
@@ -56,13 +56,13 @@ public final class TCValidationRules
   }
 
   /**
-   * Register all standard TOOP EDM v2 validation execution sets to the provided
+   * Register all standard DE4A IEM validation execution sets to the provided
    * registry.
    *
    * @param aRegistry
    *        The registry to add the artefacts. May not be <code>null</code>.
    */
-  public static void initToopEDM (@Nonnull final ValidationExecutorSetRegistry <IValidationSourceXML> aRegistry)
+  public static void initRDC (@Nonnull final ValidationExecutorSetRegistry <IValidationSourceXML> aRegistry)
   {
     ValueEnforcer.notNull (aRegistry, "Registry");
 

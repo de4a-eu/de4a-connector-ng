@@ -45,13 +45,13 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
  *
  * @author Philip Helger
  */
-public class TCValidator implements IVSValidator
+public class RDCValidator implements IVSValidator
 {
   private static final ValidationExecutorSetRegistry <IValidationSourceXML> VER = new ValidationExecutorSetRegistry <> ();
   static
   {
     // Init all TOOP rules
-    TCValidationRules.initToopEDM (VER);
+    RDCValidationRules.initRDC (VER);
   }
 
   @Nonnull
@@ -69,7 +69,7 @@ public class TCValidator implements IVSValidator
     return aVES;
   }
 
-  public TCValidator ()
+  public RDCValidator ()
   {}
 
   @Nonnull

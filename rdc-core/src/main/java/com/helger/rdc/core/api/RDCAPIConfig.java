@@ -26,7 +26,7 @@ import com.helger.rdc.api.dd.IDDServiceMetadataProvider;
 import com.helger.rdc.api.validation.IVSValidator;
 import com.helger.rdc.core.smp.DDServiceGroupHrefProviderSMP;
 import com.helger.rdc.core.smp.DDServiceMetadataProviderSMP;
-import com.helger.rdc.core.validation.TCValidator;
+import com.helger.rdc.core.validation.RDCValidator;
 
 /**
  * Global TOOP Connector NG API configuration.<br>
@@ -35,7 +35,7 @@ import com.helger.rdc.core.validation.TCValidator;
  *
  * @author Philip Helger
  */
-public final class TCAPIConfig
+public final class RDCAPIConfig
 {
   private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
 
@@ -44,9 +44,9 @@ public final class TCAPIConfig
   @GuardedBy ("RW_LOCK")
   private static IDDServiceMetadataProvider s_aDDSMProvider = new DDServiceMetadataProviderSMP ();
   @GuardedBy ("RW_LOCK")
-  private static IVSValidator s_aValidator = new TCValidator ();
+  private static IVSValidator s_aValidator = new RDCValidator ();
 
-  private TCAPIConfig ()
+  private RDCAPIConfig ()
   {}
 
   @Nonnull

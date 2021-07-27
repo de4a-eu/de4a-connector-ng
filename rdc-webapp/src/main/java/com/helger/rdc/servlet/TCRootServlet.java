@@ -33,7 +33,7 @@ import com.helger.commons.http.CHttpHeader;
 import com.helger.commons.mime.CMimeType;
 import com.helger.rdc.api.me.IMessageExchangeSPI;
 import com.helger.rdc.api.me.MessageExchangeManager;
-import com.helger.rdc.core.CTCVersion;
+import com.helger.rdc.core.CRDCVersion;
 
 /**
  * Servlet for handling the initial calls without any path. This servlet
@@ -55,8 +55,8 @@ public class TCRootServlet extends HttpServlet
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("<html><head><title>TOOP Connector NG</title><style>").append (sCSS).append ("</style></head><body>");
     aSB.append ("<h1>TOOP Connector NG</h1>");
-    aSB.append ("<div>Version: ").append (CTCVersion.BUILD_VERSION).append ("</div>");
-    aSB.append ("<div>Build timestamp: ").append (CTCVersion.BUILD_TIMESTAMP).append ("</div>");
+    aSB.append ("<div>Version: ").append (CRDCVersion.BUILD_VERSION).append ("</div>");
+    aSB.append ("<div>Build timestamp: ").append (CRDCVersion.BUILD_TIMESTAMP).append ("</div>");
     aSB.append ("<div>Current time: ").append (PDTFactory.getCurrentZonedDateTimeUTC ().toString ()).append ("</div>");
     aSB.append ("<div><a href='tc-status'>Check /tc-status</a></div>");
 

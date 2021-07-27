@@ -43,8 +43,8 @@ import com.helger.rdc.api.me.outgoing.MERoutingInformationInput;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RDCRestJAXB;
-import com.helger.rdc.core.api.TCAPIHelper;
-import com.helger.rdc.core.validation.TCValidator;
+import com.helger.rdc.core.api.RDCAPIHelper;
+import com.helger.rdc.core.validation.RDCValidator;
 import com.helger.rdc.webapi.APIParamException;
 import com.helger.rdc.webapi.ETCEdmType;
 import com.helger.rdc.webapi.helper.AbstractTCAPIInvoker;
@@ -109,16 +109,16 @@ public class ApiPostUserSubmitEdm extends AbstractTCAPIInvoker
         // validation
         final StopWatch aSW = StopWatch.createdStarted ();
         final VESID aVESID = m_eType.getVESID ();
-        final ValidationResultList aValidationResultList = TCAPIHelper.validateBusinessDocument (aVESID,
+        final ValidationResultList aValidationResultList = RDCAPIHelper.validateBusinessDocument (aVESID,
                                                                                                  aOutgoingMsg.getPayloadAtIndex (0)
                                                                                                              .getValue ());
         aSW.stop ();
 
         final IJsonObject aJsonVR = new JsonObject ();
         PhiveJsonHelper.applyValidationResultList (aJsonVR,
-                                                   TCValidator.getVES (aVESID),
+                                                   RDCValidator.getVES (aVESID),
                                                    aValidationResultList,
-                                                   TCAPIHelper.DEFAULT_LOCALE,
+                                                   RDCAPIHelper.DEFAULT_LOCALE,
                                                    aSW.getMillis (),
                                                    null,
                                                    null);
@@ -132,7 +132,7 @@ public class ApiPostUserSubmitEdm extends AbstractTCAPIInvoker
         MERoutingInformation aRoutingInfoFinal = null;
         final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
-        final ServiceMetadataType aSM = TCAPIHelper.querySMPServiceMetadata (aRoutingInfo.getReceiverID (),
+        final ServiceMetadataType aSM = RDCAPIHelper.querySMPServiceMetadata (aRoutingInfo.getReceiverID (),
                                                                              aRoutingInfo.getDocumentTypeID (),
                                                                              aRoutingInfo.getProcessID (),
                                                                              aRoutingInfo.getTransportProtocol ());
@@ -188,7 +188,7 @@ public class ApiPostUserSubmitEdm extends AbstractTCAPIInvoker
                                                                                 MEPayload.createRandomContentID ()))
                                           .data (aPayload.getValue ()));
           }
-          TCAPIHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
+          RDCAPIHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
           aJsonSending.add (JSON_SUCCESS, true);
 
           aJson.addJson ("sending-results", aJsonSending);
