@@ -42,11 +42,11 @@ import com.helger.phase4.model.pmode.leg.PModeLegReliability;
 import com.helger.phase4.model.pmode.leg.PModeLegSecurity;
 import com.helger.phase4.wss.EWSSVersion;
 
-public class RDC_PMode
+public class RDCPMode
 {
   private static final String DEFAULT_AGREEMENT_ID = "urn:as4:agreement";
 
-  private RDC_PMode ()
+  private RDCPMode ()
   {}
 
   @Nonnull
@@ -66,7 +66,7 @@ public class RDC_PMode
   }
 
   /**
-   * One-Way TOOP pmode uses one-way push
+   * One-Way RDC pmode uses one-way push
    *
    * @param sInitiatorID
    *        Initiator ID
@@ -82,11 +82,11 @@ public class RDC_PMode
    * @return New PMode
    */
   @Nonnull
-  public static PMode createTOOPMode (@Nonnull @Nonempty final String sInitiatorID,
-                                      @Nonnull @Nonempty final String sResponderID,
-                                      @Nullable final String sResponderAddress,
-                                      @Nonnull final String sPModeID,
-                                      final boolean bPersist)
+  public static PMode createRDCMode (@Nonnull @Nonempty final String sInitiatorID,
+                                     @Nonnull @Nonempty final String sResponderID,
+                                     @Nullable final String sResponderAddress,
+                                     @Nonnull final String sPModeID,
+                                     final boolean bPersist)
   {
     final PModeParty aInitiator = PModeParty.createSimple (sInitiatorID, "http://www.toop.eu/edelivery/gateway");
     final PModeParty aResponder = PModeParty.createSimple (sResponderID, "http://www.toop.eu/edelivery/gateway");

@@ -64,7 +64,7 @@ import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.api.me.outgoing.IMERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MEOutgoingException;
-import com.helger.rdc.core.phase4.config.RDC_PMode;
+import com.helger.rdc.core.phase4.config.RDCPMode;
 import com.helger.rdc.core.phase4.servlet.AS4MessageProcessorSPI;
 import com.helger.servlet.ServletHelper;
 
@@ -88,7 +88,6 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
   /**
    * @return The crypto factory in use. Never <code>null</code>.
-   * @since 2.0.0-rc4
    */
   @Nonnull
   public final IAS4CryptoFactory getCryptoFactory ()
@@ -104,7 +103,6 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
    *
    * @param aCF
    *        The crypto factory to use. May not be <code>null</code>.
-   * @since 2.0.0-rc4
    */
   public final void setCryptoFactory (@Nonnull final IAS4CryptoFactory aCF)
   {
@@ -134,8 +132,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     return ret;
   }
 
-  public void registerIncomingHandler (@Nonnull final ServletContext aServletContext,
-                                       @Nonnull final IMEIncomingHandler aIncomingHandler)
+  public void registerIncomingHandler (@Nonnull final ServletContext aServletContext, @Nonnull final IMEIncomingHandler aIncomingHandler)
   {
     ValueEnforcer.notNull (aServletContext, "ServletContext");
     ValueEnforcer.notNull (aIncomingHandler, "IncomingHandler");
@@ -172,11 +169,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = RDC_PMode.createTOOPMode ("AnyInitiatorID",
-                                                     "AnyResponderID",
-                                                     "AnyResponderAddress",
-                                                     "TOOP_PMODE",
-                                                     false);
+      final PMode aPMode = RDCPMode.createRDCMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "TOOP_PMODE", false);
       aPMode.setPayloadService (new PModePayloadService (EAS4CompressionMode.GZIP));
       aPMode.getReceptionAwareness ().setRetry (false);
       aPModeMgr.createOrUpdatePMode (aPMode);
@@ -277,8 +270,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     }
   }
 
-  public void sendOutgoing (@Nonnull final IMERoutingInformation aRoutingInfo,
-                            @Nonnull final MEMessage aMessage) throws MEOutgoingException
+  public void sendOutgoing (@Nonnull final IMERoutingInformation aRoutingInfo, @Nonnull final MEMessage aMessage) throws MEOutgoingException
   {
     LOGGER.info ("[phase4] sendOutgoing");
     _sendOutgoing (m_aCF, aRoutingInfo, aMessage);

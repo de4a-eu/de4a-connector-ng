@@ -26,7 +26,7 @@
     <xs:documentation>
       DE4A shared XML Schema
       
-      Version: 2021-05-05
+      Version: 2021-08-27
       
       Author: Philip Helger
       
@@ -89,7 +89,6 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="Request" />
       <xs:enumeration value="Response" />
-      <xs:enumeration value="ErrorResponse" />
     </xs:restriction>
   </xs:simpleType>
 

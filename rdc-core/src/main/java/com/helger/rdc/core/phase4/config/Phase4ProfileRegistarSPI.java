@@ -29,7 +29,7 @@ import com.helger.phase4.profile.IAS4ProfileRegistrarSPI;
 import com.helger.phase4.profile.IAS4ProfileValidator;
 
 /**
- * TOOP specific implementation of {@link IAS4ProfileRegistrarSPI}.
+ * DE4A specific implementation of {@link IAS4ProfileRegistrarSPI}.
  *
  * @author Philip Helger
  */
@@ -46,7 +46,7 @@ public final class Phase4ProfileRegistarSPI implements IAS4ProfileRegistrarSPI
     final IAS4Profile aProfile = new AS4Profile (AS4_PROFILE_ID,
                                                  AS4_PROFILE_NAME,
                                                  aProfileValidatorProvider,
-                                                 (i, r, a) -> RDC_PMode.createTOOPMode (i, r, a, i + "-" + r, true),
+                                                 (i, r, a) -> RDCPMode.createRDCMode (i, r, a, i + "-" + r, true),
                                                  aPModeIDProvider,
                                                  false);
     aRegistrar.registerProfile (aProfile);

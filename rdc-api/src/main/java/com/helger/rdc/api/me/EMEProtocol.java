@@ -25,7 +25,7 @@ import com.helger.commons.lang.EnumHelper;
 import com.helger.peppol.smp.ESMPTransportProfile;
 
 /**
- * Contains all protocols supported by MP
+ * Contains all protocols supported for message exchange
  *
  * @author Philip Helger
  */

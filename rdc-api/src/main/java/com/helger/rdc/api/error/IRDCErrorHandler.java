@@ -38,7 +38,7 @@ public interface IRDCErrorHandler
    * @param t
    *        Optional exception. May be <code>null</code>.
    * @param eCode
-   *        The TOOP specific error code. Never <code>null</code>.
+   *        The RDC specific error code. Never <code>null</code>.
    */
   void onMessage (@Nonnull EErrorLevel eErrorLevel, @Nonnull String sMsg, @Nullable Throwable t, @Nonnull IRDCErrorCode eCode);
 
