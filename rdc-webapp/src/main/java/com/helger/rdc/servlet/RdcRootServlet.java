@@ -53,12 +53,12 @@ public class RdcRootServlet extends HttpServlet
                         " code { font-family:monospace; color:#e83e8c; }";
 
     final StringBuilder aSB = new StringBuilder ();
-    aSB.append ("<html><head><title>TOOP Connector NG</title><style>").append (sCSS).append ("</style></head><body>");
-    aSB.append ("<h1>TOOP Connector NG</h1>");
+    aSB.append ("<html><head><title>RDC - Real DE4A Connector</title><style>").append (sCSS).append ("</style></head><body>");
+    aSB.append ("<h1>RDC - Real DE4A Connector</h1>");
     aSB.append ("<div>Version: ").append (CRdcVersion.BUILD_VERSION).append ("</div>");
     aSB.append ("<div>Build timestamp: ").append (CRdcVersion.BUILD_TIMESTAMP).append ("</div>");
     aSB.append ("<div>Current time: ").append (PDTFactory.getCurrentZonedDateTimeUTC ().toString ()).append ("</div>");
-    aSB.append ("<div><a href='tc-status'>Check /tc-status</a></div>");
+    aSB.append ("<div><a href='status'>Check /status</a></div>");
 
     {
       aSB.append ("<h2>Registered Message Exchange implementations</h2>");
@@ -71,7 +71,7 @@ public class RdcRootServlet extends HttpServlet
 
     // if (GlobalDebug.isDebugMode ())
     {
-      aSB.append ("<h2>servlet information</h2>");
+      aSB.append ("<h2>Servlet information</h2>");
       for (final Map.Entry <String, ? extends ServletRegistration> aEntry : CollectionHelper.getSortedByKey (req.getServletContext ()
                                                                                                                 .getServletRegistrations ())
                                                                                             .entrySet ())
@@ -88,35 +88,22 @@ public class RdcRootServlet extends HttpServlet
     {
       aSB.append ("<h2>API information</h2>");
 
-      aSB.append ("<h3>DSD</h3>");
-      aSB.append ("<div>GET /api/dsd/dp/by-country - <a href='" +
-                  sContextPath +
-                  "/api/dsd/dp/REGISTERED_ORGANIZATION_TYPE/by-country/SV' target='_blank'>test me</a></div>");
-      // New in 2.1.0
-      aSB.append ("<div>GET /api/dsd/dp/by-dp-type - <a href='" +
-                  sContextPath +
-                  "/api/dsd/dp/REGISTERED_ORGANIZATION_TYPE/by-dp-type/Scheme A' target='_blank'>test me</a></div>");
-
       aSB.append ("<h3>SMP</h3>");
       aSB.append ("<div>GET /api/smp/doctypes - <a href='" +
                   sContextPath +
-                  "/api/smp/doctypes/iso6523-actorid-upis%3A%3A9915%3Atooptest' target='_blank'>test me</a></div>");
+                  "/api/smp/doctypes/iso6523-actorid-upis%3A%3A9915%3Ade4atest' target='_blank'>test me</a></div>");
       aSB.append ("<div>GET /api/smp/endpoints - <a href='" +
                   sContextPath +
-                  "/api/smp/endpoints/iso6523-actorid-upis%3A%3A9915%3Atooptest/toop-doctypeid-qns%3A%3ARegisteredOrganization%3A%3AREGISTERED_ORGANIZATION_TYPE%3A%3ACONCEPT%23%23CCCEV%3A%3Atoop-edm%3Av2.0' target='_blank'>test me</a></div>");
+                  "/api/smp/endpoints/iso6523-actorid-upis%3A%3A9915%3Ade4atest/urn:de4a-eu:CanonicalEvidenceType%3A%3ACompanyRegistration:1.0' target='_blank'>test me</a></div>");
 
       aSB.append ("<h3>Validation</h3>");
-      aSB.append ("<div>POST /api/validate/request</div>");
-      aSB.append ("<div>POST /api/validate/response</div>");
-      aSB.append ("<div>POST /api/validate/error</div>");
+      aSB.append ("<div>POST /api/validate/{vesid}</div>");
 
       aSB.append ("<h3>AS4</h3>");
       aSB.append ("<div>POST /api/send</div>");
 
       aSB.append ("<h3>Utilities</h3>");
-      aSB.append ("<div>POST /api/user/submit/request</div>");
-      aSB.append ("<div>POST /api/user/submit/response</div>");
-      aSB.append ("<div>POST /api/user/submit/error</div>");
+      aSB.append ("<div>POST /api/user/submit/</div>");
     }
 
     aSB.append ("</body></html>");

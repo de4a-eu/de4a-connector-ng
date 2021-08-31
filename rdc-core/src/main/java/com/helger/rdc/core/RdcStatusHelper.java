@@ -34,8 +34,7 @@ import com.helger.json.JsonObject;
 import com.helger.rdc.api.RdcConfig;
 
 /**
- * Helper to create the TOOP Connector status reachable via the "/tc-status/"
- * servlet.
+ * Helper to create the Connector status reachable via the "/status/" servlet.
  *
  * @author Philip Helger
  */

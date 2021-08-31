@@ -32,11 +32,11 @@ public enum ERdcErrorCode implements IRdcErrorCode
 {
   /** Uncategorized error */
   GEN ("GEN"),
-  /** The payload provided from DC/DP to the TOOP Connector is not valid */
+  /** The payload provided from DC/DP to the Connector is not valid */
   IF_001 ("IF-001"),
   /** Message Validation Failed */
   IF_002 ("IF-002"),
-  /** The TOOP Directory is not reachable */
+  /** The Directory is not reachable */
   DD_001 ("DD-001"),
   /** An SMP could not be queried */
   DD_002 ("DD-002"),
@@ -48,7 +48,7 @@ public enum ERdcErrorCode implements IRdcErrorCode
    */
   DD_004 ("DD-004"),
   /**
-   * The TOOP Connector was not able to communicate with the Local AS4 gateway
+   * The Connector was not able to communicate with the Local AS4 gateway
    */
   ME_001 ("ME-001"),
   /** The AS4 Gateway was not able to send the message */

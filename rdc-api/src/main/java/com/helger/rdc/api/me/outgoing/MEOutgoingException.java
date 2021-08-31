@@ -49,16 +49,16 @@ public class MEOutgoingException extends MEException
 
   public MEOutgoingException (@Nonnull final IRdcErrorCode aErrorCode, @Nullable final Throwable aCause)
   {
-    this ("TOOP Error " + aErrorCode.getID (), aCause, aErrorCode);
+    this ("RDC Error " + aErrorCode.getID (), aCause, aErrorCode);
   }
 
   public MEOutgoingException (@Nonnull final IRdcErrorCode aErrorCode, @Nullable final String sMsg)
   {
-    this ("TOOP Error " + aErrorCode.getID () + " - " + sMsg, null, aErrorCode);
+    this ("RDC Error " + aErrorCode.getID () + " - " + sMsg, null, aErrorCode);
   }
 
   @Nullable
-  public final IRdcErrorCode getToopErrorCode ()
+  public final IRdcErrorCode getErrorCode ()
   {
     return m_aErrorCode;
   }

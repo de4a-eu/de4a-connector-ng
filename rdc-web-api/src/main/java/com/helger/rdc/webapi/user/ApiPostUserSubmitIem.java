@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,13 +41,12 @@ import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MERoutingInformationInput;
+import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
-import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.core.api.RdcAPIHelper;
 import com.helger.rdc.core.validation.RdcValidator;
 import com.helger.rdc.webapi.ApiParamException;
-import com.helger.rdc.webapi.ERdcIemType;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.security.certificate.CertificateHelper;
@@ -64,11 +64,15 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitIem.class);
 
-  private final ERdcIemType m_eType;
+  private final VESID m_aVESID;
 
-  public ApiPostUserSubmitIem (@Nonnull final ERdcIemType eType)
+  /**
+   * @param aVESID
+   *        Optional VES ID. If none is provided, no validation is performed.
+   */
+  public ApiPostUserSubmitIem (@Nullable final VESID aVESID)
   {
-    m_eType = eType;
+    m_aVESID = aVESID;
   }
 
   @Override
@@ -78,8 +82,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final TCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ()
-                                                     .read (aRequestScope.getRequest ().getInputStream ());
+    final TCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
@@ -107,24 +110,31 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
       boolean bOverallSuccess = false;
       {
         // validation
-        final StopWatch aSW = StopWatch.createdStarted ();
-        final VESID aVESID = m_eType.getVESID ();
-        final ValidationResultList aValidationResultList = RdcAPIHelper.validateBusinessDocument (aVESID,
-                                                                                                 aOutgoingMsg.getPayloadAtIndex (0)
-                                                                                                             .getValue ());
-        aSW.stop ();
+        if (m_aVESID != null)
+        {
+          final StopWatch aSW = StopWatch.createdStarted ();
+          final ValidationResultList aValidationResultList = RdcAPIHelper.validateBusinessDocument (m_aVESID,
+                                                                                                    aOutgoingMsg.getPayloadAtIndex (0)
+                                                                                                                .getValue ());
+          aSW.stop ();
 
-        final IJsonObject aJsonVR = new JsonObject ();
-        PhiveJsonHelper.applyValidationResultList (aJsonVR,
-                                                   RdcValidator.getVES (aVESID),
-                                                   aValidationResultList,
-                                                   RdcAPIHelper.DEFAULT_LOCALE,
-                                                   aSW.getMillis (),
-                                                   null,
-                                                   null);
-        aJson.addJson ("validation-results", aJsonVR);
+          final IJsonObject aJsonVR = new JsonObject ();
+          PhiveJsonHelper.applyValidationResultList (aJsonVR,
+                                                     RdcValidator.getVES (m_aVESID),
+                                                     aValidationResultList,
+                                                     RdcAPIHelper.DEFAULT_LOCALE,
+                                                     aSW.getMillis (),
+                                                     null,
+                                                     null);
+          aJson.addJson ("validation-results", aJsonVR);
 
-        bValidationOK = aValidationResultList.containsNoError ();
+          bValidationOK = aValidationResultList.containsNoError ();
+        }
+        else
+        {
+          bValidationOK = true;
+          aJson.add ("validation-skipped", true);
+        }
       }
 
       if (bValidationOK)
@@ -133,15 +143,12 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
         final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
         final ServiceMetadataType aSM = RdcAPIHelper.querySMPServiceMetadata (aRoutingInfo.getReceiverID (),
-                                                                             aRoutingInfo.getDocumentTypeID (),
-                                                                             aRoutingInfo.getProcessID (),
-                                                                             aRoutingInfo.getTransportProtocol ());
+                                                                              aRoutingInfo.getDocumentTypeID (),
+                                                                              aRoutingInfo.getProcessID (),
+                                                                              aRoutingInfo.getTransportProtocol ());
         if (aSM != null)
         {
-          aJsonSMP.addJson ("response",
-                            SMPJsonResponse.convert (aRoutingInfo.getReceiverID (),
-                                                     aRoutingInfo.getDocumentTypeID (),
-                                                     aSM));
+          aJsonSMP.addJson ("response", SMPJsonResponse.convert (aRoutingInfo.getReceiverID (), aRoutingInfo.getDocumentTypeID (), aSM));
 
           final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM,
                                                                                  aRoutingInfo.getProcessID (),

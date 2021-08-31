@@ -18,6 +18,7 @@ package com.helger.rdc.core.phase4.config;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.state.ETriState;
@@ -42,9 +43,12 @@ import com.helger.phase4.model.pmode.leg.PModeLegReliability;
 import com.helger.phase4.model.pmode.leg.PModeLegSecurity;
 import com.helger.phase4.wss.EWSSVersion;
 
-public class RdcPMode
+@NotThreadSafe
+public final class RdcPMode
 {
-  private static final String DEFAULT_AGREEMENT_ID = "urn:as4:agreement";
+  // Legacy name
+  public static final String PARTY_ROLE = "http://www.toop.eu/edelivery/gateway";
+  public static final String DEFAULT_AGREEMENT_ID = "urn:as4:agreement";
 
   private RdcPMode ()
   {}
@@ -88,8 +92,8 @@ public class RdcPMode
                                      @Nonnull final String sPModeID,
                                      final boolean bPersist)
   {
-    final PModeParty aInitiator = PModeParty.createSimple (sInitiatorID, "http://www.toop.eu/edelivery/gateway");
-    final PModeParty aResponder = PModeParty.createSimple (sResponderID, "http://www.toop.eu/edelivery/gateway");
+    final PModeParty aInitiator = PModeParty.createSimple (sInitiatorID, PARTY_ROLE);
+    final PModeParty aResponder = PModeParty.createSimple (sResponderID, PARTY_ROLE);
 
     final PMode aPMode = new PMode (sPModeID,
                                     aInitiator,

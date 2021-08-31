@@ -40,6 +40,6 @@ public final class SPITest
   public void testConfig () throws Exception
   {
     // Required to test the ph-config bug when building on the commandline
-    RdcConfig.Tracker.isDE4ATrackerEnabled ();
+    RdcConfig.Tracker.isTrackerEnabled ();
   }
 }

@@ -35,7 +35,7 @@ import com.helger.phive.json.PhiveJsonHelper;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.core.api.RdcAPIHelper;
 import com.helger.rdc.core.validation.RdcValidator;
-import com.helger.rdc.webapi.ERdcIemType;
+import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
@@ -49,12 +49,8 @@ public class ApiPostValidateIem extends AbstractRdcApiInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostValidateIem.class);
 
-  private final ERdcIemType m_eType;
-
-  public ApiPostValidateIem (@Nonnull final ERdcIemType eType)
-  {
-    m_eType = eType;
-  }
+  public ApiPostValidateIem ()
+  {}
 
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -62,8 +58,12 @@ public class ApiPostValidateIem extends AbstractRdcApiInvoker
                                 @Nonnull final Map <String, String> aPathVariables,
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
+    final String sVESID = aPathVariables.get ("vesid");
+    final VESID aVESID = VESID.parseIDOrNull (sVESID);
+    if (aVESID == null)
+      throw new ApiParamException ("Invalid VESID '" + sVESID + "' provided.");
+
     final byte [] aPayload = StreamHelper.getAllBytes (aRequestScope.getRequest ().getInputStream ());
-    final VESID aVESID = m_eType.getVESID ();
 
     if (LOGGER.isInfoEnabled ())
       LOGGER.info ("API validating " + aPayload.length + " bytes using '" + aVESID.getAsSingleID () + "'");

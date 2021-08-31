@@ -27,7 +27,7 @@ import com.helger.photon.security.login.LoggedInUserManager;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.core.RdcInit;
-import com.helger.rdc.webapi.RdcAPIInit;
+import com.helger.rdc.webapi.RdcApiInit;
 
 /**
  * Global startup etc. listener.
@@ -80,7 +80,7 @@ public class RdcWebAppListener extends WebAppListener
   @Override
   protected void initAPI (@Nonnull final IAPIRegistry aAPIRegistry)
   {
-    RdcAPIInit.initAPI (aAPIRegistry);
+    RdcApiInit.initAPI (aAPIRegistry);
   }
 
   @Override

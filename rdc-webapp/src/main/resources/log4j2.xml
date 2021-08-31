@@ -21,7 +21,7 @@
   <Appenders>
     <Console name="STDOUT" target="SYSTEM_OUT">
       <!-- Location may be an issue when async logging is used! -->
-      <PatternLayout pattern="[rdc][%date{ISO8601}] [%-5level] [%thread] %msg -- %location%n" />
+      <PatternLayout pattern="[RDC] [%date{ISO8601}] [%-5level] [%thread] %msg -- %location%n" />
     </Console>
   </Appenders>
   <Loggers>

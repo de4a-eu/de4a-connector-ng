@@ -64,7 +64,7 @@ import com.helger.xml.serialize.write.XMLWriter;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
- * TOOP specific implementation of {@link IAS4ServletMessageProcessorSPI}. It
+ * DE4A specific implementation of {@link IAS4ServletMessageProcessorSPI}. It
  * takes incoming AS4 messages and forwards it accordingly to the correct DE4A
  * {@link IMEIncomingHandler}.
  *
@@ -123,8 +123,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     {
       LOGGER.info ("Received AS4 message:");
       LOGGER.info ("  UserMessage: " + aUserMessage);
-      LOGGER.info ("  Payload: " +
-                   (aPayload == null ? "null" : true ? "present" : XMLWriter.getNodeAsString (aPayload)));
+      LOGGER.info ("  Payload: " + (aPayload == null ? "null" : true ? "present" : XMLWriter.getNodeAsString (aPayload)));
 
       if (aIncomingAttachments != null)
       {
@@ -156,8 +155,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
       try
       {
         final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();
-        final ICommonsList <Ebms3Property> aProps = new CommonsArrayList <> (aUserMessage.getMessageProperties ()
-                                                                                         .getProperty ());
+        final ICommonsList <Ebms3Property> aProps = new CommonsArrayList <> (aUserMessage.getMessageProperties ().getProperty ());
         final Ebms3Property aPropOS = aProps.findFirst (x -> x.getName ().equals (CAS4.ORIGINAL_SENDER));
         final Ebms3Property aPropFR = aProps.findFirst (x -> x.getName ().equals (CAS4.FINAL_RECIPIENT));
 
@@ -193,10 +191,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
                                            .contentID (aItem.getId ())
                                            .data (StreamHelper.getAllBytes (aItem.getSourceStream ()))
                                            .build ());
-            s_aIncomingHandler.handleIncomingResponse (new IncomingEDMResponse (aTopLevel,
-                                                                                sTopLevelContentID,
-                                                                                aAttachments,
-                                                                                aMetadata));
+            s_aIncomingHandler.handleIncomingResponse (new IncomingEDMResponse (aTopLevel, sTopLevelContentID, aAttachments, aMetadata));
           }
           else
             DE4AKafkaClient.send (EErrorLevel.ERROR, () -> "Unsuspported Message: " + aTopLevel);

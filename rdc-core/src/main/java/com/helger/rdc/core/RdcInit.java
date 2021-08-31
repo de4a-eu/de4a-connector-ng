@@ -117,22 +117,22 @@ public final class RdcInit
 
     {
       // Init tracker client
-      DE4AKafkaSettings.setKafkaEnabled (RdcConfig.Tracker.isDE4ATrackerEnabled ());
-      if (RdcConfig.Tracker.isDE4ATrackerEnabled ())
+      DE4AKafkaSettings.setKafkaEnabled (RdcConfig.Tracker.isTrackerEnabled ());
+      if (RdcConfig.Tracker.isTrackerEnabled ())
       {
         // Set tracker URL
-        final String sToopTrackerUrl = RdcConfig.Tracker.getDE4ATrackerUrl ();
-        if (StringHelper.hasNoText (sToopTrackerUrl))
+        final String sTrackerUrl = RdcConfig.Tracker.getTrackerUrl ();
+        if (StringHelper.hasNoText (sTrackerUrl))
           throw new InitializationException ("If the tracker is enabled, the tracker URL MUST be provided in the configuration file!");
         // Consistency check - no protocol like "http://" or so may be present
-        final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sToopTrackerUrl);
+        final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sTrackerUrl);
         if (aProtocol != null)
           throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" + aProtocol.getProtocol () + "'!");
-        DE4AKafkaSettings.defaultProperties ().put (ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, sToopTrackerUrl);
+        DE4AKafkaSettings.defaultProperties ().put (ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, sTrackerUrl);
 
         // Set the topic
-        final String sToopTrackerTopic = RdcConfig.Tracker.getDE4ATrackerTopic ();
-        DE4AKafkaSettings.setKafkaTopic (sToopTrackerTopic);
+        final String sTrackerTopic = RdcConfig.Tracker.getTrackerTopic ();
+        DE4AKafkaSettings.setKafkaTopic (sTrackerTopic);
       }
     }
 

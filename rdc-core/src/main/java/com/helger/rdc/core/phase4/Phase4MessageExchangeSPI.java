@@ -69,7 +69,7 @@ import com.helger.rdc.core.phase4.servlet.AS4MessageProcessorSPI;
 import com.helger.servlet.ServletHelper;
 
 /**
- * TOOP {@link IMessageExchangeSPI} implementation using phase4.
+ * DE4A {@link IMessageExchangeSPI} implementation using phase4.
  *
  * @author Philip Helger
  */
@@ -169,7 +169,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = RdcPMode.createRDCMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "TOOP_PMODE", false);
+      final PMode aPMode = RdcPMode.createRDCMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
       aPMode.setPayloadService (new PModePayloadService (EAS4CompressionMode.GZIP));
       aPMode.getReceptionAwareness ().setRetry (false);
       aPModeMgr.createOrUpdatePMode (aPMode);
@@ -212,9 +212,6 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     {
       final X509Certificate aTheirCert = aRoutingInfo.getCertificate ();
 
-      // See :
-      // http://wiki.ds.unipi.gr/display/TOOP/Routing+Information+Profile
-      // http://wiki.ds.unipi.gr/display/CCTF/TOOP+AS4+GW+Interface+specification
       final CEFUserMessageBuilder aBuilder = new CEFUserMessageBuilder ().httpClientFactory (new RdcHttpClientSettings ())
                                                                          .cryptoFactory (aCF)
                                                                          .senderParticipantID (aRoutingInfo.getSenderID ())
@@ -224,11 +221,11 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
                                                                          .conversationID (MessageHelperMethods.createRandomConversationID ())
                                                                          .fromPartyIDType (Phase4Config.getFromPartyIDType ())
                                                                          .fromPartyID (Phase4Config.getFromPartyID ())
-                                                                         .fromRole ("http://www.toop.eu/edelivery/gateway")
+                                                                         .fromRole (RdcPMode.PARTY_ROLE)
                                                                          .toPartyIDType (Phase4Config.getToPartyIDType ())
                                                                          .toPartyID (PeppolCertificateHelper.getCN (aTheirCert.getSubjectX500Principal ()
                                                                                                                               .getName ()))
-                                                                         .toRole ("http://www.toop.eu/edelivery/gateway")
+                                                                         .toRole (RdcPMode.PARTY_ROLE)
                                                                          .useOriginalSenderFinalRecipientTypeAttr (false)
                                                                          .rawResponseConsumer (new RawResponseWriter ())
                                                                          .endpointDetailProvider (new AS4EndpointDetailProviderConstant (aRoutingInfo.getCertificate (),

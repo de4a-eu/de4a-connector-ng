@@ -29,13 +29,13 @@ import com.helger.rdc.core.smp.DDServiceMetadataProviderSMP;
 import com.helger.rdc.core.validation.RdcValidator;
 
 /**
- * Global TOOP Connector NG API configuration.<br>
- * This configuration is e.g. changed by the TOOP Simulator to install "mock"
+ * Global RDC API configuration.<br>
+ * This configuration is e.g. changed by the Simulator to install "mock"
  * handler.
  *
  * @author Philip Helger
  */
-public final class RdcAPIConfig
+public final class RdcApiConfig
 {
   private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
 
@@ -46,7 +46,7 @@ public final class RdcAPIConfig
   @GuardedBy ("RW_LOCK")
   private static IRdcValidator s_aValidator = new RdcValidator ();
 
-  private RdcAPIConfig ()
+  private RdcApiConfig ()
   {}
 
   @Nonnull
@@ -57,7 +57,7 @@ public final class RdcAPIConfig
 
   public static void setDDServiceGroupHrefProvider (@Nonnull final IDDServiceGroupHrefProvider aProvider)
   {
-    ValueEnforcer.notNull (aProvider, "IDDServiceGroupHrefProvider");
+    ValueEnforcer.notNull (aProvider, "Provider");
     RW_LOCK.writeLocked ( () -> s_aDDSGHrefProvider = aProvider);
   }
 
@@ -69,19 +69,19 @@ public final class RdcAPIConfig
 
   public static void setDDServiceMetadataProvider (@Nonnull final IDDServiceMetadataProvider aProvider)
   {
-    ValueEnforcer.notNull (aProvider, "IDDServiceMetadataProvider");
+    ValueEnforcer.notNull (aProvider, "Provider");
     RW_LOCK.writeLocked ( () -> s_aDDSMProvider = aProvider);
   }
 
   @Nonnull
-  public static IRdcValidator getVSValidator ()
+  public static IRdcValidator getValidator ()
   {
     return RW_LOCK.readLockedGet ( () -> s_aValidator);
   }
 
-  public static void setVSValidator (@Nonnull final IRdcValidator aValidator)
+  public static void setValidator (@Nonnull final IRdcValidator aValidator)
   {
-    ValueEnforcer.notNull (aValidator, "IVSValidator");
+    ValueEnforcer.notNull (aValidator, "Validator");
     RW_LOCK.writeLocked ( () -> s_aValidator = aValidator);
   }
 }

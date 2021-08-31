@@ -125,37 +125,6 @@ public final class RdcConfig
     }
   }
 
-  public static final class Tracker
-  {
-    public static final boolean DEFAULT_TOOP_TRACKER_ENABLED = false;
-    public static final String DEFAULT_TOOP_TRACKER_TOPIC = "de4a";
-
-    private Tracker ()
-    {}
-
-    public static boolean isDE4ATrackerEnabled ()
-    {
-      return getConfig ().getAsBoolean ("de4a.tracker.enabled", DEFAULT_TOOP_TRACKER_ENABLED);
-    }
-
-    @Nullable
-    public static String getDE4ATrackerUrl ()
-    {
-      return getConfig ().getAsString ("de4a.tracker.url");
-    }
-
-    @Nullable
-    public static String getDE4ATrackerTopic ()
-    {
-      return getConfig ().getAsString ("de4a.tracker.topic", DEFAULT_TOOP_TRACKER_TOPIC);
-    }
-
-    public boolean isDE4ATrackerViaHttp ()
-    {
-      return getConfig ().getAsBoolean ("de4a.tracker.viahttp", false);
-    }
-  }
-
   /**
    * Global HTTP settings
    *
@@ -209,6 +178,47 @@ public final class RdcConfig
     }
   }
 
+  /**
+   * Kafka Tracker related stuff
+   *
+   * @author Philip Helger
+   */
+  public static final class Tracker
+  {
+    public static final boolean DEFAULT_TRACKER_ENABLED = false;
+    public static final String DEFAULT_TRACKER_TOPIC = "de4a";
+
+    private Tracker ()
+    {}
+
+    public static boolean isTrackerEnabled ()
+    {
+      return getConfig ().getAsBoolean ("de4a.tracker.enabled", DEFAULT_TRACKER_ENABLED);
+    }
+
+    @Nullable
+    public static String getTrackerUrl ()
+    {
+      return getConfig ().getAsString ("de4a.tracker.url");
+    }
+
+    @Nullable
+    public static String getTrackerTopic ()
+    {
+      return getConfig ().getAsString ("de4a.tracker.topic", DEFAULT_TRACKER_TOPIC);
+    }
+
+    public boolean isTrackerViaHttp ()
+    {
+      return getConfig ().getAsBoolean ("de4a.tracker.viahttp", false);
+    }
+  }
+
+  /**
+   * SMP related settings.
+   *
+   * @author Philip Helger
+   */
   public static final class SMP
   {
     public static final boolean DEFAULT_USE_SML = true;
@@ -321,7 +331,7 @@ public final class RdcConfig
     @Nullable
     public static URI getStaticSMPUrl ()
     {
-      // E.g. http://smp.central.toop
+      // E.g. http://smp.central.de4a
       final String sURI = getConfig ().getAsString ("de4a.smp.static.smpurl");
       return URLHelper.getAsURI (sURI);
     }

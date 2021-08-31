@@ -73,6 +73,7 @@ public class ApiExceptionMapper extends AbstractAPIExceptionMapper
     // From specific to general
     if (aThrowable instanceof HttpResponseException)
     {
+      // HTTP from caught exception
       _logRestException ("HttpResponse exception", aThrowable);
       final HttpResponseException aEx = (HttpResponseException) aThrowable;
       _setSimpleTextResponse (aUnifiedResponse, aEx.getStatusCode (), aEx.getReasonPhrase ());
@@ -80,6 +81,7 @@ public class ApiExceptionMapper extends AbstractAPIExceptionMapper
     }
     if (aThrowable instanceof ApiParamException)
     {
+      // HTTP 400
       _logRestException ("Parameter exception", aThrowable);
       _setSimpleTextResponse (aUnifiedResponse,
                               HttpServletResponse.SC_BAD_REQUEST,
@@ -89,6 +91,7 @@ public class ApiExceptionMapper extends AbstractAPIExceptionMapper
     }
     if (aThrowable instanceof RuntimeException)
     {
+      // HTTP 500
       _logRestException ("Runtime exception - " + aThrowable.getClass ().getName (), aThrowable);
       _setSimpleTextResponse (aUnifiedResponse,
                               HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -96,6 +99,9 @@ public class ApiExceptionMapper extends AbstractAPIExceptionMapper
                                                          : getResponseEntityWithoutStackTrace (aThrowable));
       return EHandled.HANDLED;
     }
+
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("Received unhandled Exception of type " + (aThrowable != null ? aThrowable.getClass ().getName () : "null"));
 
     // We don't know that exception
     return EHandled.UNHANDLED;

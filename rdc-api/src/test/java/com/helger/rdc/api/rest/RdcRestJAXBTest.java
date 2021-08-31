@@ -55,9 +55,8 @@ public final class RdcRestJAXBTest
     final TCOutgoingMetadata md = new TCOutgoingMetadata ();
     md.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
     md.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
-                                             "urn:eu:toop:ns:dataexchange-1p40::Request##urn:eu.toop.request.registeredorganization::1.40"));
-    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
+    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
     md.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
     md.setEndpointURL ("https://target.example.org/as4");
     md.setReceiverCertificate ("Receiver's certificate".getBytes (StandardCharsets.ISO_8859_1));
@@ -97,9 +96,8 @@ public final class RdcRestJAXBTest
     final TCIncomingMetadata md = new TCIncomingMetadata ();
     md.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
     md.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
-                                             "urn:eu:toop:ns:dataexchange-1p40::Request##urn:eu.toop.request.registeredorganization::1.40"));
-    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
+    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
     md.setPayloadType (TCPayloadType.REQUEST);
     m.setMetadata (md);
 

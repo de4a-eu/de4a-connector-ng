@@ -135,7 +135,7 @@ public final class MEPayload implements Serializable
   public static String createRandomContentID ()
   {
     // Must use RFC 2822 style
-    return UUID.randomUUID ().toString () + "@tc-ng.toop";
+    return UUID.randomUUID ().toString () + "@rdc.de4a";
   }
 
   /**

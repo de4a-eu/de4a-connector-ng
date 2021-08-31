@@ -34,31 +34,24 @@ import com.helger.rdc.webapi.validation.ApiPostValidateIem;
  * @author Philip Helger
  */
 @Immutable
-public final class RdcAPIInit
+public final class RdcApiInit
 {
-  private RdcAPIInit ()
+  private RdcApiInit ()
   {}
 
   public static void initAPI (@Nonnull final IAPIRegistry aAPIRegistry)
   {
     // SMP stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/doctypes/{pid}"), ApiGetSmpDocTypes.class));
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/endpoints/{pid}/{doctypeid}"),
-                                                 ApiGetSmpEndpoints.class));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/endpoints/{pid}/{doctypeid}"), ApiGetSmpEndpoints.class));
 
     // Validation stuff
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/request"),
-                                                 new ApiPostValidateIem (ERdcIemType.REQUEST)));
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/response"),
-                                                 new ApiPostValidateIem (ERdcIemType.RESPONSE)));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/{vesid}"), new ApiPostValidateIem ()));
 
     // AS4 stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
 
-    // User stuff
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/request"),
-                                                 new ApiPostUserSubmitIem (ERdcIemType.REQUEST)));
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/response"),
-                                                 new ApiPostUserSubmitIem (ERdcIemType.RESPONSE)));
+    // User combined stuff
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit"), new ApiPostUserSubmitIem (null)));
   }
 }

@@ -33,7 +33,7 @@ public final class RunInJettyRdc
   {
     final JettyStarter js = new JettyStarter (RunInJettyRdc.class).setPort (8090)
                                                                   .setStopPort (9090)
-                                                                  .setSessionCookieName ("RDC_TC_SESSION")
+                                                                  .setSessionCookieName ("RDC_SESSION")
                                                                   .setContainerIncludeJarPattern (JettyStarter.CONTAINER_INCLUDE_JAR_PATTERN_ALL);
     js.run ();
   }
