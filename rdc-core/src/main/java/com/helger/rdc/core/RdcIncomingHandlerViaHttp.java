@@ -24,18 +24,18 @@ import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.incoming.IncomingEDMRequest;
 import com.helger.rdc.api.me.incoming.IncomingEDMResponse;
 import com.helger.rdc.api.me.incoming.MEIncomingException;
-import com.helger.rdc.core.incoming.RDC_DP_TriggerViaHttp;
+import com.helger.rdc.core.incoming.RdcDPTriggerViaHttp;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
  * Implementation of {@link IMEIncomingHandler} using
- * {@link RDC_DP_TriggerViaHttp} to forward the message. By default this class is
+ * {@link RdcDPTriggerViaHttp} to forward the message. By default this class is
  * invoked if an incoming AS4 message is received.
  *
  * @author Philip Helger
  */
-public class RDCIncomingHandlerViaHttp implements IMEIncomingHandler
+public class RdcIncomingHandlerViaHttp implements IMEIncomingHandler
 {
   private final String m_sLogPrefix;
 
@@ -43,7 +43,7 @@ public class RDCIncomingHandlerViaHttp implements IMEIncomingHandler
    * @param sLogPrefix
    *        The log prefix to use. May not be <code>null</code> but maybe empty.
    */
-  public RDCIncomingHandlerViaHttp (@Nonnull final String sLogPrefix)
+  public RdcIncomingHandlerViaHttp (@Nonnull final String sLogPrefix)
   {
     m_sLogPrefix = ValueEnforcer.notNull (sLogPrefix, "LogPrefix");
   }
@@ -51,7 +51,7 @@ public class RDCIncomingHandlerViaHttp implements IMEIncomingHandler
   public void handleIncomingRequest (@Nonnull final IncomingEDMRequest aRequest) throws MEIncomingException
   {
     DE4AKafkaClient.send (EErrorLevel.INFO, () -> m_sLogPrefix + "TC got DP incoming MEM request (2/4)");
-    RDC_DP_TriggerViaHttp.forwardMessage (aRequest);
+    RdcDPTriggerViaHttp.forwardMessage (aRequest);
   }
 
   public void handleIncomingResponse (@Nonnull final IncomingEDMResponse aResponse) throws MEIncomingException
@@ -61,6 +61,6 @@ public class RDCIncomingHandlerViaHttp implements IMEIncomingHandler
                                 "TC got DC incoming MEM response (4/4) with " +
                                 aResponse.attachments ().size () +
                                 " attachments");
-    RDC_DP_TriggerViaHttp.forwardMessage (aResponse);
+    RdcDPTriggerViaHttp.forwardMessage (aResponse);
   }
 }

@@ -156,139 +156,11 @@ public final class RdcConfig
     }
   }
 
-  public static final class R2D2
-  {
-    public static final boolean DEFAULT_USE_SML = true;
-    private static ISMLInfo s_aCachedSMLInfo;
-
-    private R2D2 ()
-    {}
-
-    /**
-     * Get a static endpoint URL to use. This method is ONLY available for BRIS
-     * and effectively works around the SMP lookup by providing a constant
-     * result. This value is only used if it is not empty and if the static
-     * certificate is also present.<br>
-     * Additionally #isR2D2UseDNS () must return <code>false</code> for this
-     * method to be used.
-     *
-     * @return The static endpoint URL to use. May be <code>null</code>.
-     * @see #getR2D2StaticCertificate()
-     */
-    @Nullable
-    public static String getR2D2StaticEndpointURL ()
-    {
-      return getConfig ().getAsString ("de4a.r2d2.static.endpointurl");
-    }
-
-    /**
-     * Get a static endpoint certificate to use. This method is ONLY available
-     * for BRIS and effectively works around the SMP lookup by providing a
-     * constant result. This value is only used if it is not empty and if the
-     * static endpoint URL is also present.<br>
-     * Additionally #isR2D2UseDNS () must return <code>false</code> for this
-     * method to be used.
-     *
-     * @return The static endpoint URL to use. May be <code>null</code>.
-     * @see #getR2D2StaticEndpointURL()
-     */
-    @Nullable
-    public static X509Certificate getR2D2StaticCertificate ()
-    {
-      final String sCert = getConfig ().getAsString ("de4a.r2d2.static.certificate");
-      if (StringHelper.hasNoText (sCert))
-        return null;
-      final X509Certificate ret = CertificateHelper.convertStringToCertficateOrNull (sCert);
-      if (ret == null)
-        LOGGER.error ("The provided static R2D2 certificate could NOT be parsed");
-      return ret;
-    }
-
-    /**
-     * @return <code>true</code> to use SML lookup, <code>false</code> to not do
-     *         it.
-     * @see #getR2D2SML()
-     * @see #getR2D2SMPUrl()
-     */
-    public static boolean isR2D2UseDNS ()
-    {
-      return getConfig ().getAsBoolean ("de4a.r2d2.usedns", DEFAULT_USE_SML);
-    }
-
-    /**
-     * @return The SML URL to be used. Must only contain a value if
-     *         {@link #isR2D2UseDNS()} returned <code>true</code>.
-     */
-    @Nonnull
-    public static ISMLInfo getR2D2SML ()
-    {
-      ISMLInfo ret = s_aCachedSMLInfo;
-      if (ret == null)
-      {
-        final String sSMLID = getConfig ().getAsString ("de4a.r2d2.sml.id");
-        final ESML eSML = ESML.getFromIDOrNull (sSMLID);
-        if (eSML != null)
-        {
-          // Pre-configured SML it is
-          ret = eSML;
-        }
-        else
-        {
-          // Custom SML
-          final String sDisplayName = getConfig ().getAsString ("de4a.r2d2.sml.name", "DE4A SML");
-          // E.g. edelivery.tech.ec.europa.eu.
-          final String sDNSZone = getConfig ().getAsString ("de4a.r2d2.sml.dnszone");
-          // E.g. https://edelivery.tech.ec.europa.eu/edelivery-sml
-          final String sManagementServiceURL = getConfig ().getAsString ("de4a.r2d2.sml.serviceurl");
-          final boolean bClientCertificateRequired = getConfig ().getAsBoolean ("de4a.r2d2.sml.clientcert", false);
-          // No need for a persistent ID here
-          ret = new SMLInfo (GlobalIDFactory.getNewStringID (), sDisplayName, sDNSZone, sManagementServiceURL, bClientCertificateRequired);
-        }
-        // Remember in cache
-        s_aCachedSMLInfo = ret;
-      }
-      return ret;
-    }
-
-    /**
-     * @return The constant SMP URI to be used. Must only contain a value if
-     *         {@link #isR2D2UseDNS()} returned <code>false</code>.
-     */
-    @Nullable
-    public static URI getR2D2SMPUrl ()
-    {
-      // E.g. http://smp.central.toop
-      final String sURI = getConfig ().getAsString ("de4a.r2d2.smp.url");
-      return URLHelper.getAsURI (sURI);
-    }
-  }
-
-  public static final class MEM
-  {
-    private MEM ()
-    {}
-
-    /**
-     * @return The MEM implementation ID or the default value. Never
-     *         <code>null</code>.
-     */
-    @Nullable
-    public static String getMEMImplementationID ()
-    {
-      return getConfig ().getAsString ("de4a.mem.implementation");
-    }
-
-    /**
-     * @return The DSC/DP URL where incoming AS4 messages are forwarded to. This
-     *         is the value from the configuration file.
-     */
-    @Nullable
-    public static String getMEMIncomingURL ()
-    {
-      return getConfig ().getAsString ("de4a.mem.incoming.url");
-    }
-  }
-
+  /**
+   * Global HTTP settings
+   *
+   * @author Philip Helger
+   */
   public static final class HTTP
   {
     private HTTP ()
@@ -334,6 +206,150 @@ public final class RdcConfig
     {
       // -1 = system default
       return getConfig ().getAsInt ("http.read-timeout", -1);
+    }
+  }
+
+  public static final class SMP
+  {
+    public static final boolean DEFAULT_USE_SML = true;
+    private static ISMLInfo s_aCachedSMLInfo;
+
+    private SMP ()
+    {}
+
+    /**
+     * @return <code>true</code> to use the global settings (see
+     *         {@link RdcConfig.HTTP}) or <code>false</code> to use the custom
+     *         ones from "smp client configuration". Defaults to
+     *         <code>true</code>.
+     */
+    public static boolean isUseGlobalHttpSettings ()
+    {
+      return getConfig ().getAsBoolean ("de4a.smp.http.useglobalsettings", true);
+    }
+
+    /**
+     * Get a static endpoint URL to use. This method is ONLY available for BRIS
+     * and effectively works around the SMP lookup by providing a constant
+     * result. This value is only used if it is not empty and if the static
+     * certificate is also present.<br>
+     * Additionally #isR2D2UseDNS () must return <code>false</code> for this
+     * method to be used.
+     *
+     * @return The static endpoint URL to use. May be <code>null</code>.
+     * @see #getStaticCertificate()
+     */
+    @Nullable
+    public static String getStaticEndpointURL ()
+    {
+      return getConfig ().getAsString ("de4a.smp.static.endpointurl");
+    }
+
+    /**
+     * Get a static endpoint certificate to use. This method is ONLY available
+     * for BRIS and effectively works around the SMP lookup by providing a
+     * constant result. This value is only used if it is not empty and if the
+     * static endpoint URL is also present.<br>
+     * Additionally {@link #isUseDNS()} must return <code>false</code> for this
+     * method to be used.
+     *
+     * @return The static endpoint URL to use. May be <code>null</code>.
+     * @see #getStaticEndpointURL()
+     */
+    @Nullable
+    public static X509Certificate getStaticCertificate ()
+    {
+      final String sCert = getConfig ().getAsString ("de4a.smp.static.certificate");
+      if (StringHelper.hasNoText (sCert))
+        return null;
+      final X509Certificate ret = CertificateHelper.convertStringToCertficateOrNull (sCert);
+      if (ret == null)
+        LOGGER.error ("The provided static R2D2 certificate could NOT be parsed");
+      return ret;
+    }
+
+    /**
+     * @return <code>true</code> to use SML lookup, <code>false</code> to not do
+     *         it.
+     * @see #getSML()
+     * @see #getStaticSMPUrl()
+     */
+    public static boolean isUseDNS ()
+    {
+      return getConfig ().getAsBoolean ("de4a.smp.usedns", DEFAULT_USE_SML);
+    }
+
+    /**
+     * @return The SML URL to be used. Must only contain a value if
+     *         {@link #isUseDNS()} returned <code>true</code>.
+     */
+    @Nonnull
+    public static ISMLInfo getSML ()
+    {
+      ISMLInfo ret = s_aCachedSMLInfo;
+      if (ret == null)
+      {
+        final String sSMLID = getConfig ().getAsString ("de4a.smp.sml.id");
+        final ESML eSML = ESML.getFromIDOrNull (sSMLID);
+        if (eSML != null)
+        {
+          // Pre-configured SML it is
+          ret = eSML;
+        }
+        else
+        {
+          // Custom SML
+          final String sDisplayName = getConfig ().getAsString ("de4a.smp.sml.name", "DE4A SML");
+          // E.g. edelivery.tech.ec.europa.eu.
+          final String sDNSZone = getConfig ().getAsString ("de4a.smp.sml.dnszone");
+          // E.g. https://edelivery.tech.ec.europa.eu/edelivery-sml
+          final String sManagementServiceURL = getConfig ().getAsString ("de4a.smp.sml.serviceurl");
+          final boolean bClientCertificateRequired = getConfig ().getAsBoolean ("de4a.smp.sml.clientcert", false);
+          // No need for a persistent ID here
+          ret = new SMLInfo (GlobalIDFactory.getNewStringID (), sDisplayName, sDNSZone, sManagementServiceURL, bClientCertificateRequired);
+        }
+        // Remember in cache
+        s_aCachedSMLInfo = ret;
+      }
+      return ret;
+    }
+
+    /**
+     * @return The constant SMP URI to be used. Must only contain a value if
+     *         {@link #isUseDNS()} returned <code>false</code>.
+     */
+    @Nullable
+    public static URI getStaticSMPUrl ()
+    {
+      // E.g. http://smp.central.toop
+      final String sURI = getConfig ().getAsString ("de4a.smp.static.smpurl");
+      return URLHelper.getAsURI (sURI);
+    }
+  }
+
+  public static final class MEM
+  {
+    private MEM ()
+    {}
+
+    /**
+     * @return The MEM implementation ID or the default value. Never
+     *         <code>null</code>.
+     */
+    @Nullable
+    public static String getMEMImplementationID ()
+    {
+      return getConfig ().getAsString ("de4a.mem.implementation");
+    }
+
+    /**
+     * @return The DSC/DP URL where incoming AS4 messages are forwarded to. This
+     *         is the value from the configuration file.
+     */
+    @Nullable
+    public static String getMEMIncomingURL ()
+    {
+      return getConfig ().getAsString ("de4a.mem.incoming.url");
     }
   }
 

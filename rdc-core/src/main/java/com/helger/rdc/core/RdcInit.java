@@ -54,13 +54,13 @@ import eu.de4a.kafkaclient.DE4AKafkaSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class RDCInit
+public final class RdcInit
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (RDCInit.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcInit.class);
   private static final AtomicBoolean INITED = new AtomicBoolean (false);
   private static String s_sLogPrefix;
 
-  private RDCInit ()
+  private RdcInit ()
   {}
 
   /**
@@ -72,7 +72,7 @@ public final class RDCInit
    *        <code>null</code> but maybe a mocked one.
    * @param aIncomingHandler
    *        The incoming handler to be used. If <code>null</code> the default of
-   *        {@link RDCIncomingHandlerViaHttp} will be used.
+   *        {@link RdcIncomingHandlerViaHttp} will be used.
    * @throws IllegalStateException
    *         If the DE4A Connector is already initialized
    * @throws InitializationException
@@ -138,10 +138,10 @@ public final class RDCInit
 
     {
       // Check R2D2 configuration
-      if (!RdcConfig.R2D2.isR2D2UseDNS ())
+      if (!RdcConfig.SMP.isUseDNS ())
       {
-        final String sStaticEndpoint = RdcConfig.R2D2.getR2D2StaticEndpointURL ();
-        final X509Certificate aStaticCert = RdcConfig.R2D2.getR2D2StaticCertificate ();
+        final String sStaticEndpoint = RdcConfig.SMP.getStaticEndpointURL ();
+        final X509Certificate aStaticCert = RdcConfig.SMP.getStaticCertificate ();
         if (URLHelper.getAsURL (sStaticEndpoint) != null && aStaticCert != null)
         {
           if (LOGGER.isInfoEnabled ())
@@ -149,7 +149,7 @@ public final class RDCInit
         }
         else
         {
-          final URI aSMPURI = RdcConfig.R2D2.getR2D2SMPUrl ();
+          final URI aSMPURI = RdcConfig.SMP.getStaticSMPUrl ();
           if (aSMPURI != null)
           {
             if (LOGGER.isInfoEnabled ())
@@ -163,10 +163,10 @@ public final class RDCInit
 
     // Init incoming message handler
     final IMEIncomingHandler aRealIncomingHandler = aIncomingHandler != null ? aIncomingHandler
-                                                                             : new RDCIncomingHandlerViaHttp (s_sLogPrefix);
+                                                                             : new RdcIncomingHandlerViaHttp (s_sLogPrefix);
     MessageExchangeManager.getConfiguredImplementation ().registerIncomingHandler (aServletContext, aRealIncomingHandler);
 
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector WebApp " + CRDCVersion.BUILD_VERSION + " started");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector WebApp " + CRdcVersion.BUILD_VERSION + " started");
   }
 
   /**

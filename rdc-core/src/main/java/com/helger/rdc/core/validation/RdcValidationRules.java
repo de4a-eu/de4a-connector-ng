@@ -29,17 +29,17 @@ import com.helger.phive.engine.source.IValidationSourceXML;
  * @author Philip Helger
  */
 @Immutable
-public final class RDCValidationRules
+public final class RdcValidationRules
 {
   public static final String GROUP_ID = "eu.de4a";
 
-  private RDCValidationRules ()
+  private RdcValidationRules ()
   {}
 
   @Nonnull
   private static ClassLoader _getCL ()
   {
-    return RDCValidationRules.class.getClassLoader ();
+    return RdcValidationRules.class.getClassLoader ();
   }
 
   /**

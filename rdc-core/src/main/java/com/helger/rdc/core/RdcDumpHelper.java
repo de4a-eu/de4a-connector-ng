@@ -42,11 +42,11 @@ import com.helger.commons.io.stream.WrappedOutputStream;
  * @author Philip Helger
  */
 @Immutable
-public final class RDCDumpHelper
+public final class RdcDumpHelper
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (RDCDumpHelper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcDumpHelper.class);
 
-  private RDCDumpHelper ()
+  private RdcDumpHelper ()
   {}
 
   @Nonnull

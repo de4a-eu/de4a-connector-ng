@@ -55,9 +55,9 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  * @author Philip Helger
  */
 @Immutable
-public final class RDC_DP_TriggerViaHttp
+public final class RdcDPTriggerViaHttp
 {
-  private RDC_DP_TriggerViaHttp ()
+  private RdcDPTriggerViaHttp ()
   {}
 
   @Nonnull

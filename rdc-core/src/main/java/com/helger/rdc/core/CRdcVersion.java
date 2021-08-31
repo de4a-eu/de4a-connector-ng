@@ -31,14 +31,14 @@ import com.helger.commons.lang.PropertiesHelper;
  * @author Philip Helger
  */
 @Immutable
-public final class CRDCVersion
+public final class CRdcVersion
 {
   /** Current version - from properties file */
   public static final String BUILD_VERSION;
   /** Build timestamp - from properties file */
   public static final String BUILD_TIMESTAMP;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger (CRDCVersion.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (CRdcVersion.class);
 
   static
   {
@@ -64,6 +64,6 @@ public final class CRDCVersion
     BUILD_TIMESTAMP = sProjectTimestamp;
   }
 
-  private CRDCVersion ()
+  private CRdcVersion ()
   {}
 }

@@ -31,7 +31,7 @@ public final class RdcConfigTest
   @Test
   public void testBasic ()
   {
-    assertFalse (RdcConfig.R2D2.isR2D2UseDNS ());
+    assertFalse (RdcConfig.SMP.isUseDNS ());
     assertNotNull (RdcConfig.getIdentifierFactory ());
   }
 }

@@ -43,8 +43,8 @@ import com.helger.rdc.api.me.outgoing.MERoutingInformationInput;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
-import com.helger.rdc.core.api.RDCAPIHelper;
-import com.helger.rdc.core.validation.RDCValidator;
+import com.helger.rdc.core.api.RdcAPIHelper;
+import com.helger.rdc.core.validation.RdcValidator;
 import com.helger.rdc.webapi.APIParamException;
 import com.helger.rdc.webapi.ERDCIemType;
 import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
@@ -109,16 +109,16 @@ public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
         // validation
         final StopWatch aSW = StopWatch.createdStarted ();
         final VESID aVESID = m_eType.getVESID ();
-        final ValidationResultList aValidationResultList = RDCAPIHelper.validateBusinessDocument (aVESID,
+        final ValidationResultList aValidationResultList = RdcAPIHelper.validateBusinessDocument (aVESID,
                                                                                                  aOutgoingMsg.getPayloadAtIndex (0)
                                                                                                              .getValue ());
         aSW.stop ();
 
         final IJsonObject aJsonVR = new JsonObject ();
         PhiveJsonHelper.applyValidationResultList (aJsonVR,
-                                                   RDCValidator.getVES (aVESID),
+                                                   RdcValidator.getVES (aVESID),
                                                    aValidationResultList,
-                                                   RDCAPIHelper.DEFAULT_LOCALE,
+                                                   RdcAPIHelper.DEFAULT_LOCALE,
                                                    aSW.getMillis (),
                                                    null,
                                                    null);
@@ -132,7 +132,7 @@ public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
         MERoutingInformation aRoutingInfoFinal = null;
         final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
-        final ServiceMetadataType aSM = RDCAPIHelper.querySMPServiceMetadata (aRoutingInfo.getReceiverID (),
+        final ServiceMetadataType aSM = RdcAPIHelper.querySMPServiceMetadata (aRoutingInfo.getReceiverID (),
                                                                              aRoutingInfo.getDocumentTypeID (),
                                                                              aRoutingInfo.getProcessID (),
                                                                              aRoutingInfo.getTransportProtocol ());
@@ -188,7 +188,7 @@ public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
                                                                                 MEPayload.createRandomContentID ()))
                                           .data (aPayload.getValue ()));
           }
-          RDCAPIHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
+          RdcAPIHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
           aJsonSending.add (JSON_SUCCESS, true);
 
           aJson.addJson ("sending-results", aJsonSending);

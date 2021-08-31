@@ -21,16 +21,16 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 
 /**
- * Test class for class {@link CRDCVersion}
+ * Test class for class {@link CRdcVersion}
  *
  * @author Philip Helger
  */
-public final class CRDCVersionTest
+public final class CRdcVersionTest
 {
   @Test
   public void testBasic ()
   {
-    assertNotEquals ("undefined", CRDCVersion.BUILD_VERSION);
-    assertNotEquals ("undefined", CRDCVersion.BUILD_TIMESTAMP);
+    assertNotEquals ("undefined", CRdcVersion.BUILD_VERSION);
+    assertNotEquals ("undefined", CRdcVersion.BUILD_TIMESTAMP);
   }
 }

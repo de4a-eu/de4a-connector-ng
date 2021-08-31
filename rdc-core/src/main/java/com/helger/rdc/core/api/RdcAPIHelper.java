@@ -44,11 +44,11 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  * @author Philip Helger
  */
 @Immutable
-public final class RDCAPIHelper
+public final class RdcAPIHelper
 {
   public static final Locale DEFAULT_LOCALE = Locale.US;
 
-  private RDCAPIHelper ()
+  private RdcAPIHelper ()
   {}
 
   /**
@@ -61,7 +61,7 @@ public final class RDCAPIHelper
   @Nonnull
   public static ICommonsSortedMap <String, String> querySMPServiceGroups (@Nonnull final IParticipantIdentifier aParticipantID)
   {
-    return RDCAPIConfig.getDDServiceGroupHrefProvider ()
+    return RdcAPIConfig.getDDServiceGroupHrefProvider ()
                       .getAllServiceGroupHrefs (aParticipantID, LoggingRdcErrorHandler.INSTANCE);
   }
 
@@ -84,7 +84,7 @@ public final class RDCAPIHelper
                                                              @Nonnull final IProcessIdentifier aProcessID,
                                                              @Nonnull final String sTransportProfile)
   {
-    return RDCAPIConfig.getDDServiceMetadataProvider ()
+    return RdcAPIConfig.getDDServiceMetadataProvider ()
                       .getServiceMetadata (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
   }
 
@@ -110,7 +110,7 @@ public final class RDCAPIHelper
                                                @Nonnull final IProcessIdentifier aProcessID,
                                                @Nonnull final String sTransportProfile)
   {
-    return RDCAPIConfig.getDDServiceMetadataProvider ()
+    return RdcAPIConfig.getDDServiceMetadataProvider ()
                       .getEndpoint (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
   }
 
@@ -127,7 +127,7 @@ public final class RDCAPIHelper
   public static ValidationResultList validateBusinessDocument (@Nonnull final VESID aVESID,
                                                                @Nonnull final byte [] aPayload)
   {
-    return RDCAPIConfig.getVSValidator ().validate (aVESID, aPayload, DEFAULT_LOCALE);
+    return RdcAPIConfig.getVSValidator ().validate (aVESID, aPayload, DEFAULT_LOCALE);
   }
 
   /**

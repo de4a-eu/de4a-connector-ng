@@ -27,7 +27,8 @@ import com.helger.phase4.crypto.IAS4CryptoFactory;
 import com.helger.security.keystore.EKeyStoreType;
 
 /**
- * Wrapper to access the configuration for the phase4 module.
+ * Wrapper to access the configuration for the phase4 module. The configuration
+ * file resolution resides in class {@link AS4Configuration}.
  *
  * @author Philip Helger
  */
@@ -108,8 +109,7 @@ public final class Phase4Config
   @Nonnull
   public static EKeyStoreType getKeyStoreType ()
   {
-    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (getConfig ().getAsString ("phase4.keystore.type"),
-                                                            EKeyStoreType.JKS);
+    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (getConfig ().getAsString ("phase4.keystore.type"), EKeyStoreType.JKS);
   }
 
   @Nullable
@@ -140,8 +140,7 @@ public final class Phase4Config
   @Nonnull
   public static EKeyStoreType getTrustStoreType ()
   {
-    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (getConfig ().getAsString ("phase4.truststore.type"),
-                                                            EKeyStoreType.JKS);
+    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (getConfig ().getAsString ("phase4.truststore.type"), EKeyStoreType.JKS);
   }
 
   @Nullable

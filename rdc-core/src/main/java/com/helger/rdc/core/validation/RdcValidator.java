@@ -42,13 +42,13 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
  *
  * @author Philip Helger
  */
-public class RDCValidator implements IRdcValidator
+public class RdcValidator implements IRdcValidator
 {
   private static final ValidationExecutorSetRegistry <IValidationSourceXML> VER = new ValidationExecutorSetRegistry <> ();
   static
   {
     // Init all DE4A rules
-    RDCValidationRules.initRDC (VER);
+    RdcValidationRules.initRDC (VER);
   }
 
   @Nonnull
@@ -66,7 +66,7 @@ public class RDCValidator implements IRdcValidator
     return aVES;
   }
 
-  public RDCValidator ()
+  public RdcValidator ()
   {}
 
   @Nonnull
