@@ -1,12 +1,32 @@
-# rdc
+# RDC - Real DE4A Connector
 
-Real DE4A Connector
+The thing is just called "Connector" in the rest of the documentation.
 
-# TODO list
+## Structure
 
-* Create the basic structure
-  * rdc-api
-  * rdc-core (incl. phase4)
-  * rdc-web-api
-  * rdc-webapp
-* Setup the core POMs
+RDC is structured in the following sub-modules:
+
+* `rdc-api` - contains all generic interfaces for the message exchange etc. This project may be included as a dependency when programming against RDC.
+* `rdc-core` - contains the main implementation logic, the configuration, the phase4 AS4 integration, the SMP lookup etc.
+* `rdc-web-api` - contains the web integration of the core components (REST APIs), but only as a solution to be integrated (library) and not self-contained
+* `rdc-webapp` - is a standalone web application (WAR) to be deployed in a Java JEE application server like Tomcat or Jetty. It may also serve as the basis for Docker images.
+
+## Running RDC
+
+To be described
+
+### Integration
+
+There are different ways how to integrate the Connector into your environment.
+The two main ways to do it is, to
+1. run the Connector solution "as is" - this could mean you take the binary WAR file or the Docker image and run it in the JEE application service
+1. integrate the Connector into your Java application. Depending on your application you could either 
+    * Integrate `rdc-core` if you are building an application that does not require an external HTTP interface
+    * Integrate `rdc-web-api` if you are building a Servlet-based JEE application and you want to use the external HTTP interfaces
+
+## Developing RDC
+
+### Prerequisites
+
+* Java 1.8 or higher
+* Apache Maven 3.6 or higher as build tool
