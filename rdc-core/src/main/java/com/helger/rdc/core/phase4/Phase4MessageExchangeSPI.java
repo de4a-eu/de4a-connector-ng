@@ -56,8 +56,8 @@ import com.helger.phase4.model.pmode.PModePayloadService;
 import com.helger.phase4.servlet.AS4ServerInitializer;
 import com.helger.phase4.util.Phase4Exception;
 import com.helger.photon.app.io.WebFileIO;
-import com.helger.rdc.api.error.ERDCErrorCode;
-import com.helger.rdc.api.http.RDCHttpClientSettings;
+import com.helger.rdc.api.error.ERdcErrorCode;
+import com.helger.rdc.api.http.RdcHttpClientSettings;
 import com.helger.rdc.api.me.IMessageExchangeSPI;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.model.MEMessage;
@@ -215,7 +215,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       // See :
       // http://wiki.ds.unipi.gr/display/TOOP/Routing+Information+Profile
       // http://wiki.ds.unipi.gr/display/CCTF/TOOP+AS4+GW+Interface+specification
-      final CEFUserMessageBuilder aBuilder = new CEFUserMessageBuilder ().httpClientFactory (new RDCHttpClientSettings ())
+      final CEFUserMessageBuilder aBuilder = new CEFUserMessageBuilder ().httpClientFactory (new RdcHttpClientSettings ())
                                                                          .cryptoFactory (aCF)
                                                                          .senderParticipantID (aRoutingInfo.getSenderID ())
                                                                          .receiverParticipantID (aRoutingInfo.getReceiverID ())
@@ -266,7 +266,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     catch (final Phase4Exception | InvalidNameException ex)
     {
       LOGGER.error ("[phase4] Error sending message", ex);
-      throw new MEOutgoingException (ERDCErrorCode.ME_001, ex);
+      throw new MEOutgoingException (ERdcErrorCode.ME_001, ex);
     }
   }
 

@@ -23,7 +23,7 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.rdc.api.dd.IDDServiceGroupHrefProvider;
 import com.helger.rdc.api.dd.IDDServiceMetadataProvider;
-import com.helger.rdc.api.validation.IVSValidator;
+import com.helger.rdc.api.validation.IRdcValidator;
 import com.helger.rdc.core.smp.DDServiceGroupHrefProviderSMP;
 import com.helger.rdc.core.smp.DDServiceMetadataProviderSMP;
 import com.helger.rdc.core.validation.RDCValidator;
@@ -44,7 +44,7 @@ public final class RDCAPIConfig
   @GuardedBy ("RW_LOCK")
   private static IDDServiceMetadataProvider s_aDDSMProvider = new DDServiceMetadataProviderSMP ();
   @GuardedBy ("RW_LOCK")
-  private static IVSValidator s_aValidator = new RDCValidator ();
+  private static IRdcValidator s_aValidator = new RDCValidator ();
 
   private RDCAPIConfig ()
   {}
@@ -74,12 +74,12 @@ public final class RDCAPIConfig
   }
 
   @Nonnull
-  public static IVSValidator getVSValidator ()
+  public static IRdcValidator getVSValidator ()
   {
     return RW_LOCK.readLockedGet ( () -> s_aValidator);
   }
 
-  public static void setVSValidator (@Nonnull final IVSValidator aValidator)
+  public static void setVSValidator (@Nonnull final IRdcValidator aValidator)
   {
     ValueEnforcer.notNull (aValidator, "IVSValidator");
     RW_LOCK.writeLocked ( () -> s_aValidator = aValidator);

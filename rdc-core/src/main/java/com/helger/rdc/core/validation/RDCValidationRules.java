@@ -20,13 +20,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.io.resource.IReadableResource;
-import com.helger.phive.api.EValidationType;
-import com.helger.phive.api.artefact.ValidationArtefact;
 import com.helger.phive.api.executorset.ValidationExecutorSetRegistry;
-import com.helger.phive.engine.schematron.ValidationExecutorSchematron;
 import com.helger.phive.engine.source.IValidationSourceXML;
-import com.helger.ubl23.UBL23NamespaceContext;
 
 /**
  * Generic DE4A IEM validation configuration
@@ -45,14 +40,6 @@ public final class RDCValidationRules
   private static ClassLoader _getCL ()
   {
     return RDCValidationRules.class.getClassLoader ();
-  }
-
-  @Nonnull
-  private static ValidationExecutorSchematron _createXSLT (@Nonnull final IReadableResource aRes)
-  {
-    return new ValidationExecutorSchematron (new ValidationArtefact (EValidationType.SCHEMATRON_XSLT, aRes),
-                                             null,
-                                             UBL23NamespaceContext.getInstance ());
   }
 
   /**

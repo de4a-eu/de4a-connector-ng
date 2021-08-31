@@ -26,19 +26,19 @@ import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.log.LogHelper;
 
 /**
- * Logging implementation of {@link ITCErrorHandler}
- * 
+ * Logging implementation of {@link IRdcErrorHandler}
+ *
  * @author Philip Helger
  */
-public class LoggingRDCErrorHandler implements IRDCErrorHandler
+public class LoggingRdcErrorHandler implements IRdcErrorHandler
 {
-  public static final LoggingRDCErrorHandler INSTANCE = new LoggingRDCErrorHandler ();
-  private static final Logger LOGGER = LoggerFactory.getLogger (LoggingRDCErrorHandler.class);
+  public static final LoggingRdcErrorHandler INSTANCE = new LoggingRdcErrorHandler ();
+  private static final Logger LOGGER = LoggerFactory.getLogger (LoggingRdcErrorHandler.class);
 
   public void onMessage (@Nonnull final EErrorLevel eErrorLevel,
                          @Nonnull final String sMsg,
                          @Nullable final Throwable t,
-                         @Nonnull final IRDCErrorCode eCode)
+                         @Nonnull final IRdcErrorCode eCode)
   {
     LogHelper.log (LOGGER, eErrorLevel, sMsg, t);
   }

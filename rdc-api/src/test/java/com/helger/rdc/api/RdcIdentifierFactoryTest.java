@@ -14,18 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api.error;
+package com.helger.rdc.api;
 
-import java.io.Serializable;
+import static org.junit.Assert.assertNotEquals;
 
-import com.helger.commons.id.IHasID;
+import org.junit.Test;
+
+import com.helger.peppolid.IParticipantIdentifier;
 
 /**
- * Base interface for all kind of DE4A error code enums.
+ * Test class for class {@link RdcIdentifierFactory}.
  *
  * @author Philip Helger
  */
-public interface IRDCErrorCode extends IHasID <String>, Serializable
+public final class RdcIdentifierFactoryTest
 {
-  /* empty */
+  @Test
+  public void testBasic ()
+  {
+    final RdcIdentifierFactory aIF = RdcIdentifierFactory.INSTANCE;
+
+    final IParticipantIdentifier aPI1 = aIF.createParticipantIdentifier (null, "iso6523-actorid-upis::9999:elonia");
+    final IParticipantIdentifier aPI2 = aIF.createParticipantIdentifier ("iso6523-actorid-upis", "9999:elonia");
+    assertNotEquals (aPI1.getURIEncoded (), aPI2.getURIEncoded ());
+  }
 }

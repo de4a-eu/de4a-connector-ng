@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.collection.impl.ICommonsSortedMap;
 import com.helger.peppolid.IParticipantIdentifier;
-import com.helger.rdc.api.error.IRDCErrorHandler;
+import com.helger.rdc.api.error.IRdcErrorHandler;
 
 /**
  * Helper interface to be used by the REST API.
@@ -40,5 +40,5 @@ public interface IDDServiceGroupHrefProvider
    */
   @Nonnull
   ICommonsSortedMap <String, String> getAllServiceGroupHrefs (@Nonnull IParticipantIdentifier aParticipantID,
-                                                              @Nonnull IRDCErrorHandler aErrorHandler);
+                                                              @Nonnull IRdcErrorHandler aErrorHandler);
 }

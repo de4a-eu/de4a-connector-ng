@@ -74,7 +74,7 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
   {
     return ToStringGenerator.getDerived (super.toString ())
                             .append ("EndpointURL", m_sEndpointURL)
-                            .append ("Cert", m_aCert)
+                            .append ("Certificate", m_aCert)
                             .getToString ();
   }
 

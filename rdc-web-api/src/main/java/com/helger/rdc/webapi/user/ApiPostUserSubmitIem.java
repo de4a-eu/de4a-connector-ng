@@ -42,7 +42,7 @@ import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MERoutingInformationInput;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
-import com.helger.rdc.api.rest.RDCRestJAXB;
+import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.core.api.RDCAPIHelper;
 import com.helger.rdc.core.validation.RDCValidator;
 import com.helger.rdc.webapi.APIParamException;
@@ -60,13 +60,13 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  *
  * @author Philip Helger
  */
-public class ApiPostUserSubmitEdm extends AbstractRDCAPIInvoker
+public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitEdm.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitIem.class);
 
   private final ERDCIemType m_eType;
 
-  public ApiPostUserSubmitEdm (@Nonnull final ERDCIemType eType)
+  public ApiPostUserSubmitIem (@Nonnull final ERDCIemType eType)
   {
     m_eType = eType;
   }
@@ -78,7 +78,7 @@ public class ApiPostUserSubmitEdm extends AbstractRDCAPIInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final TCOutgoingMessage aOutgoingMsg = RDCRestJAXB.outgoingMessage ()
+    final TCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ()
                                                      .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new APIParamException ("Failed to interpret the message body as an 'OutgoingMessage'");

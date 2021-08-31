@@ -27,11 +27,11 @@ import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.error.list.ErrorList;
 
 /**
- * Collecting implementation of {@link ITCErrorHandler}
+ * Collecting implementation of {@link IRdcErrorHandler}
  *
  * @author Philip Helger
  */
-public class WrappedRDCErrorHandler implements IRDCErrorHandler
+public class WrappedRdcErrorHandler implements IRdcErrorHandler
 {
   private final ErrorList m_aErrorList;
   private final Predicate <? super IError> m_aFilter;
@@ -42,7 +42,7 @@ public class WrappedRDCErrorHandler implements IRDCErrorHandler
    * @param aErrorList
    *        The error list to be filled. May not be <code>null</code>.
    */
-  public WrappedRDCErrorHandler (@Nonnull final ErrorList aErrorList)
+  public WrappedRdcErrorHandler (@Nonnull final ErrorList aErrorList)
   {
     this (aErrorList, null);
   }
@@ -56,7 +56,7 @@ public class WrappedRDCErrorHandler implements IRDCErrorHandler
    *        The filter to be used. May be <code>null</code> to collect all
    *        errors.
    */
-  public WrappedRDCErrorHandler (@Nonnull final ErrorList aErrorList, @Nullable final Predicate <? super IError> aFilter)
+  public WrappedRdcErrorHandler (@Nonnull final ErrorList aErrorList, @Nullable final Predicate <? super IError> aFilter)
   {
     m_aErrorList = aErrorList;
     m_aFilter = aFilter;
@@ -65,7 +65,7 @@ public class WrappedRDCErrorHandler implements IRDCErrorHandler
   public void onMessage (@Nonnull final EErrorLevel eErrorLevel,
                          @Nonnull final String sMsg,
                          @Nullable final Throwable t,
-                         @Nonnull final IRDCErrorCode eCode)
+                         @Nonnull final IRdcErrorCode eCode)
   {
     final IError aError = SingleError.builder ()
                                      .errorLevel (eErrorLevel)

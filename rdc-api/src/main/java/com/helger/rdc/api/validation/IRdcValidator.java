@@ -28,7 +28,7 @@ import com.helger.phive.api.result.ValidationResultList;
  *
  * @author Philip Helger
  */
-public interface IVSValidator
+public interface IRdcValidator
 {
   /**
    * Perform validation

@@ -19,11 +19,11 @@ package com.helger.rdc.api.me;
 import javax.annotation.Nullable;
 
 /**
- * Base exception for all ME exceptions.
+ * Base exception for all Message Exchange exceptions.
  *
  * @author Philip Helger
  */
-public class MEException extends Exception
+public abstract class MEException extends Exception
 {
   public MEException (@Nullable final String sMsg)
   {

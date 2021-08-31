@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.helger.commons.mock.SPITestHelper;
 import com.helger.photon.core.mock.PhotonCoreValidator;
-import com.helger.rdc.api.RDCConfig;
+import com.helger.rdc.api.RdcConfig;
 
 /**
  * Test SPI definitions and web.xml
@@ -40,6 +40,6 @@ public final class SPITest
   public void testConfig () throws Exception
   {
     // Required to test the ph-config bug when building on the commandline
-    RDCConfig.Tracker.isDE4ATrackerEnabled ();
+    RdcConfig.Tracker.isDE4ATrackerEnabled ();
   }
 }

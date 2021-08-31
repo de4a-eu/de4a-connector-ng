@@ -14,24 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api;
+package com.helger.rdc.api.error;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import java.io.Serializable;
 
-import org.junit.Test;
+import com.helger.commons.id.IHasID;
 
 /**
- * Test class for class {@link TCConfig}.
+ * Base interface for all kind of DE4A error code enums.
  *
  * @author Philip Helger
  */
-public final class RDCConfigTest
+public interface IRdcErrorCode extends IHasID <String>, Serializable
 {
-  @Test
-  public void testBasic ()
-  {
-    assertFalse (RDCConfig.R2D2.isR2D2UseDNS ());
-    assertNotNull (RDCConfig.getIdentifierFactory ());
-  }
+  /* empty */
 }

@@ -31,12 +31,12 @@ import com.helger.httpclient.response.ResponseHandlerJson;
 import com.helger.json.IJson;
 import com.helger.json.serialize.JsonWriter;
 import com.helger.json.serialize.JsonWriterSettings;
-import com.helger.rdc.api.RDCIdentifierFactory;
+import com.helger.rdc.api.RdcIdentifierFactory;
 import com.helger.rdc.api.me.EMEProtocol;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCOutgoingMetadata;
 import com.helger.rdc.api.rest.TCPayload;
-import com.helger.rdc.api.rest.RDCRestJAXB;
+import com.helger.rdc.api.rest.RdcRestJAXB;
 
 public class MainValidateLookupAndSendEdmRequest
 {
@@ -47,11 +47,11 @@ public class MainValidateLookupAndSendEdmRequest
     final TCOutgoingMessage aOM = new TCOutgoingMessage ();
     {
       final TCOutgoingMetadata aMetadata = new TCOutgoingMetadata ();
-      aMetadata.setSenderID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PARTICIPANT_SCHEME, "9914:tc-ng-test-sender"));
-      aMetadata.setReceiverID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PARTICIPANT_SCHEME, "9915:tooptest"));
-      aMetadata.setDocTypeID (RDCRestJAXB.createTCID (RDCIdentifierFactory.DOCTYPE_SCHEME,
+      aMetadata.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9914:tc-ng-test-sender"));
+      aMetadata.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:tooptest"));
+      aMetadata.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
                                                      "urn:eu:toop:ns:dataexchange-1p40::Response##urn:eu.toop.response.registeredorganization::1.40"));
-      aMetadata.setProcessID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PROCESS_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+      aMetadata.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "urn:eu.toop.process.datarequestresponse"));
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
       aOM.setMetadata (aMetadata);
     }
@@ -63,12 +63,12 @@ public class MainValidateLookupAndSendEdmRequest
       aOM.addPayload (aPayload);
     }
 
-    LOGGER.info (RDCRestJAXB.outgoingMessage ().getAsString (aOM));
+    LOGGER.info (RdcRestJAXB.outgoingMessage ().getAsString (aOM));
 
     try (HttpClientManager aHCM = new HttpClientManager ())
     {
       final HttpPost aPost = new HttpPost ("http://localhost:8090/api/user/submit/request");
-      aPost.setEntity (new ByteArrayEntity (RDCRestJAXB.outgoingMessage ().getAsBytes (aOM)));
+      aPost.setEntity (new ByteArrayEntity (RdcRestJAXB.outgoingMessage ().getAsBytes (aOM)));
       final IJson aJson = aHCM.execute (aPost, new ResponseHandlerJson ());
       LOGGER.info (new JsonWriter (new JsonWriterSettings ().setIndentEnabled (true)).writeAsString (aJson));
     }

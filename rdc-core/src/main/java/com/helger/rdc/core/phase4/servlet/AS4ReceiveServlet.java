@@ -27,8 +27,8 @@ import com.helger.rdc.core.phase4.Phase4Config;
 import com.helger.xservlet.AbstractXServlet;
 
 /**
- * Local AS4 servlet. This endpoint must be used in the SMP for receiving
- * messages.
+ * Local AS4 servlet. This endpoint (full deployed URL) must be registered in
+ * SMP endpoints for receiving messages.
  *
  * @author Philip Helger
  */

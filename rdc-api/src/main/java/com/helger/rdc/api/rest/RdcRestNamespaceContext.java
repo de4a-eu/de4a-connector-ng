@@ -14,28 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api;
+package com.helger.rdc.api.rest;
 
-import static org.junit.Assert.assertNotEquals;
+import javax.annotation.Nonnull;
 
-import org.junit.Test;
-
-import com.helger.peppolid.IParticipantIdentifier;
+import com.helger.commons.annotation.Singleton;
+import com.helger.xml.namespace.MapBasedNamespaceContext;
 
 /**
- * Test class for class {@link TCIdentifierFactory}.
+ * The namespace context to be used as the namespace prefix mapper.
  *
  * @author Philip Helger
  */
-public final class RDCIdentifierFactoryTest
+@Singleton
+public class RdcRestNamespaceContext extends MapBasedNamespaceContext
 {
-  @Test
-  public void testBasic ()
+  private static final class SingletonHolder
   {
-    final RDCIdentifierFactory aIF = RDCIdentifierFactory.INSTANCE;
+    static final RdcRestNamespaceContext INSTANCE = new RdcRestNamespaceContext ();
+  }
 
-    final IParticipantIdentifier aPI1 = aIF.createParticipantIdentifier (null, "iso6523-actorid-upis::9999:elonia");
-    final IParticipantIdentifier aPI2 = aIF.createParticipantIdentifier ("iso6523-actorid-upis", "9999:elonia");
-    assertNotEquals (aPI1.getURIEncoded (), aPI2.getURIEncoded ());
+  protected RdcRestNamespaceContext ()
+  {
+    addMapping (RdcRestJAXB.DEFAULT_NAMESPACE_PREFIX, RdcRestJAXB.NS_URI);
+  }
+
+  @Nonnull
+  public static RdcRestNamespaceContext getInstance ()
+  {
+    return SingletonHolder.INSTANCE;
   }
 }

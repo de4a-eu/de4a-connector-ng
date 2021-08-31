@@ -26,7 +26,7 @@ import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.commons.exception.InitializationException;
 import com.helger.commons.lang.ServiceLoaderHelper;
-import com.helger.rdc.api.RDCConfig;
+import com.helger.rdc.api.RdcConfig;
 
 public class MessageExchangeManager
 {
@@ -71,7 +71,7 @@ public class MessageExchangeManager
   @Nonnull
   public static IMessageExchangeSPI getConfiguredImplementation ()
   {
-    final String sID = RDCConfig.MEM.getMEMImplementationID ();
+    final String sID = RdcConfig.MEM.getMEMImplementationID ();
     final IMessageExchangeSPI ret = getImplementationOfID (sID);
     if (ret == null)
       throw new IllegalStateException ("Failed to resolve MEM implementation with ID '" + sID + "'");

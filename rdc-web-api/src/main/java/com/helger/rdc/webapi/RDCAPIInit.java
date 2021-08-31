@@ -25,7 +25,7 @@ import com.helger.photon.api.IAPIRegistry;
 import com.helger.rdc.webapi.as4.ApiPostSend;
 import com.helger.rdc.webapi.smp.ApiGetSmpDocTypes;
 import com.helger.rdc.webapi.smp.ApiGetSmpEndpoints;
-import com.helger.rdc.webapi.user.ApiPostUserSubmitEdm;
+import com.helger.rdc.webapi.user.ApiPostUserSubmitIem;
 import com.helger.rdc.webapi.validation.ApiPostValidateIem;
 
 /**
@@ -57,8 +57,8 @@ public final class RDCAPIInit
 
     // User stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/request"),
-                                                 new ApiPostUserSubmitEdm (ERDCIemType.REQUEST)));
+                                                 new ApiPostUserSubmitIem (ERDCIemType.REQUEST)));
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/response"),
-                                                 new ApiPostUserSubmitEdm (ERDCIemType.RESPONSE)));
+                                                 new ApiPostUserSubmitIem (ERDCIemType.RESPONSE)));
   }
 }

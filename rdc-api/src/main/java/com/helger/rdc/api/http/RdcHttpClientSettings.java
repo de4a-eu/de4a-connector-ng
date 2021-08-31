@@ -19,10 +19,12 @@ package com.helger.rdc.api.http;
 import java.security.GeneralSecurityException;
 
 import org.apache.http.HttpHost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.commons.exception.InitializationException;
 import com.helger.httpclient.HttpClientSettings;
-import com.helger.rdc.api.RDCConfig;
+import com.helger.rdc.api.RdcConfig;
 
 /**
  * Common DE4A Connector {@link HttpClientSettings} based on the configuration
@@ -30,36 +32,43 @@ import com.helger.rdc.api.RDCConfig;
  *
  * @author Philip Helger
  */
-public class RDCHttpClientSettings extends HttpClientSettings
+public class RdcHttpClientSettings extends HttpClientSettings
 {
-  public RDCHttpClientSettings ()
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcHttpClientSettings.class);
+
+  public RdcHttpClientSettings ()
   {
     // Add settings from configuration file here centrally
-    if (RDCConfig.HTTP.isProxyServerEnabled ())
+    if (RdcConfig.HTTP.isProxyServerEnabled ())
     {
-      setProxyHost (new HttpHost (RDCConfig.HTTP.getProxyServerAddress (), RDCConfig.HTTP.getProxyServerPort ()));
+      setProxyHost (new HttpHost (RdcConfig.HTTP.getProxyServerAddress (), RdcConfig.HTTP.getProxyServerPort ()));
 
       // Non-proxy hosts
-      addNonProxyHostsFromPipeString (RDCConfig.HTTP.getProxyServerNonProxyHosts ());
+      addNonProxyHostsFromPipeString (RdcConfig.HTTP.getProxyServerNonProxyHosts ());
+
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Enabled HTTP proxy settings for request");
     }
 
     // Disable SSL checks?
-    if (RDCConfig.HTTP.isTLSTrustAll ())
+    if (RdcConfig.HTTP.isTLSTrustAll ())
       try
       {
         setSSLContextTrustAll ();
         setHostnameVerifierVerifyAll ();
+        if (LOGGER.isDebugEnabled ())
+          LOGGER.debug ("Trusting all TLS configurations - not recommended for production");
       }
       catch (final GeneralSecurityException ex)
       {
         throw new InitializationException (ex);
       }
 
-    final int nConnectionTimeoutMS = RDCConfig.HTTP.getConnectionTimeoutMS ();
+    final int nConnectionTimeoutMS = RdcConfig.HTTP.getConnectionTimeoutMS ();
     if (nConnectionTimeoutMS >= 0)
       setConnectionTimeoutMS (nConnectionTimeoutMS);
 
-    final int nReadTimeoutMS = RDCConfig.HTTP.getReadTimeoutMS ();
+    final int nReadTimeoutMS = RdcConfig.HTTP.getReadTimeoutMS ();
     if (nReadTimeoutMS >= 0)
       setSocketTimeoutMS (nReadTimeoutMS);
   }

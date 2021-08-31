@@ -30,22 +30,22 @@ import org.w3c.dom.Document;
 import com.helger.commons.io.resource.FileSystemResource;
 import com.helger.commons.mime.CMimeType;
 import com.helger.commons.mock.CommonsTestHelper;
-import com.helger.rdc.api.RDCIdentifierFactory;
+import com.helger.rdc.api.RdcIdentifierFactory;
 import com.helger.rdc.api.me.EMEProtocol;
 
 /**
- * Test class for class {@link TCRestJAXB}.
+ * Test class for class {@link RdcRestJAXB}.
  *
  * @author Philip Helger
  */
-public final class RDCRestJAXBTest
+public final class RdcRestJAXBTest
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (RDCRestJAXBTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcRestJAXBTest.class);
 
   @Test
   public void testBasic ()
   {
-    assertTrue (RDCRestJAXB.XSD_RES.exists ());
+    assertTrue (RdcRestJAXB.XSD_RES.exists ());
   }
 
   @Test
@@ -53,11 +53,11 @@ public final class RDCRestJAXBTest
   {
     final TCOutgoingMessage m = new TCOutgoingMessage ();
     final TCOutgoingMetadata md = new TCOutgoingMetadata ();
-    md.setSenderID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
-    md.setReceiverID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (RDCRestJAXB.createTCID (RDCIdentifierFactory.DOCTYPE_SCHEME,
-                                            "urn:eu:toop:ns:dataexchange-1p40::Request##urn:eu.toop.request.registeredorganization::1.40"));
-    md.setProcessID (RDCRestJAXB.createTCID (RDCIdentifierFactory.DOCTYPE_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+    md.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
+    md.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
+    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
+                                             "urn:eu:toop:ns:dataexchange-1p40::Request##urn:eu.toop.request.registeredorganization::1.40"));
+    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "urn:eu.toop.process.datarequestresponse"));
     md.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
     md.setEndpointURL ("https://target.example.org/as4");
     md.setReceiverCertificate ("Receiver's certificate".getBytes (StandardCharsets.ISO_8859_1));
@@ -72,21 +72,21 @@ public final class RDCRestJAXBTest
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m.clone ());
 
     if (false)
-      LOGGER.info (RDCRestJAXB.outgoingMessage ().getAsString (m));
+      LOGGER.info (RdcRestJAXB.outgoingMessage ().getAsString (m));
 
     // Write
-    final Document aDoc = RDCRestJAXB.outgoingMessage ().getAsDocument (m);
+    final Document aDoc = RdcRestJAXB.outgoingMessage ().getAsDocument (m);
     assertNotNull (aDoc);
 
     // Read
-    final TCOutgoingMessage m2 = RDCRestJAXB.outgoingMessage ().read (aDoc);
+    final TCOutgoingMessage m2 = RdcRestJAXB.outgoingMessage ().read (aDoc);
     assertNotNull (m2);
 
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m2);
 
     // Read
-    final TCOutgoingMessage m3 = RDCRestJAXB.outgoingMessage ()
-                                           .read (new FileSystemResource (new File ("src/test/resources/xml/rest1.xml")));
+    final TCOutgoingMessage m3 = RdcRestJAXB.outgoingMessage ()
+                                            .read (new FileSystemResource (new File ("src/test/resources/xml/rest1.xml")));
     assertNotNull (m3);
   }
 
@@ -95,11 +95,11 @@ public final class RDCRestJAXBTest
   {
     final TCIncomingMessage m = new TCIncomingMessage ();
     final TCIncomingMetadata md = new TCIncomingMetadata ();
-    md.setSenderID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
-    md.setReceiverID (RDCRestJAXB.createTCID (RDCIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (RDCRestJAXB.createTCID (RDCIdentifierFactory.DOCTYPE_SCHEME,
-                                            "urn:eu:toop:ns:dataexchange-1p40::Request##urn:eu.toop.request.registeredorganization::1.40"));
-    md.setProcessID (RDCRestJAXB.createTCID (RDCIdentifierFactory.DOCTYPE_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+    md.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
+    md.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
+    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
+                                             "urn:eu:toop:ns:dataexchange-1p40::Request##urn:eu.toop.request.registeredorganization::1.40"));
+    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "urn:eu.toop.process.datarequestresponse"));
     md.setPayloadType (TCPayloadType.REQUEST);
     m.setMetadata (md);
 
@@ -112,14 +112,14 @@ public final class RDCRestJAXBTest
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m.clone ());
 
     if (false)
-      LOGGER.info (RDCRestJAXB.incomingMessage ().getAsString (m));
+      LOGGER.info (RdcRestJAXB.incomingMessage ().getAsString (m));
 
     // Write
-    final Document aDoc = RDCRestJAXB.incomingMessage ().getAsDocument (m);
+    final Document aDoc = RdcRestJAXB.incomingMessage ().getAsDocument (m);
     assertNotNull (aDoc);
 
     // Read
-    final TCIncomingMessage m2 = RDCRestJAXB.incomingMessage ().read (aDoc);
+    final TCIncomingMessage m2 = RdcRestJAXB.incomingMessage ().read (aDoc);
     assertNotNull (m2);
 
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m2);

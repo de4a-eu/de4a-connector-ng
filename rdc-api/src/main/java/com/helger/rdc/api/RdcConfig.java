@@ -42,7 +42,6 @@ import com.helger.peppol.sml.ESML;
 import com.helger.peppol.sml.ISMLInfo;
 import com.helger.peppol.sml.SMLInfo;
 import com.helger.peppolid.factory.IIdentifierFactory;
-import com.helger.rdc.api.me.EMEProtocol;
 import com.helger.security.certificate.CertificateHelper;
 
 /**
@@ -51,9 +50,9 @@ import com.helger.security.certificate.CertificateHelper;
  * @author Philip Helger
  */
 @ThreadSafe
-public final class RDCConfig
+public final class RdcConfig
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (RDCConfig.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcConfig.class);
   private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
 
   @GuardedBy ("RW_LOCK")
@@ -64,7 +63,7 @@ public final class RDCConfig
     setDefaultConfig ();
   }
 
-  private RDCConfig ()
+  private RdcConfig ()
   {}
 
   /**
@@ -101,7 +100,7 @@ public final class RDCConfig
   @Nonnull
   public static IIdentifierFactory getIdentifierFactory ()
   {
-    return RDCIdentifierFactory.INSTANCE;
+    return RdcIdentifierFactory.INSTANCE;
   }
 
   public static final class Global
@@ -280,55 +279,6 @@ public final class RDCConfig
     }
 
     /**
-     * Get the overall protocol to be used. Depending on that output different
-     * other properties might be queried.
-     *
-     * @return The overall protocol to use. Never <code>null</code>.
-     */
-    @Nonnull
-    public static EMEProtocol getMEMProtocol ()
-    {
-      final String sID = getConfig ().getAsString ("de4a.mem.protocol", EMEProtocol.DEFAULT.getID ());
-      final EMEProtocol eProtocol = EMEProtocol.getFromIDOrNull (sID);
-      if (eProtocol == null)
-        throw new IllegalStateException ("Failed to resolve protocol with ID '" + sID + "'");
-      return eProtocol;
-    }
-
-    // GW_URL
-    @Nullable
-    public static String getMEMAS4Endpoint ()
-    {
-      return getConfig ().getAsString ("de4a.mem.as4.endpoint");
-    }
-
-    @Nullable
-    public static String getMEMAS4GwPartyID ()
-    {
-      return getConfig ().getAsString ("de4a.mem.as4.gw.partyid");
-    }
-
-    @Nullable
-    public static String getMEMAS4TcPartyid ()
-    {
-      return getConfig ().getAsString ("de4a.mem.as4.tc.partyid");
-    }
-
-    /**
-     * @return The <code>To/PartyId/@type</code> for receiving party id
-     */
-    @Nullable
-    public static String getToPartyIdType ()
-    {
-      return getConfig ().getAsString ("de4a.mem.as4.to-party-id-type");
-    }
-
-    public static long getGatewayNotificationWaitTimeout ()
-    {
-      return getConfig ().getAsLong ("de4a.mem.as4.notificationWaitTimeout", 20000);
-    }
-
-    /**
      * @return The DSC/DP URL where incoming AS4 messages are forwarded to. This
      *         is the value from the configuration file.
      */
@@ -336,28 +286,6 @@ public final class RDCConfig
     public static String getMEMIncomingURL ()
     {
       return getConfig ().getAsString ("de4a.mem.incoming.url");
-    }
-
-    public static boolean isMEMOutgoingDumpEnabled ()
-    {
-      return getConfig ().getAsBoolean ("de4a.mem.outgoing.dump.enabled", false);
-    }
-
-    @Nullable
-    public static String getMEMOutgoingDumpPath ()
-    {
-      return getConfig ().getAsString ("de4a.mem.outgoing.dump.path");
-    }
-
-    public static boolean isMEMIncomingDumpEnabled ()
-    {
-      return getConfig ().getAsBoolean ("de4a.mem.incoming.dump.enabled", false);
-    }
-
-    @Nullable
-    public static String getMEMIncomingDumpPath ()
-    {
-      return getConfig ().getAsString ("de4a.mem.incoming.dump.path");
     }
   }
 
