@@ -4,7 +4,7 @@ de4a: {
     service: {
     }
   },
-  r2d2: {
+  smp: {
     usedns: false
   }
 }
