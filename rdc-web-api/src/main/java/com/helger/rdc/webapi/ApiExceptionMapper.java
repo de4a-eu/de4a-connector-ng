@@ -37,9 +37,9 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
  *
  * @author Philip Helger
  */
-public class APIExceptionMapper extends AbstractAPIExceptionMapper
+public class ApiExceptionMapper extends AbstractAPIExceptionMapper
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (APIExceptionMapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ApiExceptionMapper.class);
 
   private static void _logRestException (@Nonnull final String sMsg, @Nonnull final Throwable t)
   {
@@ -78,7 +78,7 @@ public class APIExceptionMapper extends AbstractAPIExceptionMapper
       _setSimpleTextResponse (aUnifiedResponse, aEx.getStatusCode (), aEx.getReasonPhrase ());
       return EHandled.HANDLED;
     }
-    if (aThrowable instanceof APIParamException)
+    if (aThrowable instanceof ApiParamException)
     {
       _logRestException ("Parameter exception", aThrowable);
       _setSimpleTextResponse (aUnifiedResponse,

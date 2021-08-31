@@ -35,9 +35,9 @@ import com.helger.phive.json.PhiveJsonHelper;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.core.api.RdcAPIHelper;
 import com.helger.rdc.core.validation.RdcValidator;
-import com.helger.rdc.webapi.ERDCIemType;
-import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
-import com.helger.rdc.webapi.helper.CommonAPIInvoker;
+import com.helger.rdc.webapi.ERdcIemType;
+import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 
 /**
@@ -45,13 +45,13 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
  *
  * @author Philip Helger
  */
-public class ApiPostValidateIem extends AbstractRDCAPIInvoker
+public class ApiPostValidateIem extends AbstractRdcApiInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostValidateIem.class);
 
-  private final ERDCIemType m_eType;
+  private final ERdcIemType m_eType;
 
-  public ApiPostValidateIem (@Nonnull final ERDCIemType eType)
+  public ApiPostValidateIem (@Nonnull final ERdcIemType eType)
   {
     m_eType = eType;
   }
@@ -69,7 +69,7 @@ public class ApiPostValidateIem extends AbstractRDCAPIInvoker
       LOGGER.info ("API validating " + aPayload.length + " bytes using '" + aVESID.getAsSingleID () + "'");
 
     final IJsonObject aJson = new JsonObject ();
-    CommonAPIInvoker.invoke (aJson, () -> {
+    CommonApiInvoker.invoke (aJson, () -> {
       // Main validation
       final StopWatch aSW = StopWatch.createdStarted ();
       final ValidationResultList aValidationResultList = RdcAPIHelper.validateBusinessDocument (aVESID, aPayload);

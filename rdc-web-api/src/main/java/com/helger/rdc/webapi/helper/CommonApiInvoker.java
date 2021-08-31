@@ -29,9 +29,9 @@ import com.helger.json.IJsonObject;
 import com.helger.phive.json.PhiveJsonHelper;
 
 @Immutable
-public final class CommonAPIInvoker
+public final class CommonApiInvoker
 {
-  private CommonAPIInvoker ()
+  private CommonApiInvoker ()
   {}
 
   public static void invoke (@Nonnull final IJsonObject aJson, @Nonnull final IThrowingRunnable <Exception> r)
@@ -44,7 +44,7 @@ public final class CommonAPIInvoker
     }
     catch (final Exception ex)
     {
-      aJson.add (AbstractRDCAPIInvoker.JSON_SUCCESS, false);
+      aJson.add (AbstractRdcApiInvoker.JSON_SUCCESS, false);
       aJson.addJson ("exception", PhiveJsonHelper.getJsonStackTrace (ex));
     }
     aSW.stop ();

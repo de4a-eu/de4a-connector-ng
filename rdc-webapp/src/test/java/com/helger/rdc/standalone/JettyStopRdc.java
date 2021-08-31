@@ -14,26 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.servlet;
+package com.helger.rdc.standalone;
 
-import javax.servlet.annotation.WebServlet;
+import java.io.IOException;
 
-import com.helger.commons.http.EHttpMethod;
-import com.helger.xservlet.AbstractXServlet;
+import com.helger.photon.jetty.JettyStopper;
 
-/**
- * The servlet to show the application status.
- *
- * @author Philip Helger
- */
-@WebServlet ("/tc-status/*")
-public class TCStatusServlet extends AbstractXServlet
+public final class JettyStopRdc
 {
-  public static final String SERVLET_DEFAULT_NAME = "tc-status";
-  public static final String SERVLET_DEFAULT_PATH = '/' + SERVLET_DEFAULT_NAME;
-
-  public TCStatusServlet ()
+  public static void main (final String [] args) throws IOException
   {
-    handlerRegistry ().registerHandler (EHttpMethod.GET, new TCStatusXServletHandler ());
+    new JettyStopper ().setStopPort (9090).run ();
   }
 }

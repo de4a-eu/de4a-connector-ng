@@ -27,11 +27,11 @@ import com.helger.photon.jetty.JettyStarter;
  * @author Philip Helger
  */
 @Immutable
-public final class RunInJettyRDC
+public final class RunInJettyRdc
 {
   public static void main (final String [] args) throws Exception
   {
-    final JettyStarter js = new JettyStarter (RunInJettyRDC.class).setPort (8090)
+    final JettyStarter js = new JettyStarter (RunInJettyRdc.class).setPort (8090)
                                                                   .setStopPort (9090)
                                                                   .setSessionCookieName ("RDC_TC_SESSION")
                                                                   .setContainerIncludeJarPattern (JettyStarter.CONTAINER_INCLUDE_JAR_PATTERN_ALL);

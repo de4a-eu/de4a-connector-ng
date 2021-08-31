@@ -39,9 +39,9 @@ import com.helger.xservlet.handler.simple.IXServletSimpleHandler;
  *
  * @author Philip Helger
  */
-final class TCStatusXServletHandler implements IXServletSimpleHandler
+final class RdcStatusXServletHandler implements IXServletSimpleHandler
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (TCStatusXServletHandler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcStatusXServletHandler.class);
   private static final Charset CHARSET = StandardCharsets.UTF_8;
 
   public void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,

@@ -45,10 +45,10 @@ import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.core.api.RdcAPIHelper;
 import com.helger.rdc.core.validation.RdcValidator;
-import com.helger.rdc.webapi.APIParamException;
-import com.helger.rdc.webapi.ERDCIemType;
-import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
-import com.helger.rdc.webapi.helper.CommonAPIInvoker;
+import com.helger.rdc.webapi.ApiParamException;
+import com.helger.rdc.webapi.ERdcIemType;
+import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.security.certificate.CertificateHelper;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
@@ -60,13 +60,13 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  *
  * @author Philip Helger
  */
-public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
+public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitIem.class);
 
-  private final ERDCIemType m_eType;
+  private final ERdcIemType m_eType;
 
-  public ApiPostUserSubmitIem (@Nonnull final ERDCIemType eType)
+  public ApiPostUserSubmitIem (@Nonnull final ERdcIemType eType)
   {
     m_eType = eType;
   }
@@ -81,13 +81,13 @@ public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
     final TCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ()
                                                      .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
-      throw new APIParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
+      throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
     // These fields MUST not be present here - they are filled while we go
     if (StringHelper.hasText (aOutgoingMsg.getMetadata ().getEndpointURL ()))
-      throw new APIParamException ("The 'OutgoingMessage/Metadata/EndpointURL' element MUST NOT be present");
+      throw new ApiParamException ("The 'OutgoingMessage/Metadata/EndpointURL' element MUST NOT be present");
     if (ArrayHelper.isNotEmpty (aOutgoingMsg.getMetadata ().getReceiverCertificate ()))
-      throw new APIParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST NOT be present");
+      throw new ApiParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST NOT be present");
 
     // Convert metadata
     final MERoutingInformationInput aRoutingInfo = MERoutingInformationInput.createForInput (aOutgoingMsg.getMetadata ());
@@ -102,7 +102,7 @@ public class ApiPostUserSubmitIem extends AbstractRDCAPIInvoker
       aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, aRoutingInfo.getTransportProtocol ());
     }
 
-    CommonAPIInvoker.invoke (aJson, () -> {
+    CommonApiInvoker.invoke (aJson, () -> {
       final boolean bValidationOK;
       boolean bOverallSuccess = false;
       {

@@ -27,16 +27,16 @@ import com.helger.photon.security.login.LoggedInUserManager;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.core.RdcInit;
-import com.helger.rdc.webapi.RDCAPIInit;
+import com.helger.rdc.webapi.RdcAPIInit;
 
 /**
  * Global startup etc. listener.
  *
  * @author Philip Helger
  */
-public class TCWebAppListener extends WebAppListener
+public class RdcWebAppListener extends WebAppListener
 {
-  public TCWebAppListener ()
+  public RdcWebAppListener ()
   {
     setHandleStatisticsOnEnd (false);
   }
@@ -80,7 +80,7 @@ public class TCWebAppListener extends WebAppListener
   @Override
   protected void initAPI (@Nonnull final IAPIRegistry aAPIRegistry)
   {
-    RDCAPIInit.initAPI (aAPIRegistry);
+    RdcAPIInit.initAPI (aAPIRegistry);
   }
 
   @Override

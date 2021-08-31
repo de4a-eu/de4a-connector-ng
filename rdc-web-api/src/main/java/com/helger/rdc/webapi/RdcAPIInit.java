@@ -34,9 +34,9 @@ import com.helger.rdc.webapi.validation.ApiPostValidateIem;
  * @author Philip Helger
  */
 @Immutable
-public final class RDCAPIInit
+public final class RdcAPIInit
 {
-  private RDCAPIInit ()
+  private RdcAPIInit ()
   {}
 
   public static void initAPI (@Nonnull final IAPIRegistry aAPIRegistry)
@@ -48,17 +48,17 @@ public final class RDCAPIInit
 
     // Validation stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/request"),
-                                                 new ApiPostValidateIem (ERDCIemType.REQUEST)));
+                                                 new ApiPostValidateIem (ERdcIemType.REQUEST)));
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/response"),
-                                                 new ApiPostValidateIem (ERDCIemType.RESPONSE)));
+                                                 new ApiPostValidateIem (ERdcIemType.RESPONSE)));
 
     // AS4 stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
 
     // User stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/request"),
-                                                 new ApiPostUserSubmitIem (ERDCIemType.REQUEST)));
+                                                 new ApiPostUserSubmitIem (ERdcIemType.REQUEST)));
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit/response"),
-                                                 new ApiPostUserSubmitIem (ERDCIemType.RESPONSE)));
+                                                 new ApiPostUserSubmitIem (ERdcIemType.RESPONSE)));
   }
 }

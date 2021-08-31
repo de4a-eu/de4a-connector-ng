@@ -37,9 +37,9 @@ import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.core.api.RdcAPIHelper;
-import com.helger.rdc.webapi.APIParamException;
-import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
-import com.helger.rdc.webapi.helper.CommonAPIInvoker;
+import com.helger.rdc.webapi.ApiParamException;
+import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 
@@ -48,7 +48,7 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
  *
  * @author Philip Helger
  */
-public class ApiPostSend extends AbstractRDCAPIInvoker
+public class ApiPostSend extends AbstractRdcApiInvoker
 {
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -60,13 +60,13 @@ public class ApiPostSend extends AbstractRDCAPIInvoker
     final TCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ()
                                                      .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
-      throw new APIParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
+      throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
     // These fields are optional in the XSD but required here
     if (StringHelper.hasNoText (aOutgoingMsg.getMetadata ().getEndpointURL ()))
-      throw new APIParamException ("The 'OutgoingMessage/Metadata/EndpointURL' element MUST be present and not empty");
+      throw new ApiParamException ("The 'OutgoingMessage/Metadata/EndpointURL' element MUST be present and not empty");
     if (ArrayHelper.isEmpty (aOutgoingMsg.getMetadata ().getReceiverCertificate ()))
-      throw new APIParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST be present and not empty");
+      throw new ApiParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST be present and not empty");
 
     // Convert metadata
     final IMERoutingInformation aRoutingInfo;
@@ -76,7 +76,7 @@ public class ApiPostSend extends AbstractRDCAPIInvoker
     }
     catch (final CertificateException ex)
     {
-      throw new APIParamException ("Invalid routing information provided: " + ex.getMessage ());
+      throw new ApiParamException ("Invalid routing information provided: " + ex.getMessage ());
     }
 
     // Add payloads
@@ -101,7 +101,7 @@ public class ApiPostSend extends AbstractRDCAPIInvoker
       aJson.add (SMPJsonResponse.JSON_ENDPOINT_REFERENCE, aRoutingInfo.getEndpointURL ());
     }
 
-    CommonAPIInvoker.invoke (aJson, () -> {
+    CommonApiInvoker.invoke (aJson, () -> {
       // Main sending - throws Exception on error
       RdcAPIHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
       aJson.add (JSON_SUCCESS, true);

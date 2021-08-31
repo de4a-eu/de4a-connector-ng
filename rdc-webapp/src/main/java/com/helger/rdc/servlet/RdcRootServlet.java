@@ -42,7 +42,7 @@ import com.helger.rdc.core.CRdcVersion;
  * @author Philip Helger
  */
 @WebServlet ("")
-public class TCRootServlet extends HttpServlet
+public class RdcRootServlet extends HttpServlet
 {
   @Override
   protected void doGet (@Nonnull final HttpServletRequest req, @Nonnull final HttpServletResponse resp) throws ServletException, IOException

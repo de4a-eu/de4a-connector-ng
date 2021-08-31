@@ -14,12 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.webapi;
+package com.helger.rdc.servlet;
 
-public class APIParamException extends RuntimeException
+import javax.servlet.annotation.WebServlet;
+
+import com.helger.commons.http.EHttpMethod;
+import com.helger.xservlet.AbstractXServlet;
+
+/**
+ * The servlet to show the application status.
+ *
+ * @author Philip Helger
+ */
+@WebServlet ("/status/*")
+public class RdcStatusServlet extends AbstractXServlet
 {
-  public APIParamException (final String sMsg)
+  public static final String SERVLET_DEFAULT_NAME = "status";
+  public static final String SERVLET_DEFAULT_PATH = '/' + SERVLET_DEFAULT_NAME;
+
+  public RdcStatusServlet ()
   {
-    super (sMsg);
+    handlerRegistry ().registerHandler (EHttpMethod.GET, new RdcStatusXServletHandler ());
   }
 }

@@ -14,16 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.standalone;
+package com.helger.rdc.webapi;
 
-import java.io.IOException;
-
-import com.helger.photon.jetty.JettyStopper;
-
-public final class JettyStopRDC
+public class ApiParamException extends RuntimeException
 {
-  public static void main (final String [] args) throws IOException
+  public ApiParamException (final String sMsg)
   {
-    new JettyStopper ().setStopPort (9090).run ();
+    super (sMsg);
   }
 }

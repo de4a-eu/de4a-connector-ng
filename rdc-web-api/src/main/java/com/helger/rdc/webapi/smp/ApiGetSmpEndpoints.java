@@ -33,9 +33,9 @@ import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.core.api.RdcAPIHelper;
-import com.helger.rdc.webapi.APIParamException;
-import com.helger.rdc.webapi.helper.AbstractRDCAPIInvoker;
-import com.helger.rdc.webapi.helper.CommonAPIInvoker;
+import com.helger.rdc.webapi.ApiParamException;
+import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
@@ -45,7 +45,7 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  *
  * @author Philip Helger
  */
-public class ApiGetSmpEndpoints extends AbstractRDCAPIInvoker
+public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiGetSmpEndpoints.class);
 
@@ -61,13 +61,13 @@ public class ApiGetSmpEndpoints extends AbstractRDCAPIInvoker
     final String sParticipantID = aPathVariables.get ("pid");
     final IParticipantIdentifier aParticipantID = aIF.parseParticipantIdentifier (sParticipantID);
     if (aParticipantID == null)
-      throw new APIParamException ("Invalid participant ID '" + sParticipantID + "' provided.");
+      throw new ApiParamException ("Invalid participant ID '" + sParticipantID + "' provided.");
 
     // Get document type ID
     final String sDocTypeID = aPathVariables.get ("doctypeid");
     final IDocumentTypeIdentifier aDocTypeID = aIF.parseDocumentTypeIdentifier (sDocTypeID);
     if (aDocTypeID == null)
-      throw new APIParamException ("Invalid document type ID '" + sDocTypeID + "' provided.");
+      throw new ApiParamException ("Invalid document type ID '" + sDocTypeID + "' provided.");
 
     LOGGER.info ("[API] Participant information of '" +
                  aParticipantID.getURIEncoded () +
@@ -80,7 +80,7 @@ public class ApiGetSmpEndpoints extends AbstractRDCAPIInvoker
     aJson.add (SMPJsonResponse.JSON_PARTICIPANT_ID, aParticipantID.getURIEncoded ());
     aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aDocTypeID.getURIEncoded ());
 
-    CommonAPIInvoker.invoke (aJson,
+    CommonApiInvoker.invoke (aJson,
                              () -> {
                                // Main query
                                final ServiceMetadataType aSM = RdcAPIHelper.querySMPServiceMetadata (aParticipantID,

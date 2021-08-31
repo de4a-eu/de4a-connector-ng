@@ -30,7 +30,7 @@
   </session-config>
   
   <listener>
-    <listener-class>com.helger.rdc.servlet.TCWebAppListener</listener-class>
+    <listener-class>com.helger.rdc.servlet.RdcWebAppListener</listener-class>
   </listener>
   
   <servlet>
