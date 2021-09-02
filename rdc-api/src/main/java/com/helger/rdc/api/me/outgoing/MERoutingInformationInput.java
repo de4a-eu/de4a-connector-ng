@@ -26,7 +26,7 @@ import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.rdc.api.RdcConfig;
-import com.helger.rdc.api.rest.TCOutgoingMetadata;
+import com.helger.rdc.api.rest.RDCOutgoingMetadata;
 
 /**
  * Base class for {@link MERoutingInformation}
@@ -103,7 +103,7 @@ public class MERoutingInformationInput
   }
 
   @Nonnull
-  public static MERoutingInformationInput createBaseForSending (@Nonnull final TCOutgoingMetadata aMetadata)
+  public static MERoutingInformationInput createBaseForSending (@Nonnull final RDCOutgoingMetadata aMetadata)
   {
     ValueEnforcer.notNull (aMetadata, "Metadata");
     final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();

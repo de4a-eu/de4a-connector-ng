@@ -24,9 +24,9 @@
            xmlns="urn:com.helger/de4a/connector/exchange/2021/05/">
   <xs:annotation>
     <xs:documentation>
-      DE4A shared XML Schema
+      DE4A RDC shared XML Schema for sending and receiving messages
       
-      Version: 2021-08-27
+      Version: 2021-09-02
       
       Author: Philip Helger
       
@@ -38,7 +38,7 @@
   
   <!-- generic stuff -->
            
-  <xs:complexType name="TCIdentifierType">
+  <xs:complexType name="RDCIdentifierType">
     <xs:annotation>
       <xs:documentation>Generic 2-part identifier for participants, document types and processes</xs:documentation>
     </xs:annotation>
@@ -47,7 +47,7 @@
     <xs:attribute name="value" type="xs:string" use="required" />
   </xs:complexType>
 
-  <xs:complexType name="TCPayload">
+  <xs:complexType name="RDCPayload">
     <xs:simpleContent>
       <xs:extension base="xs:base64Binary">
         <xs:attribute name="ContentID" type="xs:string" use="optional" />
@@ -55,29 +55,46 @@
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
+
+  <xs:simpleType name="RDCPayloadType" final="restriction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Request" />
+      <xs:enumeration value="Response" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="RDCMetadata" abstract="true">
+    <xs:sequence>
+      <xs:element name="SenderID" type="RDCIdentifierType" />
+      <xs:element name="ReceiverID" type="RDCIdentifierType" />
+      <xs:element name="DocTypeID" type="RDCIdentifierType" />
+      <xs:element name="ProcessID" type="RDCIdentifierType" />
+      <xs:element name="PayloadType" type="RDCPayloadType" />
+    </xs:sequence>
+  </xs:complexType>
   
   <!-- outgoing (from DC/DP) stuff -->
   
-  <xs:complexType name="TCOutgoingMetadata">
+  <xs:complexType name="RDCOutgoingMetadata">
+    <xs:complexContent>
+      <xs:extension base="RDCMetadata">
+        <xs:sequence>
+          <xs:element name="TransportProtocol" type="xs:string" />
+          <xs:element name="EndpointURL" type="xs:string" minOccurs="0"/>
+          <xs:element name="ReceiverCertificate" type="xs:base64Binary" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="RDCOutgoingMessage">
     <xs:sequence>
-      <xs:element name="SenderID" type="TCIdentifierType" />
-      <xs:element name="ReceiverID" type="TCIdentifierType" />
-      <xs:element name="DocTypeID" type="TCIdentifierType" />
-      <xs:element name="ProcessID" type="TCIdentifierType" />
-      <xs:element name="TransportProtocol" type="xs:string" />
-      <xs:element name="EndpointURL" type="xs:string" minOccurs="0"/>
-      <xs:element name="ReceiverCertificate" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="Metadata" type="RDCOutgoingMetadata" />
+      <xs:element name="Payload" type="RDCPayload" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
   
-  <xs:complexType name="TCOutgoingMessage">
-    <xs:sequence>
-      <xs:element name="Metadata" type="TCOutgoingMetadata" />
-      <xs:element name="Payload" type="TCPayload" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  
-  <xs:element name="OutgoingMessage" type="TCOutgoingMessage">
+  <xs:element name="OutgoingMessage" type="RDCOutgoingMessage">
     <xs:annotation>
       <xs:documentation>Element to be used for sending an AS4 message from DC/DP</xs:documentation>
     </xs:annotation>
@@ -85,31 +102,24 @@
 
   <!-- incoming (to DC/DP) stuff -->
 
-  <xs:simpleType name="TCPayloadType" final="restriction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Request" />
-      <xs:enumeration value="Response" />
-    </xs:restriction>
-  </xs:simpleType>
+  <xs:complexType name="RDCIncomingMetadata">
+    <xs:complexContent>
+      <xs:extension base="RDCMetadata">
+        <xs:sequence>
+          <!--  empty -->
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-  <xs:complexType name="TCIncomingMetadata">
+  <xs:complexType name="RDCIncomingMessage">
     <xs:sequence>
-      <xs:element name="SenderID" type="TCIdentifierType" />
-      <xs:element name="ReceiverID" type="TCIdentifierType" />
-      <xs:element name="DocTypeID" type="TCIdentifierType" />
-      <xs:element name="ProcessID" type="TCIdentifierType" />
-      <xs:element name="PayloadType" type="TCPayloadType" />
+      <xs:element name="Metadata" type="RDCIncomingMetadata" />
+      <xs:element name="Payload" type="RDCPayload" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="TCIncomingMessage">
-    <xs:sequence>
-      <xs:element name="Metadata" type="TCIncomingMetadata" />
-      <xs:element name="Payload" type="TCPayload" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:element name="IncomingMessage" type="TCIncomingMessage">
+  <xs:element name="IncomingMessage" type="RDCIncomingMessage">
     <xs:annotation>
       <xs:documentation>Element to be used for receiving an AS4 message at DC/DP</xs:documentation>
     </xs:annotation>

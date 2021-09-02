@@ -34,9 +34,9 @@ import com.helger.json.serialize.JsonWriter;
 import com.helger.json.serialize.JsonWriterSettings;
 import com.helger.rdc.api.RdcIdentifierFactory;
 import com.helger.rdc.api.me.EMEProtocol;
-import com.helger.rdc.api.rest.TCOutgoingMessage;
-import com.helger.rdc.api.rest.TCOutgoingMetadata;
-import com.helger.rdc.api.rest.TCPayload;
+import com.helger.rdc.api.rest.RDCOutgoingMessage;
+import com.helger.rdc.api.rest.RDCOutgoingMetadata;
+import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 
 public class MainSendEdmRequest
@@ -45,21 +45,21 @@ public class MainSendEdmRequest
 
   public static void main (final String [] args) throws IOException
   {
-    final TCOutgoingMessage aOM = new TCOutgoingMessage ();
+    final RDCOutgoingMessage aOM = new RDCOutgoingMessage ();
     {
-      final TCOutgoingMetadata aMetadata = new TCOutgoingMetadata ();
-      aMetadata.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9914:tc-ng-test-sender"));
-      aMetadata.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:tooptest"));
-      aMetadata.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
-                                                     "urn:eu:toop:ns:dataexchange-1p40::Response##urn:eu.toop.response.registeredorganization::1.40"));
-      aMetadata.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+      final RDCOutgoingMetadata aMetadata = new RDCOutgoingMetadata ();
+      aMetadata.setSenderID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9914:tc-ng-test-sender"));
+      aMetadata.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:tooptest"));
+      aMetadata.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
+                                                       "urn:eu:toop:ns:dataexchange-1p40::Response##urn:eu.toop.response.registeredorganization::1.40"));
+      aMetadata.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "urn:eu.toop.process.datarequestresponse"));
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
       aMetadata.setEndpointURL ("https://toop.usp.gv.at/noopdc/phase4");
-      aMetadata.setReceiverCertificate (Base64.decode ("MIIEqjCCApKgAwIBAgICEAkwDQYJKoZIhvcNAQELBQAwVzELMAkGA1UEBhMCRVUxDTALBgNVBAoMBFRPT1AxDTALBgNVBAsMBENDVEYxKjAoBgNVBAMMIVRPT1AgUElMT1RTIFRFU1QgQUNDRVNTIFBPSU5UUyBDQTAeFw0xODEwMjYxMTA4MDBaFw0yMDEwMjUxMTA4MDBaMDkxCzAJBgNVBAYTAkFUMRwwGgYDVQQKDBNCdW5kZXNyZWNoZW56ZW50cnVtMQwwCgYDVQQDDANCUlowggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC0ZKt1+9ulKvbTxyVh6XKcLZ24CQIGQMkiLzZYSkPrdxa59Ac7jhrk3V0Rv+wjW6rT3kxHd+nmFKli7fiql1jj+pTlmnEL8vv1TLfDeH0ADLVkfsiinM4FgriNjPI62EY6n9L3WKrua/RMdCPstJqqbUBpNG52MsiGFDxoYnK96JAlzwfYatIga+jvGyxmeNP2vwpXkCDI8eTS2SF/XX4MM8om3/5HZ1yj0POONHYtXupkd7y8dU39VZcBq5YCxIGAee1A5K1eFTcJmBWRPkK9tqW+Y8vyb++WH8XB6PfQZ2Gc24ItVXUgXAsokbnUlhpzt2/v/YXH9EnmZjYoNlLJAgMBAAGjgZ0wgZowCQYDVR0TBAIwADARBglghkgBhvhCAQEEBAMCBDAwKgYJYIZIAYb4QgENBB0WG1RPT1AgUGlsb3QgVGVzdCBDZXJ0aWZpY2F0ZTAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0OBBYEFJhuTeXVJ7OkEQtuP2uENZBpBMcdMB8GA1UdIwQYMBaAFHulODfJDc+HzJc6ouc/Z44yuaheMA0GCSqGSIb3DQEBCwUAA4ICAQCAFdUTuGJrTc0ex3neGkkWBqYSEMp+eHZ4tyJhabCeKKs8/U4WUMklfI9ubNx/ncN621/kxLbiRTIFT3n7oLc416zI/gPB7pz+QZZOj6AQM+ftonsn77E/sfgWwT2+UpzXwt9Bfrm4U2g64MKPU9WObu9960AOmNuKvDRjDbaeUl5SFYkU71QTcNcfHSUR4v7n3cV1heq3abQFguKL04BpCx21h3SnPWau+r+w4aNrODk9i/0Z2QyfnimSpc6mHGLYTXAemrSzHBKZln3C2rTC2rOMncTlcrPGJpHYOdAyOczBvi/P4Be7ZIjrHQZun40Me5PA/PudWcJCKx1Lt/qNYPCdOtsEnY20LUWjL1eJwfIeBbA1zXIlmTp+oKA+4PP4Pdz/LL/VlKejKXq0Y0Htl+AP5WDY3axqwnxqWHPp9MtHjNaxA4oldc484NUugYZCpijfLA/ZRNStRVQMIOoKk8aIF4oqAY8hk90wKWdbTQaugTfx2hyyMMzILNth+qgqOrvkSk4qA/g5r0AyrpdIMz83/Kn43Rcmbh72wMWKRMX8UxHCS4KCZZRS6dVVFtZES/GiNVy9aUbd+e+zywxiwb7fu5Ln/kDiDlYWHAG/FzGK9MOyvH3/2BFjULfG/jQ2ZaGeDe+0IqyXUSOhqZMSX78DSIGezyaIutkDrAN0Pw=="));
+      aMetadata.setReceiverCertificate (Base64.decode ("MIIEqjCCApKgAwIBAgICEAkwDQYJKoZIhvcNAQELBQAwVzELMAkGA1UEBhMCRVUxDTALBgNVBAoMBFRPT1AxDTALBgNVBAsMBENDVEYxKjAoBgNVBAMMIVRPT1AgUElMT1RTIFRFU1QgQUNDRVNTIFBPSU5UUyBDQTAeFw0xODEwMjYxMTA4MDBaFw0yMDEwMjUxMTA4MDBaMDkxCzAJBgNVBAYTAkFUMRwwGgYDVQQKDBNCdW5kZXNyZWNoZW56ZW50cnVtMQwwCgYDVQQDDANCUlowggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC0ZKt1+9ulKvbTxyVh6XKcLZ24CQIGQMkiLzZYSkPrdxa59Ac7jhrk3V0Rv+wjW6rT3kxHd+nmFKli7fiql1jj+pTlmnEL8vv1TLfDeH0ADLVkfsiinM4FgriNjPI62EY6n9L3WKrua/RMdCPstJqqbUBpNG52MsiGFDxoYnK96JAlzwfYatIga+jvGyxmeNP2vwpXkCDI8eTS2SF/XX4MM8om3/5HZ1yj0POONHYtXupkd7y8dU39VZcBq5YCxIGAee1A5K1eFTcJmBWRPkK9tqW+Y8vyb++WH8XB6PfQZ2Gc24ItVXUgXAsokbnUlhpzt2/v/YXH9EnmZjYoNlLJAgMBAAGjgZ0wgZowCQYDVR0TBAIwADARBglghkgBhvhCAQEEBAMCBDAwKgYJYIZIAYb4QgENBB0WG1RPT1AgUGlsb3QgVGVzdCBDZXJ0aWZpY2F0ZTAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0OBBYEFJhuTeXVJ7OkEQtuP2uENZBpBMcdMB8GA1UdIwQYMBaAFHulODfJDc+HzJc6ouc/Z44yuaheMA0GCSqGSIb3DQEBCwUAA4ICAQCAFdUTuGJrTc0ex3neGkkWBqYSEMp+eHZ4tyJhabCeKKs8/U4WUMklfI9ubNx/ncN621/kxLbiRTIFT3n7oLc416zI/gPB7pz+QZZOj6AQM+ftonsn77E/sfgWwT2+UpzXwt9Bfrm4U2g64MKPU9WObu9960AOmNuKvDRjDbaeUl5SFYkU71QTcNcfHSUR4v7n3cV1heq3abQFguKL04BpCx21h3SnPWau+r+w4aNrODk9i/0Z2QyfnimSpc6mHGLYTXAemrSzHBKZln3C2rRDC2rOMncTlcrPGJpHYOdAyOczBvi/P4Be7ZIjrHQZun40Me5PA/PudWcJCKx1Lt/qNYPCdOtsEnY20LUWjL1eJwfIeBbA1zXIlmTp+oKA+4PP4Pdz/LL/VlKejKXq0Y0Htl+AP5WDY3axqwnxqWHPp9MtHjNaxA4oldc484NUugYZCpijfLA/ZRNStRVQMIOoKk8aIF4oqAY8hk90wKWdbTQaugTfx2hyyMMzILNth+qgqOrvkSk4qA/g5r0AyrpdIMz83/Kn43Rcmbh72wMWKRMX8UxHCS4KCZZRS6dVVFtZES/GiNVy9aUbd+e+zywxiwb7fu5Ln/kDiDlYWHAG/FzGK9MOyvH3/2BFjULfG/jQ2ZaGeDe+0IqyXUSOhqZMSX78DSIGezyaIutkDrAN0Pw=="));
       aOM.setMetadata (aMetadata);
     }
     {
-      final TCPayload aPayload = new TCPayload ();
+      final RDCPayload aPayload = new RDCPayload ();
       aPayload.setValue (StreamHelper.getAllBytes (new ClassPathResource ("edm/Concept Request_LP.xml")));
       aPayload.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
       aPayload.setContentID ("mock-request@toop");

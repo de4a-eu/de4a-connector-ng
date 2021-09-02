@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
@@ -41,17 +42,23 @@ import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MERoutingInformationInput;
+import com.helger.rdc.api.rest.RDCOutgoingMessage;
+import com.helger.rdc.api.rest.RDCPayload;
+import com.helger.rdc.api.rest.RdcRegRepHelper;
 import com.helger.rdc.api.rest.RdcRestJAXB;
-import com.helger.rdc.api.rest.TCOutgoingMessage;
-import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.core.api.RdcApiHelper;
 import com.helger.rdc.core.validation.RdcValidator;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
+import com.helger.regrep.CRegRep4;
+import com.helger.regrep.RegRep4Writer;
+import com.helger.regrep.query.QueryRequest;
+import com.helger.regrep.query.QueryResponse;
 import com.helger.security.certificate.CertificateHelper;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
+import com.helger.xml.serialize.read.DOMReader;
 import com.helger.xsds.bdxr.smp1.EndpointType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
 
@@ -82,7 +89,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final TCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final RDCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
@@ -148,7 +155,8 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
                                                                               aRoutingInfoBase.getTransportProtocol ());
         if (aSM != null)
         {
-          aJsonSMP.addJson ("response", SMPJsonResponse.convert (aRoutingInfoBase.getReceiverID (), aRoutingInfoBase.getDocumentTypeID (), aSM));
+          aJsonSMP.addJson ("response",
+                            SMPJsonResponse.convert (aRoutingInfoBase.getReceiverID (), aRoutingInfoBase.getDocumentTypeID (), aSM));
 
           final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM,
                                                                                  aRoutingInfoBase.getProcessID (),
@@ -187,13 +195,49 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
 
           // Add payloads
           final MEMessage.Builder aMessage = MEMessage.builder ();
-          for (final TCPayload aPayload : aOutgoingMsg.getPayload ())
+          int nIndex = 0;
+          for (final RDCPayload aPayload : aOutgoingMsg.getPayload ())
           {
+            if (nIndex == 0)
+            {
+              final Document aDoc = DOMReader.readXMLDOM (aPayload.getValue ());
+              if (aDoc == null)
+                throw new IllegalStateException ("Failed to parse first payload as XML");
+
+              final byte [] aRegRepPayload;
+              switch (aOutgoingMsg.getMetadata ().getPayloadType ())
+              {
+                case REQUEST:
+                {
+                  // TODO
+                  final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
+                  aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
+                  break;
+                }
+                case RESPONSE:
+                {
+                  // TODO
+                  final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
+                  aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
+                  break;
+                }
+                default:
+                  throw new IllegalStateException ("No such payload type");
+              }
+
+              // RegRep should be first
+              aMessage.addPayload (MEPayload.builder ()
+                                            .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
+                                            .contentID (MEPayload.createRandomContentID ())
+                                            .data (aRegRepPayload));
+            }
+
             aMessage.addPayload (MEPayload.builder ()
                                           .mimeType (MimeTypeParser.parseMimeType (aPayload.getMimeType ()))
                                           .contentID (StringHelper.getNotEmpty (aPayload.getContentID (),
                                                                                 MEPayload.createRandomContentID ()))
                                           .data (aPayload.getValue ()));
+            nIndex++;
           }
           RdcApiHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
           aJsonSending.add (JSON_SUCCESS, true);

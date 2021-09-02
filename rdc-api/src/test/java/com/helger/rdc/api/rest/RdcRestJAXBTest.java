@@ -51,18 +51,19 @@ public final class RdcRestJAXBTest
   @Test
   public void testOutgoing ()
   {
-    final TCOutgoingMessage m = new TCOutgoingMessage ();
-    final TCOutgoingMetadata md = new TCOutgoingMetadata ();
-    md.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
-    md.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
-    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
+    final RDCOutgoingMessage m = new RDCOutgoingMessage ();
+    final RDCOutgoingMetadata md = new RDCOutgoingMetadata ();
+    md.setSenderID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
+    md.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
+    md.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
+    md.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
+    md.setPayloadType (RDCPayloadType.REQUEST);
     md.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
     md.setEndpointURL ("https://target.example.org/as4");
     md.setReceiverCertificate ("Receiver's certificate".getBytes (StandardCharsets.ISO_8859_1));
     m.setMetadata (md);
 
-    final TCPayload p = new TCPayload ();
+    final RDCPayload p = new RDCPayload ();
     p.setContentID ("cid1");
     p.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
     p.setValue ("Hello World".getBytes (StandardCharsets.ISO_8859_1));
@@ -78,30 +79,30 @@ public final class RdcRestJAXBTest
     assertNotNull (aDoc);
 
     // Read
-    final TCOutgoingMessage m2 = RdcRestJAXB.outgoingMessage ().read (aDoc);
+    final RDCOutgoingMessage m2 = RdcRestJAXB.outgoingMessage ().read (aDoc);
     assertNotNull (m2);
 
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m2);
 
     // Read
-    final TCOutgoingMessage m3 = RdcRestJAXB.outgoingMessage ()
-                                            .read (new FileSystemResource (new File ("src/test/resources/xml/rest1.xml")));
+    final RDCOutgoingMessage m3 = RdcRestJAXB.outgoingMessage ()
+                                             .read (new FileSystemResource (new File ("src/test/resources/xml/rdc-outgoing.xml")));
     assertNotNull (m3);
   }
 
   @Test
   public void testIncoming ()
   {
-    final TCIncomingMessage m = new TCIncomingMessage ();
-    final TCIncomingMetadata md = new TCIncomingMetadata ();
-    md.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
-    md.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
-    md.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
-    md.setPayloadType (TCPayloadType.REQUEST);
+    final RDCIncomingMessage m = new RDCIncomingMessage ();
+    final RDCIncomingMetadata md = new RDCIncomingMetadata ();
+    md.setSenderID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
+    md.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
+    md.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
+    md.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
+    md.setPayloadType (RDCPayloadType.REQUEST);
     m.setMetadata (md);
 
-    final TCPayload p = new TCPayload ();
+    final RDCPayload p = new RDCPayload ();
     p.setContentID ("cid1");
     p.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
     p.setValue ("Hello World".getBytes (StandardCharsets.ISO_8859_1));
@@ -117,9 +118,14 @@ public final class RdcRestJAXBTest
     assertNotNull (aDoc);
 
     // Read
-    final TCIncomingMessage m2 = RdcRestJAXB.incomingMessage ().read (aDoc);
+    final RDCIncomingMessage m2 = RdcRestJAXB.incomingMessage ().read (aDoc);
     assertNotNull (m2);
 
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m2);
+
+    // Read
+    final RDCOutgoingMessage m3 = RdcRestJAXB.outgoingMessage ()
+                                             .read (new FileSystemResource (new File ("src/test/resources/xml/rdc-incoming.xml")));
+    assertNotNull (m3);
   }
 }

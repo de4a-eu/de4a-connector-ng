@@ -29,15 +29,14 @@ import com.helger.jaxb.GenericJAXBMarshaller;
 import com.helger.peppolid.IIdentifier;
 
 /**
- * JAXB helper for TC NG REST classes.
+ * JAXB helper for RDC NG REST classes.
  *
  * @author Philip Helger
  */
 @Immutable
 public final class RdcRestJAXB
 {
-  public static final ClassPathResource XSD_RES = new ClassPathResource ("/schemas/rdc-rest.xsd",
-                                                                         RdcRestJAXB.class.getClassLoader ());
+  public static final ClassPathResource XSD_RES = new ClassPathResource ("/schemas/rdc-rest.xsd", RdcRestJAXB.class.getClassLoader ());
   public static final String NS_URI = "urn:com.helger/de4a/connector/exchange/2021/05/";
   public static final String DEFAULT_NAMESPACE_PREFIX = "de4a";
 
@@ -54,30 +53,30 @@ public final class RdcRestJAXB
   }
 
   /**
-   * @return A new marshaller to read and write {@link TCOutgoingMessage}
+   * @return A new marshaller to read and write {@link RDCOutgoingMessage}
    *         objects. Never <code>null</code>.
    */
   @Nonnull
-  public static GenericJAXBMarshaller <TCOutgoingMessage> outgoingMessage ()
+  public static GenericJAXBMarshaller <RDCOutgoingMessage> outgoingMessage ()
   {
-    final GenericJAXBMarshaller <TCOutgoingMessage> ret = new GenericJAXBMarshaller <> (TCOutgoingMessage.class,
-                                                                                        getAllXSDResources (),
-                                                                                        new ObjectFactory ()::createOutgoingMessage);
+    final GenericJAXBMarshaller <RDCOutgoingMessage> ret = new GenericJAXBMarshaller <> (RDCOutgoingMessage.class,
+                                                                                         getAllXSDResources (),
+                                                                                         new ObjectFactory ()::createOutgoingMessage);
     ret.setFormattedOutput (true);
     ret.setNamespaceContext (RdcRestNamespaceContext.getInstance ());
     return ret;
   }
 
   /**
-   * @return A new marshaller to read and write {@link TCIncomingMessage}
+   * @return A new marshaller to read and write {@link RDCIncomingMessage}
    *         objects. Never <code>null</code>.
    */
   @Nonnull
-  public static GenericJAXBMarshaller <TCIncomingMessage> incomingMessage ()
+  public static GenericJAXBMarshaller <RDCIncomingMessage> incomingMessage ()
   {
-    final GenericJAXBMarshaller <TCIncomingMessage> ret = new GenericJAXBMarshaller <> (TCIncomingMessage.class,
-                                                                                        getAllXSDResources (),
-                                                                                        new ObjectFactory ()::createIncomingMessage);
+    final GenericJAXBMarshaller <RDCIncomingMessage> ret = new GenericJAXBMarshaller <> (RDCIncomingMessage.class,
+                                                                                         getAllXSDResources (),
+                                                                                         new ObjectFactory ()::createIncomingMessage);
     ret.setFormattedOutput (true);
     ret.setNamespaceContext (RdcRestNamespaceContext.getInstance ());
     return ret;
@@ -86,29 +85,29 @@ public final class RdcRestJAXB
   /**
    * @param aID
    *        The source identifier. May not be <code>null</code>.
-   * @return The created {@link TCIdentifierType} and never <code>null</code>.
+   * @return The created {@link RDCIdentifierType} and never <code>null</code>.
    */
   @Nonnull
-  public static TCIdentifierType createTCID (@Nonnull final IIdentifier aID)
+  public static RDCIdentifierType createRDCID (@Nonnull final IIdentifier aID)
   {
     ValueEnforcer.notNull (aID, "ID");
-    return createTCID (aID.getScheme (), aID.getValue ());
+    return createRDCID (aID.getScheme (), aID.getValue ());
   }
 
   /**
-   * Create a new {@link TCIdentifierType}
+   * Create a new {@link RDCIdentifierType}
    *
    * @param sScheme
    *        The scheme to use. May be <code>null</code>.
    * @param sValue
    *        The value to use. May not be <code>null</code>.
-   * @return The created {@link TCIdentifierType} and never <code>null</code>.
+   * @return The created {@link RDCIdentifierType} and never <code>null</code>.
    */
   @Nonnull
-  public static TCIdentifierType createTCID (@Nullable final String sScheme, @Nonnull final String sValue)
+  public static RDCIdentifierType createRDCID (@Nullable final String sScheme, @Nonnull final String sValue)
   {
     ValueEnforcer.notNull (sValue, "Value");
-    final TCIdentifierType ret = new TCIdentifierType ();
+    final RDCIdentifierType ret = new RDCIdentifierType ();
     ret.setScheme (sScheme);
     ret.setValue (sValue);
     return ret;

@@ -40,10 +40,10 @@ import com.helger.rdc.api.me.incoming.IMEIncomingTransportMetadata;
 import com.helger.rdc.api.me.incoming.IncomingEDMRequest;
 import com.helger.rdc.api.me.incoming.IncomingEDMResponse;
 import com.helger.rdc.api.me.model.MEPayload;
-import com.helger.rdc.api.rest.TCIncomingMessage;
-import com.helger.rdc.api.rest.TCIncomingMetadata;
-import com.helger.rdc.api.rest.TCPayload;
-import com.helger.rdc.api.rest.TCPayloadType;
+import com.helger.rdc.api.rest.RDCIncomingMessage;
+import com.helger.rdc.api.rest.RDCIncomingMetadata;
+import com.helger.rdc.api.rest.RDCPayload;
+import com.helger.rdc.api.rest.RDCPayloadType;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.regrep.CRegRep4;
 
@@ -61,8 +61,7 @@ public final class RdcDPTriggerViaHttp
   {}
 
   @Nonnull
-  private static ESuccess _forwardMessage (@Nonnull final TCIncomingMessage aMsg,
-                                           @Nonnull @Nonempty final String sDestURL)
+  private static ESuccess _forwardMessage (@Nonnull final RDCIncomingMessage aMsg, @Nonnull @Nonempty final String sDestURL)
   {
     ValueEnforcer.notNull (aMsg, "Msg");
     ValueEnforcer.notEmpty (sDestURL, "Destination URL");
@@ -79,10 +78,9 @@ public final class RdcDPTriggerViaHttp
     if (aPayload == null)
       throw new IllegalStateException ();
 
-    DE4AKafkaClient.send (EErrorLevel.INFO,
-                          () -> "Sending inbound message to '" + sDestURL + "' with " + aPayload.length + " bytes");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> "Sending inbound message to '" + sDestURL + "' with " + aPayload.length + " bytes");
 
-    // Main sending, using TC http settings
+    // Main sending, using RDC http settings
     try (final HttpClientManager aHCM = HttpClientManager.create (new RdcHttpClientSettings ()))
     {
       final HttpPost aPost = new HttpPost (sDestURL);
@@ -90,9 +88,7 @@ public final class RdcDPTriggerViaHttp
       final byte [] aResult = aHCM.execute (aPost, new ResponseHandlerByteArray ());
 
       DE4AKafkaClient.send (EErrorLevel.INFO,
-                            () -> "Sending inbound message was successful. Got " +
-                                  ArrayHelper.getSize (aResult) +
-                                  " bytes back");
+                            () -> "Sending inbound message was successful. Got " + ArrayHelper.getSize (aResult) + " bytes back");
       return ESuccess.SUCCESS;
     }
     catch (final Exception ex)
@@ -103,24 +99,24 @@ public final class RdcDPTriggerViaHttp
   }
 
   @Nonnull
-  private static TCIncomingMetadata _createMetadata (@Nonnull final IMEIncomingTransportMetadata aMD,
-                                                     @Nonnull final TCPayloadType ePayloadType)
+  private static RDCIncomingMetadata _createMetadata (@Nonnull final IMEIncomingTransportMetadata aMD,
+                                                      @Nonnull final RDCPayloadType ePayloadType)
   {
-    final TCIncomingMetadata ret = new TCIncomingMetadata ();
-    ret.setSenderID (RdcRestJAXB.createTCID (aMD.getSenderID ()));
-    ret.setReceiverID (RdcRestJAXB.createTCID (aMD.getReceiverID ()));
-    ret.setDocTypeID (RdcRestJAXB.createTCID (aMD.getDocumentTypeID ()));
-    ret.setProcessID (RdcRestJAXB.createTCID (aMD.getProcessID ()));
+    final RDCIncomingMetadata ret = new RDCIncomingMetadata ();
+    ret.setSenderID (RdcRestJAXB.createRDCID (aMD.getSenderID ()));
+    ret.setReceiverID (RdcRestJAXB.createRDCID (aMD.getReceiverID ()));
+    ret.setDocTypeID (RdcRestJAXB.createRDCID (aMD.getDocumentTypeID ()));
+    ret.setProcessID (RdcRestJAXB.createRDCID (aMD.getProcessID ()));
     ret.setPayloadType (ePayloadType);
     return ret;
   }
 
   @Nonnull
-  private static TCPayload _createPayload (@Nonnull final byte [] aValue,
-                                           @Nullable final String sContentID,
-                                           @Nonnull final IMimeType aMimeType)
+  private static RDCPayload _createPayload (@Nonnull final byte [] aValue,
+                                            @Nullable final String sContentID,
+                                            @Nonnull final IMimeType aMimeType)
   {
-    final TCPayload ret = new TCPayload ();
+    final RDCPayload ret = new RDCPayload ();
     ret.setValue (aValue);
     ret.setContentID (sContentID);
     ret.setMimeType (aMimeType.getAsString ());
@@ -144,13 +140,12 @@ public final class RdcDPTriggerViaHttp
   }
 
   @Nonnull
-  public static ESuccess forwardMessage (@Nonnull final IncomingEDMRequest aRequest,
-                                         @Nonnull @Nonempty final String sDestURL)
+  public static ESuccess forwardMessage (@Nonnull final IncomingEDMRequest aRequest, @Nonnull @Nonempty final String sDestURL)
   {
     ValueEnforcer.notEmpty (sDestURL, "Destination URL");
 
-    final TCIncomingMessage aMsg = new TCIncomingMessage ();
-    aMsg.setMetadata (_createMetadata (aRequest.getMetadata (), TCPayloadType.REQUEST));
+    final RDCIncomingMessage aMsg = new RDCIncomingMessage ();
+    aMsg.setMetadata (_createMetadata (aRequest.getMetadata (), RDCPayloadType.REQUEST));
     aMsg.addPayload (_createPayload (aRequest.getRequest ().getWriter ().getAsBytes (),
                                      aRequest.getTopLevelContentID (),
                                      CRegRep4.MIME_TYPE_EBRS_XML));
@@ -164,21 +159,18 @@ public final class RdcDPTriggerViaHttp
   }
 
   @Nonnull
-  public static ESuccess forwardMessage (@Nonnull final IncomingEDMResponse aResponse,
-                                         @Nonnull @Nonempty final String sDestURL)
+  public static ESuccess forwardMessage (@Nonnull final IncomingEDMResponse aResponse, @Nonnull @Nonempty final String sDestURL)
   {
     ValueEnforcer.notEmpty (sDestURL, "Destination URL");
 
-    final TCIncomingMessage aMsg = new TCIncomingMessage ();
-    aMsg.setMetadata (_createMetadata (aResponse.getMetadata (), TCPayloadType.RESPONSE));
+    final RDCIncomingMessage aMsg = new RDCIncomingMessage ();
+    aMsg.setMetadata (_createMetadata (aResponse.getMetadata (), RDCPayloadType.RESPONSE));
     aMsg.addPayload (_createPayload (aResponse.getResponse ().getWriter ().getAsBytes (),
                                      aResponse.getTopLevelContentID (),
                                      CRegRep4.MIME_TYPE_EBRS_XML));
     // Add all attachments
     for (final MEPayload aPayload : aResponse.attachments ().values ())
-      aMsg.addPayload (_createPayload (aPayload.getData ().bytes (),
-                                       aPayload.getContentID (),
-                                       aPayload.getMimeType ()));
+      aMsg.addPayload (_createPayload (aPayload.getData ().bytes (), aPayload.getContentID (), aPayload.getMimeType ()));
     return _forwardMessage (aMsg, sDestURL);
   }
 }

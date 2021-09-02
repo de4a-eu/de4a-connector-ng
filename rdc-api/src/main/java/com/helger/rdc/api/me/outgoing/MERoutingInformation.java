@@ -27,7 +27,7 @@ import com.helger.commons.string.ToStringGenerator;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
-import com.helger.rdc.api.rest.TCOutgoingMetadata;
+import com.helger.rdc.api.rest.RDCOutgoingMetadata;
 import com.helger.security.certificate.CertificateHelper;
 
 /**
@@ -94,7 +94,7 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
   }
 
   @Nonnull
-  public static MERoutingInformation createForSending (@Nonnull final TCOutgoingMetadata aMetadata) throws CertificateException
+  public static MERoutingInformation createForSending (@Nonnull final RDCOutgoingMetadata aMetadata) throws CertificateException
   {
     ValueEnforcer.notNull (aMetadata, "Metadata");
     return create (createBaseForSending (aMetadata),

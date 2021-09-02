@@ -33,9 +33,9 @@ import com.helger.json.serialize.JsonWriter;
 import com.helger.json.serialize.JsonWriterSettings;
 import com.helger.rdc.api.RdcIdentifierFactory;
 import com.helger.rdc.api.me.EMEProtocol;
-import com.helger.rdc.api.rest.TCOutgoingMessage;
-import com.helger.rdc.api.rest.TCOutgoingMetadata;
-import com.helger.rdc.api.rest.TCPayload;
+import com.helger.rdc.api.rest.RDCOutgoingMessage;
+import com.helger.rdc.api.rest.RDCOutgoingMetadata;
+import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 
 public class MainValidateLookupAndSendEdmRequest
@@ -44,19 +44,19 @@ public class MainValidateLookupAndSendEdmRequest
 
   public static void main (final String [] args) throws IOException
   {
-    final TCOutgoingMessage aOM = new TCOutgoingMessage ();
+    final RDCOutgoingMessage aOM = new RDCOutgoingMessage ();
     {
-      final TCOutgoingMetadata aMetadata = new TCOutgoingMetadata ();
-      aMetadata.setSenderID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9914:tc-ng-test-sender"));
-      aMetadata.setReceiverID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:tooptest"));
-      aMetadata.setDocTypeID (RdcRestJAXB.createTCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
-                                                     "urn:eu:toop:ns:dataexchange-1p40::Response##urn:eu.toop.response.registeredorganization::1.40"));
-      aMetadata.setProcessID (RdcRestJAXB.createTCID (RdcIdentifierFactory.PROCESS_SCHEME, "urn:eu.toop.process.datarequestresponse"));
+      final RDCOutgoingMetadata aMetadata = new RDCOutgoingMetadata ();
+      aMetadata.setSenderID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9914:tc-ng-test-sender"));
+      aMetadata.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:tooptest"));
+      aMetadata.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME,
+                                                       "urn:eu:toop:ns:dataexchange-1p40::Response##urn:eu.toop.response.registeredorganization::1.40"));
+      aMetadata.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "urn:eu.toop.process.datarequestresponse"));
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
       aOM.setMetadata (aMetadata);
     }
     {
-      final TCPayload aPayload = new TCPayload ();
+      final RDCPayload aPayload = new RDCPayload ();
       aPayload.setValue (StreamHelper.getAllBytes (new ClassPathResource ("edm/Concept Request_LP.xml")));
       aPayload.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
       aPayload.setContentID ("mock-request@toop");
