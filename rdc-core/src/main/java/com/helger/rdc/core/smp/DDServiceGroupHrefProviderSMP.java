@@ -18,6 +18,9 @@ package com.helger.rdc.core.smp;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsTreeMap;
 import com.helger.commons.collection.impl.ICommonsSortedMap;
@@ -34,6 +37,8 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataReferenceType;
 
 public class DDServiceGroupHrefProviderSMP extends AbstractDDClient implements IDDServiceGroupHrefProvider
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (DDServiceGroupHrefProviderSMP.class);
+
   public DDServiceGroupHrefProviderSMP ()
   {}
 
@@ -55,20 +60,19 @@ public class DDServiceGroupHrefProviderSMP extends AbstractDDClient implements I
       // Map from cleaned URL to original URL
       if (aSG != null && aSG.getServiceMetadataReferenceCollection () != null)
       {
-        for (final ServiceMetadataReferenceType aSMR : aSG.getServiceMetadataReferenceCollection ()
-                                                          .getServiceMetadataReference ())
+        for (final ServiceMetadataReferenceType aSMR : aSG.getServiceMetadataReferenceCollection ().getServiceMetadataReference ())
         {
           // Decoded href is important for unification
           final String sHref = CIdentifier.createPercentDecoded (aSMR.getHref ());
           if (ret.put (sHref, aSMR.getHref ()) != null)
-            aErrorHandler.onWarning ("The SMP ServiceGroup list contains the duplicate URL '" + sHref + "'",
-                                     ERdcErrorCode.GEN);
+            aErrorHandler.onWarning ("The SMP ServiceGroup list contains the duplicate URL '" + sHref + "'", ERdcErrorCode.GEN);
         }
       }
       return ret;
     }
     catch (final SMPDNSResolutionException | SMPClientException ex)
     {
+      LOGGER.error ("getServiceMetadata exception: " + ex.getClass ().getName () + " - " + ex.getMessage ());
       throw new IllegalStateException (ex);
     }
   }

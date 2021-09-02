@@ -19,6 +19,9 @@ package com.helger.rdc.core.smp;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.ValueEnforcer;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
@@ -38,6 +41,8 @@ import com.helger.xsds.bdxr.smp1.SignedServiceMetadataType;
  */
 public class DDServiceMetadataProviderSMP extends AbstractDDClient implements IDDServiceMetadataProvider
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (DDServiceMetadataProviderSMP.class);
+
   public DDServiceMetadataProviderSMP ()
   {}
 
@@ -64,6 +69,7 @@ public class DDServiceMetadataProviderSMP extends AbstractDDClient implements ID
     }
     catch (final SMPDNSResolutionException | SMPClientException ex)
     {
+      LOGGER.error ("getServiceMetadata exception: " + ex.getClass ().getName () + " - " + ex.getMessage ());
       throw new IllegalStateException (ex);
     }
   }
