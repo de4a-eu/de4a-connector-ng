@@ -40,9 +40,9 @@ import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.rdc.api.rest.RDCPayloadType;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 
-public class MainSendRequest
+public class MainSendRequestToRomania
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (MainSendRequest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (MainSendRequestToRomania.class);
 
   public static void main (final String [] args) throws IOException
   {
