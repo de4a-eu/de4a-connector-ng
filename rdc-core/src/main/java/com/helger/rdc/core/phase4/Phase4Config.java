@@ -78,21 +78,23 @@ public final class Phase4Config
   }
 
   /**
-   * @return The <code>From/PartyId/@type</code> for receiving party id
+   * @return The <code>From/PartyId/@type</code> for receiving party id.
+   *         Defaults to <code>ignore-me</code> because it must be set.
    */
-  @Nullable
+  @Nonnull
   public static String getFromPartyIDType ()
   {
-    return getConfig ().getAsString ("phase4.send.fromparty.id.type");
+    return getConfig ().getAsString ("phase4.send.fromparty.id.type", "ignore-me");
   }
 
   /**
-   * @return The <code>To/PartyId/@type</code> for receiving party id
+   * @return The <code>To/PartyId/@type</code> for receiving party id. Defaults
+   *         to <code>ignore-me</code> because it must be set.
    */
-  @Nullable
+  @Nonnull
   public static String getToPartyIDType ()
   {
-    return getConfig ().getAsString ("phase4.send.toparty.id.type");
+    return getConfig ().getAsString ("phase4.send.toparty.id.type", "ignore-me");
   }
 
   /**

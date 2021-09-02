@@ -7,4 +7,5 @@ hs_err_pid*
 zz
 
 .settings/
+conf/
 target/
