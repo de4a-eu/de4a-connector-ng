@@ -82,6 +82,10 @@
       <artifactId>phive-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-regrep</artifactId>
+    </dependency>
+    <dependency>
       <groupId>eu.de4a</groupId>
       <artifactId>de4a-iem</artifactId>
     </dependency>

@@ -32,7 +32,8 @@ import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 
 /**
- * List of {@link MEPayload} objects.
+ * List of {@link MEPayload} objects. The first payload MUST be the main user
+ * message.
  *
  * @author Philip Helger
  */
