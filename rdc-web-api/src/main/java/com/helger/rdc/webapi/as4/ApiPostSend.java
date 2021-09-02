@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.helger.commons.annotation.Nonempty;
@@ -58,6 +60,8 @@ import com.helger.xml.serialize.read.DOMReader;
  */
 public class ApiPostSend extends AbstractRdcApiInvoker
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostSend.class);
+
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
                                 @Nonnull @Nonempty final String sPath,
@@ -123,6 +127,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
                                       .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
                                       .contentID (MEPayload.createRandomContentID ())
                                       .data (aRegRepPayload));
+        LOGGER.info ("Successfully added RegRep dummy");
       }
 
       aMessage.addPayload (MEPayload.builder ()

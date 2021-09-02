@@ -17,10 +17,12 @@
 package com.helger.rdc.core.phase4;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.file.SimpleFileIO;
 import com.helger.commons.string.StringHelper;
@@ -39,8 +41,15 @@ public class RawResponseWriter implements IAS4RawResponseConsumer
     if (StringHelper.hasText (sFolderName))
     {
       final String sMessageID = aResponseEntity.getMessageID ();
-      final String sFilename = PDTIOHelper.getCurrentLocalDateTimeForFilename () +
-                               "-" +
+      final LocalDateTime aLDT = PDTFactory.getCurrentLocalDateTime ();
+      final String sFilename = StringHelper.getLeadingZero (aLDT.getYear (), 4) +
+                               '/' +
+                               StringHelper.getLeadingZero (aLDT.getMonthValue (), 2) +
+                               '/' +
+                               StringHelper.getLeadingZero (aLDT.getDayOfMonth (), 2) +
+                               '/' +
+                               PDTIOHelper.getTimeForFilename (aLDT.toLocalTime ()) +
+                               '-' +
                                FilenameHelper.getAsSecureValidASCIIFilename (sMessageID) +
                                "-response.xml";
       final File aResponseFile = new File (sFolderName, sFilename);
@@ -48,6 +57,11 @@ public class RawResponseWriter implements IAS4RawResponseConsumer
         LOGGER.info ("[phase4] Response file was written to '" + aResponseFile.getAbsolutePath () + "'");
       else
         LOGGER.error ("[phase4] Error writing response file to '" + aResponseFile.getAbsolutePath () + "'");
+    }
+    else
+    {
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("[phase4] As no response folder name is configured, no message will be stored");
     }
   }
 }
