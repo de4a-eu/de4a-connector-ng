@@ -85,9 +85,10 @@ public final class RdcRestJAXBTest
     CommonsTestHelper.testDefaultImplementationWithEqualContentObject (m, m2);
 
     // Read
-    final RDCOutgoingMessage m3 = RdcRestJAXB.outgoingMessage ()
-                                             .read (new FileSystemResource (new File ("src/test/resources/xml/rdc-outgoing.xml")));
+    final RDCOutgoingMessage m3 = RdcRestJAXB.outgoingMessage ().read (new File ("src/test/resources/xml/rdc-outgoing.xml"));
     assertNotNull (m3);
+    final RDCOutgoingMessage m4 = RdcRestJAXB.outgoingMessage ().read (new File ("src/test/resources/xml/rdc-outgoing2.xml"));
+    assertNotNull (m4);
   }
 
   @Test
