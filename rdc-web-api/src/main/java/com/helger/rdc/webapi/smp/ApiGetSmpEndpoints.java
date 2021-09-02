@@ -32,7 +32,7 @@ import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.api.RdcConfig;
-import com.helger.rdc.core.api.RdcAPIHelper;
+import com.helger.rdc.core.api.RdcApiHelper;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
@@ -83,7 +83,7 @@ public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
     CommonApiInvoker.invoke (aJson,
                              () -> {
                                // Main query
-                               final ServiceMetadataType aSM = RdcAPIHelper.querySMPServiceMetadata (aParticipantID,
+                               final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aParticipantID,
                                                                                                     aDocTypeID,
                                                                                                     aIF.createProcessIdentifier ("dummy-procid",
                                                                                                                                  "procid-fake"),

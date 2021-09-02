@@ -41,11 +41,11 @@ public class MERoutingInformationInput
   private final IProcessIdentifier m_aProcessID;
   private final String m_sTransportProtocol;
 
-  public MERoutingInformationInput (@Nonnull final IParticipantIdentifier aSenderID,
-                                    @Nonnull final IParticipantIdentifier aReceiverID,
-                                    @Nonnull final IDocumentTypeIdentifier aDocTypeID,
-                                    @Nonnull final IProcessIdentifier aProcessID,
-                                    @Nonnull @Nonempty final String sTransportProtocol)
+  protected MERoutingInformationInput (@Nonnull final IParticipantIdentifier aSenderID,
+                                       @Nonnull final IParticipantIdentifier aReceiverID,
+                                       @Nonnull final IDocumentTypeIdentifier aDocTypeID,
+                                       @Nonnull final IProcessIdentifier aProcessID,
+                                       @Nonnull @Nonempty final String sTransportProtocol)
   {
     ValueEnforcer.notNull (aSenderID, "SenderID");
     ValueEnforcer.notNull (aReceiverID, "ReceiverID");
@@ -103,7 +103,7 @@ public class MERoutingInformationInput
   }
 
   @Nonnull
-  public static MERoutingInformationInput createForInput (@Nonnull final TCOutgoingMetadata aMetadata)
+  public static MERoutingInformationInput createBaseForSending (@Nonnull final TCOutgoingMetadata aMetadata)
   {
     ValueEnforcer.notNull (aMetadata, "Metadata");
     final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();

@@ -44,11 +44,11 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  * @author Philip Helger
  */
 @Immutable
-public final class RdcAPIHelper
+public final class RdcApiHelper
 {
   public static final Locale DEFAULT_LOCALE = Locale.US;
 
-  private RdcAPIHelper ()
+  private RdcApiHelper ()
   {}
 
   /**

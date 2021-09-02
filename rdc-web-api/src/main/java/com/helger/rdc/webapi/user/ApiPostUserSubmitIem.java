@@ -44,7 +44,7 @@ import com.helger.rdc.api.me.outgoing.MERoutingInformationInput;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
-import com.helger.rdc.core.api.RdcAPIHelper;
+import com.helger.rdc.core.api.RdcApiHelper;
 import com.helger.rdc.core.validation.RdcValidator;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
@@ -93,16 +93,16 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
       throw new ApiParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST NOT be present");
 
     // Convert metadata
-    final MERoutingInformationInput aRoutingInfo = MERoutingInformationInput.createForInput (aOutgoingMsg.getMetadata ());
+    final MERoutingInformationInput aRoutingInfoBase = MERoutingInformationInput.createBaseForSending (aOutgoingMsg.getMetadata ());
 
     // Start response
     final IJsonObject aJson = new JsonObject ();
     {
-      aJson.add ("senderid", aRoutingInfo.getSenderID ().getURIEncoded ());
-      aJson.add ("receiverid", aRoutingInfo.getReceiverID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aRoutingInfo.getDocumentTypeID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_PROCESS_ID, aRoutingInfo.getProcessID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, aRoutingInfo.getTransportProtocol ());
+      aJson.add ("senderid", aRoutingInfoBase.getSenderID ().getURIEncoded ());
+      aJson.add ("receiverid", aRoutingInfoBase.getReceiverID ().getURIEncoded ());
+      aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aRoutingInfoBase.getDocumentTypeID ().getURIEncoded ());
+      aJson.add (SMPJsonResponse.JSON_PROCESS_ID, aRoutingInfoBase.getProcessID ().getURIEncoded ());
+      aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, aRoutingInfoBase.getTransportProtocol ());
     }
 
     CommonApiInvoker.invoke (aJson, () -> {
@@ -113,7 +113,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
         if (m_aVESID != null)
         {
           final StopWatch aSW = StopWatch.createdStarted ();
-          final ValidationResultList aValidationResultList = RdcAPIHelper.validateBusinessDocument (m_aVESID,
+          final ValidationResultList aValidationResultList = RdcApiHelper.validateBusinessDocument (m_aVESID,
                                                                                                     aOutgoingMsg.getPayloadAtIndex (0)
                                                                                                                 .getValue ());
           aSW.stop ();
@@ -122,7 +122,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
           PhiveJsonHelper.applyValidationResultList (aJsonVR,
                                                      RdcValidator.getVES (m_aVESID),
                                                      aValidationResultList,
-                                                     RdcAPIHelper.DEFAULT_LOCALE,
+                                                     RdcApiHelper.DEFAULT_LOCALE,
                                                      aSW.getMillis (),
                                                      null,
                                                      null);
@@ -142,34 +142,34 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
         MERoutingInformation aRoutingInfoFinal = null;
         final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
-        final ServiceMetadataType aSM = RdcAPIHelper.querySMPServiceMetadata (aRoutingInfo.getReceiverID (),
-                                                                              aRoutingInfo.getDocumentTypeID (),
-                                                                              aRoutingInfo.getProcessID (),
-                                                                              aRoutingInfo.getTransportProtocol ());
+        final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aRoutingInfoBase.getReceiverID (),
+                                                                              aRoutingInfoBase.getDocumentTypeID (),
+                                                                              aRoutingInfoBase.getProcessID (),
+                                                                              aRoutingInfoBase.getTransportProtocol ());
         if (aSM != null)
         {
-          aJsonSMP.addJson ("response", SMPJsonResponse.convert (aRoutingInfo.getReceiverID (), aRoutingInfo.getDocumentTypeID (), aSM));
+          aJsonSMP.addJson ("response", SMPJsonResponse.convert (aRoutingInfoBase.getReceiverID (), aRoutingInfoBase.getDocumentTypeID (), aSM));
 
           final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM,
-                                                                                 aRoutingInfo.getProcessID (),
-                                                                                 aRoutingInfo.getTransportProtocol ());
+                                                                                 aRoutingInfoBase.getProcessID (),
+                                                                                 aRoutingInfoBase.getTransportProtocol ());
           if (aEndpoint != null)
           {
             aJsonSMP.add (SMPJsonResponse.JSON_ENDPOINT_REFERENCE, aEndpoint.getEndpointURI ());
-            aRoutingInfoFinal = MERoutingInformation.create (aRoutingInfo,
+            aRoutingInfoFinal = MERoutingInformation.create (aRoutingInfoBase,
                                                              aEndpoint.getEndpointURI (),
                                                              CertificateHelper.convertByteArrayToCertficateDirect (aEndpoint.getCertificate ()));
           }
           if (aRoutingInfoFinal == null)
           {
             LOGGER.warn ("[API] The SMP lookup for '" +
-                         aRoutingInfo.getReceiverID ().getURIEncoded () +
+                         aRoutingInfoBase.getReceiverID ().getURIEncoded () +
                          "' and '" +
-                         aRoutingInfo.getDocumentTypeID ().getURIEncoded () +
+                         aRoutingInfoBase.getDocumentTypeID ().getURIEncoded () +
                          "' succeeded, but no endpoint matching '" +
-                         aRoutingInfo.getProcessID ().getURIEncoded () +
+                         aRoutingInfoBase.getProcessID ().getURIEncoded () +
                          "' and '" +
-                         aRoutingInfo.getTransportProtocol () +
+                         aRoutingInfoBase.getTransportProtocol () +
                          "' was found.");
           }
 
@@ -195,7 +195,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
                                                                                 MEPayload.createRandomContentID ()))
                                           .data (aPayload.getValue ()));
           }
-          RdcAPIHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
+          RdcApiHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
           aJsonSending.add (JSON_SUCCESS, true);
 
           aJson.addJson ("sending-results", aJsonSending);

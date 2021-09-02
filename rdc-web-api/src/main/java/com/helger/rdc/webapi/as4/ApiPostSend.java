@@ -36,7 +36,7 @@ import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.rest.TCOutgoingMessage;
 import com.helger.rdc.api.rest.TCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
-import com.helger.rdc.core.api.RdcAPIHelper;
+import com.helger.rdc.core.api.RdcApiHelper;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
@@ -72,7 +72,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
     final IMERoutingInformation aRoutingInfo;
     try
     {
-      aRoutingInfo = MERoutingInformation.createFrom (aOutgoingMsg.getMetadata ());
+      aRoutingInfo = MERoutingInformation.createForSending (aOutgoingMsg.getMetadata ());
     }
     catch (final CertificateException ex)
     {
@@ -103,7 +103,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
 
     CommonApiInvoker.invoke (aJson, () -> {
       // Main sending - throws Exception on error
-      RdcAPIHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
+      RdcApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
       aJson.add (JSON_SUCCESS, true);
     });
 

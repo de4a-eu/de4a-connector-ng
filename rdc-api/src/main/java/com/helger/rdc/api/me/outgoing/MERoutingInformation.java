@@ -58,13 +58,13 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
 
   @Nonnull
   @Nonempty
-  public String getEndpointURL ()
+  public final String getEndpointURL ()
   {
     return m_sEndpointURL;
   }
 
   @Nonnull
-  public X509Certificate getCertificate ()
+  public final X509Certificate getCertificate ()
   {
     return m_aCert;
   }
@@ -94,10 +94,10 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
   }
 
   @Nonnull
-  public static MERoutingInformation createFrom (@Nonnull final TCOutgoingMetadata aMetadata) throws CertificateException
+  public static MERoutingInformation createForSending (@Nonnull final TCOutgoingMetadata aMetadata) throws CertificateException
   {
     ValueEnforcer.notNull (aMetadata, "Metadata");
-    return create (MERoutingInformationInput.createForInput (aMetadata),
+    return create (createBaseForSending (aMetadata),
                    aMetadata.getEndpointURL (),
                    CertificateHelper.convertByteArrayToCertficateDirect (aMetadata.getReceiverCertificate ()));
   }

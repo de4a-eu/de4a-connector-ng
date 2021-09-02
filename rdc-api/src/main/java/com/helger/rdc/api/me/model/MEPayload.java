@@ -37,7 +37,6 @@ import com.helger.commons.string.ToStringGenerator;
 /**
  * A single payload of an AS4 message. Used inside {@link MEMessage}
  *
- * @author myildiz at 15.02.2018.
  * @author Philip Helger
  */
 @Immutable
@@ -176,7 +175,13 @@ public final class MEPayload implements Serializable
     public Builder data (@Nullable final byte [] a)
     {
       // Assume: no copy
-      return data (a == null ? null : new ByteArrayWrapper (a, false));
+      return data (a, false);
+    }
+
+    @Nonnull
+    public Builder data (@Nullable final byte [] a, final boolean bCopy)
+    {
+      return data (a == null ? null : new ByteArrayWrapper (a, bCopy));
     }
 
     @Nonnull

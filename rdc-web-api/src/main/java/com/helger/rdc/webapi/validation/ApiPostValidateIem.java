@@ -33,7 +33,7 @@ import com.helger.phive.api.executorset.VESID;
 import com.helger.phive.api.result.ValidationResultList;
 import com.helger.phive.json.PhiveJsonHelper;
 import com.helger.photon.api.IAPIDescriptor;
-import com.helger.rdc.core.api.RdcAPIHelper;
+import com.helger.rdc.core.api.RdcApiHelper;
 import com.helger.rdc.core.validation.RdcValidator;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
@@ -72,7 +72,7 @@ public class ApiPostValidateIem extends AbstractRdcApiInvoker
     CommonApiInvoker.invoke (aJson, () -> {
       // Main validation
       final StopWatch aSW = StopWatch.createdStarted ();
-      final ValidationResultList aValidationResultList = RdcAPIHelper.validateBusinessDocument (aVESID, aPayload);
+      final ValidationResultList aValidationResultList = RdcApiHelper.validateBusinessDocument (aVESID, aPayload);
       aSW.stop ();
 
       // Build response
@@ -80,7 +80,7 @@ public class ApiPostValidateIem extends AbstractRdcApiInvoker
       PhiveJsonHelper.applyValidationResultList (aJson,
                                                  RdcValidator.getVES (aVESID),
                                                  aValidationResultList,
-                                                 RdcAPIHelper.DEFAULT_LOCALE,
+                                                 RdcApiHelper.DEFAULT_LOCALE,
                                                  aSW.getMillis (),
                                                  null,
                                                  null);
