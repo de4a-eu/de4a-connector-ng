@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns="urn:brz:eu.de4a/at/decos/1" 
+           targetNamespace="urn:brz:eu.de4a/at/decos/1" 
+           elementFormDefault="qualified" 
+           attributeFormDefault="unqualified">
+  <xs:complexType name="SectionType">
+    <xs:sequence>
+      <xs:element name="Label" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:simpleType name="InteractionTypeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="checkbox" />
+      <xs:enumeration value="radiobutton" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:complexType name="FileType">
+    <xs:sequence>
+      <xs:element name="Filename" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="MimeType" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Icon" type="xs:normalizedString" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Content" type="xs:base64Binary" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="InteractionType">
+    <xs:sequence>
+      <xs:element name="InteractionID" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Type" type="InteractionTypeType" minOccurs="1" maxOccurs="1" default="checkbox" />
+      <xs:element name="Mandatory" type="xs:boolean" minOccurs="1" maxOccurs="1" default="true" />
+      <xs:element name="Label" type="xs:string" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="ButtonType">
+    <xs:sequence>
+      <xs:element name="Label" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Icon" type="xs:normalizedString" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="RequestType">
+    <xs:sequence>
+      <xs:element name="RequestID" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Section" type="SectionType" minOccurs="1" maxOccurs="unbounded" />
+      <xs:element name="File" type="FileType" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="Interaction" type="InteractionType" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="AgreeButton" type="ButtonType" minOccurs="1" maxOccurs="1" />
+      <xs:element name="DisagreeButton" type="ButtonType" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
