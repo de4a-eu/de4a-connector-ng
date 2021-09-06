@@ -23,10 +23,8 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.concurrent.SimpleReadWriteLock;
 import com.helger.rdc.api.dd.IDDServiceGroupHrefProvider;
 import com.helger.rdc.api.dd.IDDServiceMetadataProvider;
-import com.helger.rdc.api.validation.IRdcValidator;
 import com.helger.rdc.core.smp.DDServiceGroupHrefProviderSMP;
 import com.helger.rdc.core.smp.DDServiceMetadataProviderSMP;
-import com.helger.rdc.core.validation.RdcValidator;
 
 /**
  * Global RDC API configuration.<br>
@@ -43,8 +41,6 @@ public final class RdcApiConfig
   private static IDDServiceGroupHrefProvider s_aDDSGHrefProvider = new DDServiceGroupHrefProviderSMP ();
   @GuardedBy ("RW_LOCK")
   private static IDDServiceMetadataProvider s_aDDSMProvider = new DDServiceMetadataProviderSMP ();
-  @GuardedBy ("RW_LOCK")
-  private static IRdcValidator s_aValidator = new RdcValidator ();
 
   private RdcApiConfig ()
   {}
@@ -71,17 +67,5 @@ public final class RdcApiConfig
   {
     ValueEnforcer.notNull (aProvider, "Provider");
     RW_LOCK.writeLocked ( () -> s_aDDSMProvider = aProvider);
-  }
-
-  @Nonnull
-  public static IRdcValidator getValidator ()
-  {
-    return RW_LOCK.readLockedGet ( () -> s_aValidator);
-  }
-
-  public static void setValidator (@Nonnull final IRdcValidator aValidator)
-  {
-    ValueEnforcer.notNull (aValidator, "Validator");
-    RW_LOCK.writeLocked ( () -> s_aValidator = aValidator);
   }
 }

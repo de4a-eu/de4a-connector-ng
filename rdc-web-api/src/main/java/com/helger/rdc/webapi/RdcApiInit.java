@@ -26,7 +26,6 @@ import com.helger.rdc.webapi.as4.ApiPostSend;
 import com.helger.rdc.webapi.smp.ApiGetSmpDocTypes;
 import com.helger.rdc.webapi.smp.ApiGetSmpEndpoints;
 import com.helger.rdc.webapi.user.ApiPostUserSubmitIem;
-import com.helger.rdc.webapi.validation.ApiPostValidateIem;
 
 /**
  * Register all APIs
@@ -45,13 +44,10 @@ public final class RdcApiInit
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/doctypes/{pid}"), ApiGetSmpDocTypes.class));
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/endpoints/{pid}/{doctypeid}"), ApiGetSmpEndpoints.class));
 
-    // Validation stuff
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/validate/{vesid}"), new ApiPostValidateIem ()));
-
     // AS4 stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
 
     // User combined stuff
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit"), new ApiPostUserSubmitIem (null)));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit"), new ApiPostUserSubmitIem ()));
   }
 }

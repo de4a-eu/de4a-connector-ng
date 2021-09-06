@@ -78,10 +78,6 @@
       <artifactId>peppol-commons</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger.phive</groupId>
-      <artifactId>phive-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.helger</groupId>
       <artifactId>ph-regrep</artifactId>
     </dependency>

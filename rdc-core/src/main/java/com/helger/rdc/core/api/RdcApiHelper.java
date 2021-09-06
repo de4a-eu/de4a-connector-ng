@@ -26,8 +26,6 @@ import com.helger.commons.collection.impl.ICommonsSortedMap;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
-import com.helger.phive.api.executorset.VESID;
-import com.helger.phive.api.result.ValidationResultList;
 import com.helger.rdc.api.error.LoggingRdcErrorHandler;
 import com.helger.rdc.api.me.IMessageExchangeSPI;
 import com.helger.rdc.api.me.MessageExchangeManager;
@@ -109,21 +107,6 @@ public final class RdcApiHelper
                                                @Nonnull final String sTransportProfile)
   {
     return RdcApiConfig.getDDServiceMetadataProvider ().getEndpoint (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
-  }
-
-  /**
-   * Perform validation
-   *
-   * @param aVESID
-   *        VESID to use.
-   * @param aPayload
-   *        Payload to validate.
-   * @return A non-<code>null</code> result list.
-   */
-  @Nonnull
-  public static ValidationResultList validateBusinessDocument (@Nonnull final VESID aVESID, @Nonnull final byte [] aPayload)
-  {
-    return RdcApiConfig.getValidator ().validate (aVESID, aPayload, DEFAULT_LOCALE);
   }
 
   /**

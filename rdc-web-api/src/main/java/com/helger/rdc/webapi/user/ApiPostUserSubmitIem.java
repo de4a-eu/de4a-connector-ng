@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +29,8 @@ import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
 import com.helger.commons.mime.MimeTypeParser;
 import com.helger.commons.string.StringHelper;
-import com.helger.commons.timing.StopWatch;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
-import com.helger.phive.api.executorset.VESID;
-import com.helger.phive.api.result.ValidationResultList;
-import com.helger.phive.json.PhiveJsonHelper;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.api.dd.IDDServiceMetadataProvider;
 import com.helger.rdc.api.me.model.MEMessage;
@@ -47,7 +42,6 @@ import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.rdc.api.rest.RdcRegRepHelper;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.core.api.RdcApiHelper;
-import com.helger.rdc.core.validation.RdcValidator;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
@@ -71,16 +65,8 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitIem.class);
 
-  private final VESID m_aVESID;
-
-  /**
-   * @param aVESID
-   *        Optional VES ID. If none is provided, no validation is performed.
-   */
-  public ApiPostUserSubmitIem (@Nullable final VESID aVESID)
-  {
-    m_aVESID = aVESID;
-  }
+  public ApiPostUserSubmitIem ()
+  {}
 
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -113,40 +99,11 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
     }
 
     CommonApiInvoker.invoke (aJson, () -> {
-      final boolean bValidationOK;
       boolean bOverallSuccess = false;
+      MERoutingInformation aRoutingInfoFinal = null;
+
+      // Query SMP
       {
-        // validation
-        if (m_aVESID != null)
-        {
-          final StopWatch aSW = StopWatch.createdStarted ();
-          final ValidationResultList aValidationResultList = RdcApiHelper.validateBusinessDocument (m_aVESID,
-                                                                                                    aOutgoingMsg.getPayloadAtIndex (0)
-                                                                                                                .getValue ());
-          aSW.stop ();
-
-          final IJsonObject aJsonVR = new JsonObject ();
-          PhiveJsonHelper.applyValidationResultList (aJsonVR,
-                                                     RdcValidator.getVES (m_aVESID),
-                                                     aValidationResultList,
-                                                     RdcApiHelper.DEFAULT_LOCALE,
-                                                     aSW.getMillis (),
-                                                     null,
-                                                     null);
-          aJson.addJson ("validation-results", aJsonVR);
-
-          bValidationOK = aValidationResultList.containsNoError ();
-        }
-        else
-        {
-          bValidationOK = true;
-          aJson.add ("validation-skipped", true);
-        }
-      }
-
-      if (bValidationOK)
-      {
-        MERoutingInformation aRoutingInfoFinal = null;
         final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
         final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aRoutingInfoBase.getReceiverID (),
@@ -187,68 +144,67 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
         else
           aJsonSMP.add (JSON_SUCCESS, false);
         aJson.addJson ("lookup-results", aJsonSMP);
+      }
 
-        // Read for AS4 sending?
-        if (aRoutingInfoFinal != null)
+      // Read for AS4 sending?
+      if (aRoutingInfoFinal != null)
+      {
+        final IJsonObject aJsonSending = new JsonObject ();
+
+        // Add payloads
+        final MEMessage.Builder aMessage = MEMessage.builder ();
+        int nIndex = 0;
+        for (final RDCPayload aPayload : aOutgoingMsg.getPayload ())
         {
-          final IJsonObject aJsonSending = new JsonObject ();
-
-          // Add payloads
-          final MEMessage.Builder aMessage = MEMessage.builder ();
-          int nIndex = 0;
-          for (final RDCPayload aPayload : aOutgoingMsg.getPayload ())
+          if (nIndex == 0)
           {
-            if (nIndex == 0)
+            final Document aDoc = DOMReader.readXMLDOM (aPayload.getValue ());
+            if (aDoc == null)
+              throw new IllegalStateException ("Failed to parse first payload as XML");
+
+            final byte [] aRegRepPayload;
+            switch (aOutgoingMsg.getMetadata ().getPayloadType ())
             {
-              final Document aDoc = DOMReader.readXMLDOM (aPayload.getValue ());
-              if (aDoc == null)
-                throw new IllegalStateException ("Failed to parse first payload as XML");
-
-              final byte [] aRegRepPayload;
-              switch (aOutgoingMsg.getMetadata ().getPayloadType ())
+              case REQUEST:
               {
-                case REQUEST:
-                {
-                  // TODO
-                  final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
-                  aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
-                  break;
-                }
-                case RESPONSE:
-                {
-                  // TODO
-                  final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
-                  aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
-                  break;
-                }
-                default:
-                  throw new IllegalStateException ("No such payload type");
+                // TODO
+                final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
+                aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
+                break;
               }
-
-              // RegRep should be first
-              aMessage.addPayload (MEPayload.builder ()
-                                            .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
-                                            .contentID (MEPayload.createRandomContentID ())
-                                            .data (aRegRepPayload));
+              case RESPONSE:
+              {
+                // TODO
+                final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
+                aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
+                break;
+              }
+              default:
+                throw new IllegalStateException ("No such payload type");
             }
 
+            // RegRep should be first
             aMessage.addPayload (MEPayload.builder ()
-                                          .mimeType (MimeTypeParser.parseMimeType (aPayload.getMimeType ()))
-                                          .contentID (StringHelper.getNotEmpty (aPayload.getContentID (),
-                                                                                MEPayload.createRandomContentID ()))
-                                          .data (aPayload.getValue ()));
-            nIndex++;
+                                          .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
+                                          .contentID (MEPayload.createRandomContentID ())
+                                          .data (aRegRepPayload));
           }
-          RdcApiHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
-          aJsonSending.add (JSON_SUCCESS, true);
 
-          aJson.addJson ("sending-results", aJsonSending);
-          bOverallSuccess = true;
+          aMessage.addPayload (MEPayload.builder ()
+                                        .mimeType (MimeTypeParser.parseMimeType (aPayload.getMimeType ()))
+                                        .contentID (StringHelper.getNotEmpty (aPayload.getContentID (), MEPayload.createRandomContentID ()))
+                                        .data (aPayload.getValue ()));
+          nIndex++;
         }
+        RdcApiHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
+        aJsonSending.add (JSON_SUCCESS, true);
 
-        // Overall success
-        aJson.add (JSON_SUCCESS, bOverallSuccess);
+        aJson.addJson ("sending-results", aJsonSending);
+        bOverallSuccess = true;
       }
+
+      // Overall success
+      aJson.add (JSON_SUCCESS, bOverallSuccess);
     });
 
     return aJson;
