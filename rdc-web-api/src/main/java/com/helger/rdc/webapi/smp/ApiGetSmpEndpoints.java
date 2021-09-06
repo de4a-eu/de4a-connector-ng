@@ -20,10 +20,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.error.level.EErrorLevel;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
 import com.helger.peppol.smp.ESMPTransportProfile;
@@ -40,6 +38,8 @@ import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
 
+import eu.de4a.kafkaclient.DE4AKafkaClient;
+
 /**
  * Query all matching endpoints from an SMP
  *
@@ -47,8 +47,6 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  */
 public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (ApiGetSmpEndpoints.class);
-
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
                                 @Nonnull @Nonempty final String sPath,
@@ -69,35 +67,34 @@ public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
     if (aDocTypeID == null)
       throw new ApiParamException ("Invalid document type ID '" + sDocTypeID + "' provided.");
 
-    LOGGER.info ("[API] Participant information of '" +
-                 aParticipantID.getURIEncoded () +
-                 "' is queried for document type '" +
-                 aDocTypeID.getURIEncoded () +
-                 "'");
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "[API] Participant information of '" +
+                                aParticipantID.getURIEncoded () +
+                                "' is queried for document type '" +
+                                aDocTypeID.getURIEncoded () +
+                                "'");
 
     // Start response
     final IJsonObject aJson = new JsonObject ();
     aJson.add (SMPJsonResponse.JSON_PARTICIPANT_ID, aParticipantID.getURIEncoded ());
     aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aDocTypeID.getURIEncoded ());
 
-    CommonApiInvoker.invoke (aJson,
-                             () -> {
-                               // Main query
-                               final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aParticipantID,
-                                                                                                    aDocTypeID,
-                                                                                                    aIF.createProcessIdentifier ("dummy-procid",
-                                                                                                                                 "procid-fake"),
-                                                                                                    ESMPTransportProfile.TRANSPORT_PROFILE_BDXR_AS4.getID ());
+    CommonApiInvoker.invoke (aJson, () -> {
+      // Main query
+      final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aParticipantID,
+                                                                            aDocTypeID,
+                                                                            aIF.createProcessIdentifier ("dummy-procid", "procid-fake"),
+                                                                            ESMPTransportProfile.TRANSPORT_PROFILE_BDXR_AS4.getID ());
 
-                               // Add to response
-                               if (aSM != null)
-                               {
-                                 aJson.add (JSON_SUCCESS, true);
-                                 aJson.addJson ("response", SMPJsonResponse.convert (aParticipantID, aDocTypeID, aSM));
-                               }
-                               else
-                                 aJson.add (JSON_SUCCESS, false);
-                             });
+      // Add to response
+      if (aSM != null)
+      {
+        aJson.add (JSON_SUCCESS, true);
+        aJson.addJson ("response", SMPJsonResponse.convert (aParticipantID, aDocTypeID, aSM));
+      }
+      else
+        aJson.add (JSON_SUCCESS, false);
+    });
 
     return aJson;
   }

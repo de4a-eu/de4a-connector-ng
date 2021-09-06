@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.error.level.EErrorLevel;
+import com.helger.commons.string.ToStringGenerator;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.incoming.MEIncomingException;
 import com.helger.rdc.api.me.model.MEMessage;
@@ -50,5 +51,11 @@ public class RdcIncomingHandlerViaHttp implements IMEIncomingHandler
   {
     DE4AKafkaClient.send (EErrorLevel.INFO, () -> m_sLogPrefix + "RDC got incoming request");
     RdcDPTriggerViaHttp.forwardMessage (aRequest);
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("LogPrefix", m_sLogPrefix).getToString ();
   }
 }

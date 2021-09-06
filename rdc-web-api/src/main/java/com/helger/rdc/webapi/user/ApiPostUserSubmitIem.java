@@ -21,12 +21,11 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
+import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.mime.MimeTypeParser;
 import com.helger.commons.string.StringHelper;
 import com.helger.json.IJsonObject;
@@ -58,6 +57,8 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
 import com.helger.xsds.bdxr.smp1.EndpointType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
 
+import eu.de4a.kafkaclient.DE4AKafkaClient;
+
 /**
  * Perform validation, lookup and sending via API
  *
@@ -65,8 +66,6 @@ import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
  */
 public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostUserSubmitIem.class);
-
   public ApiPostUserSubmitIem ()
   {}
 
@@ -102,7 +101,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
 
     CommonApiInvoker.invoke (aJson, () -> {
       boolean bOverallSuccess = false;
-      MERoutingInformation aRoutingInfoFinal = null;
+      MERoutingInformation aRoutingInfo = null;
 
       // Query SMP
       {
@@ -123,25 +122,26 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
           if (aEndpoint != null)
           {
             aJsonSMP.add (SMPJsonResponse.JSON_ENDPOINT_REFERENCE, aEndpoint.getEndpointURI ());
-            aRoutingInfoFinal = MERoutingInformation.create (aRoutingInfoBase,
-                                                             aEndpoint.getEndpointURI (),
-                                                             CertificateHelper.convertByteArrayToCertficateDirect (aEndpoint.getCertificate ()));
+            aRoutingInfo = MERoutingInformation.create (aRoutingInfoBase,
+                                                        aEndpoint.getEndpointURI (),
+                                                        CertificateHelper.convertByteArrayToCertficateDirect (aEndpoint.getCertificate ()));
           }
-          if (aRoutingInfoFinal == null)
+          if (aRoutingInfo == null)
           {
-            LOGGER.warn ("[API] The SMP lookup for '" +
-                         aRoutingInfoBase.getReceiverID ().getURIEncoded () +
-                         "' and '" +
-                         aRoutingInfoBase.getDocumentTypeID ().getURIEncoded () +
-                         "' succeeded, but no endpoint matching '" +
-                         aRoutingInfoBase.getProcessID ().getURIEncoded () +
-                         "' and '" +
-                         aRoutingInfoBase.getTransportProtocol () +
-                         "' was found.");
+            DE4AKafkaClient.send (EErrorLevel.WARN,
+                                  () -> "[API] The SMP lookup for '" +
+                                        aRoutingInfoBase.getReceiverID ().getURIEncoded () +
+                                        "' and '" +
+                                        aRoutingInfoBase.getDocumentTypeID ().getURIEncoded () +
+                                        "' succeeded, but no endpoint matching '" +
+                                        aRoutingInfoBase.getProcessID ().getURIEncoded () +
+                                        "' and '" +
+                                        aRoutingInfoBase.getTransportProtocol () +
+                                        "' was found.");
           }
 
           // Only if a match was found
-          aJsonSMP.add (JSON_SUCCESS, aRoutingInfoFinal != null);
+          aJsonSMP.add (JSON_SUCCESS, aRoutingInfo != null);
         }
         else
           aJsonSMP.add (JSON_SUCCESS, false);
@@ -149,7 +149,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
       }
 
       // Read for AS4 sending?
-      if (aRoutingInfoFinal != null)
+      if (aRoutingInfo != null)
       {
         final IJsonObject aJsonSending = new JsonObject ();
 
@@ -191,7 +191,7 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
                                         .data (aPayload.getValue ()));
           nIndex++;
         }
-        RdcApiHelper.sendAS4Message (aRoutingInfoFinal, aMessage.build ());
+        RdcApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
         aJsonSending.add (JSON_SUCCESS, true);
 
         aJson.addJson ("sending-results", aJsonSending);

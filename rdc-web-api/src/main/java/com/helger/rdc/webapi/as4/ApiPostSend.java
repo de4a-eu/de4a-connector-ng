@@ -22,12 +22,11 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
+import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.mime.MimeTypeParser;
 import com.helger.commons.string.StringHelper;
 import com.helger.json.IJsonObject;
@@ -55,6 +54,8 @@ import com.helger.xml.EXMLParserFeature;
 import com.helger.xml.serialize.read.DOMReader;
 import com.helger.xml.serialize.read.DOMReaderSettings;
 
+import eu.de4a.kafkaclient.DE4AKafkaClient;
+
 /**
  * Send an outgoing AS4 message via the configured MEM gateway
  *
@@ -62,8 +63,6 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
  */
 public class ApiPostSend extends AbstractRdcApiInvoker
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (ApiPostSend.class);
-
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
                                 @Nonnull @Nonempty final String sPath,
@@ -122,7 +121,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
                                       .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
                                       .contentID (MEPayload.createRandomContentID ())
                                       .data (aRegRepPayload));
-        LOGGER.info ("Successfully added RegRep dummy");
+        DE4AKafkaClient.send (EErrorLevel.INFO, "Successfully added RegRep dummy");
       }
 
       aMessage.addPayload (MEPayload.builder ()

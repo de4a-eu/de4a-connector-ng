@@ -33,7 +33,7 @@ import com.helger.servlet.response.UnifiedResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 
 /**
- * Special API exception mapper for the SMP REST API.
+ * Special API exception mapper for the REST API.
  *
  * @author Philip Helger
  */

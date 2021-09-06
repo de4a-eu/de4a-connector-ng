@@ -20,11 +20,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.impl.ICommonsSortedMap;
+import com.helger.commons.error.level.EErrorLevel;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
 import com.helger.peppol.sml.ESMPAPIType;
@@ -38,6 +36,8 @@ import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 
+import eu.de4a.kafkaclient.DE4AKafkaClient;
+
 /**
  * Query all document types of a participant
  *
@@ -45,8 +45,6 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
  */
 public class ApiGetSmpDocTypes extends AbstractRdcApiInvoker
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (ApiGetSmpDocTypes.class);
-
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
                                 @Nonnull @Nonempty final String sPath,
@@ -54,12 +52,11 @@ public class ApiGetSmpDocTypes extends AbstractRdcApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     final String sParticipantID = aPathVariables.get ("pid");
-    final IParticipantIdentifier aParticipantID = RdcConfig.getIdentifierFactory ()
-                                                          .parseParticipantIdentifier (sParticipantID);
+    final IParticipantIdentifier aParticipantID = RdcConfig.getIdentifierFactory ().parseParticipantIdentifier (sParticipantID);
     if (aParticipantID == null)
       throw new ApiParamException ("Invalid participant ID '" + sParticipantID + "' provided.");
 
-    LOGGER.info ("[API] Document types of '" + aParticipantID.getURIEncoded () + "' are queried");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> "[API] Document types of '" + aParticipantID.getURIEncoded () + "' are queried");
 
     final IJsonObject aJson = new JsonObject ();
     aJson.add (SMPJsonResponse.JSON_PARTICIPANT_ID, aParticipantID.getURIEncoded ());
@@ -69,10 +66,7 @@ public class ApiGetSmpDocTypes extends AbstractRdcApiInvoker
 
       aJson.add (JSON_SUCCESS, true);
       aJson.addJson ("response",
-                     SMPJsonResponse.convert (ESMPAPIType.OASIS_BDXR_V1,
-                                              aParticipantID,
-                                              aSGHrefs,
-                                              RdcConfig.getIdentifierFactory ()));
+                     SMPJsonResponse.convert (ESMPAPIType.OASIS_BDXR_V1, aParticipantID, aSGHrefs, RdcConfig.getIdentifierFactory ()));
     });
 
     return aJson;

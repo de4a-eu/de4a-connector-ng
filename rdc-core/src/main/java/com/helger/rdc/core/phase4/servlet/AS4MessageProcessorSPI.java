@@ -78,6 +78,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     ValueEnforcer.notNull (aIncomingHandler, "IncomingHandler");
     ValueEnforcer.isNull (s_aIncomingHandler, "s_aIncomingHandler");
     s_aIncomingHandler = aIncomingHandler;
+    LOGGER.info ("Set the incoming message handler to " + aIncomingHandler);
   }
 
   @Nullable

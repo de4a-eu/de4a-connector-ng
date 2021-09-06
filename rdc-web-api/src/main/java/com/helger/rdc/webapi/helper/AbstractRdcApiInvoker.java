@@ -38,7 +38,7 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
- * Abstract base invoker for TC REST API
+ * Abstract base invoker for RDC REST API
  *
  * @author Philip Helger
  */

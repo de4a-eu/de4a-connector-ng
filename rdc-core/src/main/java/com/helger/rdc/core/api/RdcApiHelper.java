@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.collection.impl.ICommonsSortedMap;
+import com.helger.commons.error.level.EErrorLevel;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
@@ -34,6 +35,8 @@ import com.helger.rdc.api.me.outgoing.IMERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MEOutgoingException;
 import com.helger.xsds.bdxr.smp1.EndpointType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
+
+import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
  * A utility class that provides abstractions for all major tasks to be invoked
@@ -124,5 +127,16 @@ public final class RdcApiHelper
   {
     final IMessageExchangeSPI aMEM = MessageExchangeManager.getConfiguredImplementation ();
     aMEM.sendOutgoing (aRoutingInfo, aMessage);
+
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "Sent from '" +
+                                aRoutingInfo.getSenderID ().getURIEncoded () +
+                                "' to '" +
+                                aRoutingInfo.getReceiverID ().getURIEncoded () +
+                                "' using doctype '" +
+                                aRoutingInfo.getDocumentTypeID ().getURIEncoded () +
+                                "' and process '" +
+                                aRoutingInfo.getProcessID ().getURIEncoded () +
+                                "'");
   }
 }
