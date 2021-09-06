@@ -56,20 +56,12 @@
     </xs:simpleContent>
   </xs:complexType>
 
-  <xs:simpleType name="RDCPayloadType" final="restriction">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Request" />
-      <xs:enumeration value="Response" />
-    </xs:restriction>
-  </xs:simpleType>
-
   <xs:complexType name="RDCMetadata" abstract="true">
     <xs:sequence>
       <xs:element name="SenderID" type="RDCIdentifierType" />
       <xs:element name="ReceiverID" type="RDCIdentifierType" />
       <xs:element name="DocTypeID" type="RDCIdentifierType" />
       <xs:element name="ProcessID" type="RDCIdentifierType" />
-      <xs:element name="PayloadType" type="RDCPayloadType" />
     </xs:sequence>
   </xs:complexType>
   

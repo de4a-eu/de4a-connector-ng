@@ -81,10 +81,6 @@
       <groupId>com.helger</groupId>
       <artifactId>ph-regrep</artifactId>
     </dependency>
-    <dependency>
-      <groupId>eu.de4a</groupId>
-      <artifactId>de4a-iem</artifactId>
-    </dependency>
     
     <dependency>
       <groupId>javax.servlet</groupId>

@@ -51,12 +51,7 @@ import com.helger.phase4.servlet.spi.AS4SignalMessageProcessorResult;
 import com.helger.phase4.servlet.spi.IAS4ServletMessageProcessorSPI;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
-import com.helger.rdc.api.me.incoming.ITODOWritableObject;
-import com.helger.rdc.api.me.incoming.ITODOWritableObject.TodoRequest;
-import com.helger.rdc.api.me.incoming.ITODOWritableObject.TodoResponse;
-import com.helger.rdc.api.me.incoming.IncomingEDMRequest;
-import com.helger.rdc.api.me.incoming.IncomingEDMResponse;
-import com.helger.rdc.api.me.incoming.MEIncomingTransportMetadata;
+import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.core.phase4.Phase4Config;
 import com.helger.xml.serialize.write.XMLWriter;
@@ -103,12 +98,6 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     return aIF.createParticipantIdentifier (sType, sValue);
   }
 
-  private static ITODOWritableObject _parseAndFindTodo (final InputStream aSourceStream)
-  {
-    // TODO
-    return null;
-  }
-
   @Nonnull
   public AS4MessageProcessorResult processAS4UserMessage (@Nonnull final IAS4IncomingMessageMetadata aMessageMetadata,
                                                           @Nonnull final HttpHeaderMap aHttpHeaders,
@@ -150,8 +139,6 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
 
     if (aIncomingAttachments != null && aIncomingAttachments.isNotEmpty ())
     {
-      // This is the ASIC
-      final WSS4JAttachment aMainPayload = aIncomingAttachments.getFirst ();
       try
       {
         final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();
@@ -159,42 +146,24 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
         final Ebms3Property aPropOS = aProps.findFirst (x -> x.getName ().equals (CAS4.ORIGINAL_SENDER));
         final Ebms3Property aPropFR = aProps.findFirst (x -> x.getName ().equals (CAS4.FINAL_RECIPIENT));
 
-        final MEIncomingTransportMetadata aMetadata = new MEIncomingTransportMetadata (_asPI (aPropOS),
-                                                                                       _asPI (aPropFR),
-                                                                                       aIF.parseDocumentTypeIdentifier (aUserMessage.getCollaborationInfo ()
-                                                                                                                                    .getAction ()),
-                                                                                       aIF.createProcessIdentifier (aUserMessage.getCollaborationInfo ()
-                                                                                                                                .getService ()
-                                                                                                                                .getType (),
-                                                                                                                    aUserMessage.getCollaborationInfo ()
-                                                                                                                                .getService ()
-                                                                                                                                .getValue ()));
-        LOGGER.info ("Incoming Transport Metadata: " + aMetadata.toString ());
+        final MEMessage.Builder aMessageBuilder = MEMessage.builder ()
+                                                           .senderID (_asPI (aPropOS))
+                                                           .receiverID (_asPI (aPropFR))
+                                                           .docTypeID (aIF.parseDocumentTypeIdentifier (aUserMessage.getCollaborationInfo ()
+                                                                                                                    .getAction ()))
+                                                           .processID (aIF.createProcessIdentifier (aUserMessage.getCollaborationInfo ()
+                                                                                                                .getService ()
+                                                                                                                .getType (),
+                                                                                                    aUserMessage.getCollaborationInfo ()
+                                                                                                                .getService ()
+                                                                                                                .getValue ()));
+        for (final WSS4JAttachment aItem : aIncomingAttachments)
+          aMessageBuilder.addPayload (MEPayload.builder ()
+                                               .mimeType (MimeTypeParser.safeParseMimeType (aItem.getMimeType ()))
+                                               .contentID (aItem.getId ())
+                                               .data (StreamHelper.getAllBytes (aItem.getSourceStream ())));
 
-        final String sTopLevelContentID = aMainPayload.getId ();
-
-        final ITODOWritableObject aTopLevel = _parseAndFindTodo (aMainPayload.getSourceStream ());
-        if (aTopLevel instanceof TodoRequest)
-        {
-          // Request
-          s_aIncomingHandler.handleIncomingRequest (new IncomingEDMRequest (aTopLevel, sTopLevelContentID, aMetadata));
-        }
-        else
-          if (aTopLevel instanceof TodoResponse)
-          {
-            // Response
-            final ICommonsList <MEPayload> aAttachments = new CommonsArrayList <> ();
-            for (final WSS4JAttachment aItem : aIncomingAttachments)
-              if (aItem != aMainPayload)
-                aAttachments.add (MEPayload.builder ()
-                                           .mimeType (MimeTypeParser.safeParseMimeType (aItem.getMimeType ()))
-                                           .contentID (aItem.getId ())
-                                           .data (StreamHelper.getAllBytes (aItem.getSourceStream ()))
-                                           .build ());
-            s_aIncomingHandler.handleIncomingResponse (new IncomingEDMResponse (aTopLevel, sTopLevelContentID, aAttachments, aMetadata));
-          }
-          else
-            DE4AKafkaClient.send (EErrorLevel.ERROR, () -> "Unsuspported Message: " + aTopLevel);
+        s_aIncomingHandler.handleIncomingRequest (aMessageBuilder.build ());
       }
       catch (final AS4DecompressException ex)
       {
@@ -212,6 +181,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
 
     // To test returning with a failure works as intended
     if (aUserMessage.getCollaborationInfo ().getAction ().equals (ACTION_FAILURE))
+
     {
       return AS4MessageProcessorResult.createFailure (ACTION_FAILURE);
     }

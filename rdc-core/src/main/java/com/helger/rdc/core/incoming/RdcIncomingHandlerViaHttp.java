@@ -14,17 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.core;
+package com.helger.rdc.core.incoming;
 
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.error.level.EErrorLevel;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
-import com.helger.rdc.api.me.incoming.IncomingEDMRequest;
-import com.helger.rdc.api.me.incoming.IncomingEDMResponse;
 import com.helger.rdc.api.me.incoming.MEIncomingException;
-import com.helger.rdc.core.incoming.RdcDPTriggerViaHttp;
+import com.helger.rdc.api.me.model.MEMessage;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
@@ -48,19 +46,9 @@ public class RdcIncomingHandlerViaHttp implements IMEIncomingHandler
     m_sLogPrefix = ValueEnforcer.notNull (sLogPrefix, "LogPrefix");
   }
 
-  public void handleIncomingRequest (@Nonnull final IncomingEDMRequest aRequest) throws MEIncomingException
+  public void handleIncomingRequest (@Nonnull final MEMessage aRequest) throws MEIncomingException
   {
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> m_sLogPrefix + "TC got DP incoming MEM request (2/4)");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> m_sLogPrefix + "RDC got incoming request");
     RdcDPTriggerViaHttp.forwardMessage (aRequest);
-  }
-
-  public void handleIncomingResponse (@Nonnull final IncomingEDMResponse aResponse) throws MEIncomingException
-  {
-    DE4AKafkaClient.send (EErrorLevel.INFO,
-                          () -> m_sLogPrefix +
-                                "TC got DC incoming MEM response (4/4) with " +
-                                aResponse.attachments ().size () +
-                                " attachments");
-    RdcDPTriggerViaHttp.forwardMessage (aResponse);
   }
 }

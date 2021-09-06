@@ -43,6 +43,7 @@ import com.helger.commons.url.URLProtocolRegistry;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.MessageExchangeManager;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
+import com.helger.rdc.core.incoming.RdcIncomingHandlerViaHttp;
 import com.helger.xservlet.requesttrack.RequestTrackerSettings;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;

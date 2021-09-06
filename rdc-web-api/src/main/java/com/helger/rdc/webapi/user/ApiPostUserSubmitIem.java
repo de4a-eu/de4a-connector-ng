@@ -52,7 +52,9 @@ import com.helger.regrep.query.QueryResponse;
 import com.helger.security.certificate.CertificateHelper;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
+import com.helger.xml.EXMLParserFeature;
 import com.helger.xml.serialize.read.DOMReader;
+import com.helger.xml.serialize.read.DOMReaderSettings;
 import com.helger.xsds.bdxr.smp1.EndpointType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
 
@@ -158,29 +160,22 @@ public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
         {
           if (nIndex == 0)
           {
-            final Document aDoc = DOMReader.readXMLDOM (aPayload.getValue ());
+            final Document aDoc = DOMReader.readXMLDOM (aPayload.getValue (),
+                                                        new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
             if (aDoc == null)
               throw new IllegalStateException ("Failed to parse first payload as XML");
 
             final byte [] aRegRepPayload;
-            switch (aOutgoingMsg.getMetadata ().getPayloadType ())
+            // TODO
+            if (true)
             {
-              case REQUEST:
-              {
-                // TODO
-                final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
-                aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
-                break;
-              }
-              case RESPONSE:
-              {
-                // TODO
-                final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
-                aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
-                break;
-              }
-              default:
-                throw new IllegalStateException ("No such payload type");
+              final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
+              aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
+            }
+            else
+            {
+              final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
+              aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
             }
 
             // RegRep should be first

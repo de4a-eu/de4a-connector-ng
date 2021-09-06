@@ -57,7 +57,6 @@ public final class RdcRestJAXBTest
     md.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
     md.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
     md.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
-    md.setPayloadType (RDCPayloadType.REQUEST);
     md.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
     md.setEndpointURL ("https://target.example.org/as4");
     md.setReceiverCertificate ("Receiver's certificate".getBytes (StandardCharsets.ISO_8859_1));
@@ -100,7 +99,6 @@ public final class RdcRestJAXBTest
     md.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
     md.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
     md.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
-    md.setPayloadType (RDCPayloadType.REQUEST);
     m.setMetadata (md);
 
     final RDCPayload p = new RDCPayload ();

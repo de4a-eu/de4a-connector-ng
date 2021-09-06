@@ -95,7 +95,7 @@ public class MEMessage
    * @return the document type id. Maybe <code>null</code>.
    */
   @Nullable
-  public IDocumentTypeIdentifier getDoctypeID ()
+  public IDocumentTypeIdentifier getDocumentTypeID ()
   {
     return m_aDocTypeID;
   }

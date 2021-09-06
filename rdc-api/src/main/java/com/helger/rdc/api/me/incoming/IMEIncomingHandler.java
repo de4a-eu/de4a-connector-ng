@@ -18,35 +18,26 @@ package com.helger.rdc.api.me.incoming;
 
 import javax.annotation.Nonnull;
 
+import com.helger.rdc.api.me.model.MEMessage;
+
 /**
  * The callback handler for incoming messages from the AS4 Gateway. An
  * implementation of this interface must be provided when calling
- * "TCInit.initGlobally". The default implementation is
- * "TCIncomingHandlerViaHttp". If you are embedding the TC into your application
- * you must provide an implementation of this interface.
+ * "RdcInit.initGlobally". The default implementation is
+ * "RdcIncomingHandlerViaHttp". If you are embedding the RDC into your
+ * application you must provide an implementation of this interface.
  *
  * @author Philip Helger
  */
 public interface IMEIncomingHandler
 {
   /**
-   * Handle an incoming request for step 2/4 (on DP side).
+   * Handle an incoming request (for DC or DP).
    *
-   * @param aRequest
-   *        The request to handle. Never <code>null</code>.
+   * @param aMessage
+   *        The message to handle. Never <code>null</code>.
    * @throws MEIncomingException
    *         In case of error.
    */
-  void handleIncomingRequest (@Nonnull IncomingEDMRequest aRequest) throws MEIncomingException;
-
-  /**
-   * Handle an incoming response for step 4/4 (on DC side).
-   *
-   * @param aResponse
-   *        The response to handle. Contains attachments and metadata. Never
-   *        <code>null</code>.
-   * @throws MEIncomingException
-   *         In case of error.
-   */
-  void handleIncomingResponse (@Nonnull IncomingEDMResponse aResponse) throws MEIncomingException;
+  void handleIncomingRequest (@Nonnull MEMessage aMessage) throws MEIncomingException;
 }

@@ -23,7 +23,6 @@
     <ReceiverID scheme="iso6523-actorid-upis" value="9999:bolagsverket1" />
     <DocTypeID scheme="urn:de4a-eu:CanonicalEvidenceType" value="CompanyRegistration:1.0" />
     <ProcessID scheme="urn:de4a-eu:MessageType" value="request" />
-    <PayloadType>Request</PayloadType>
     <TransportProtocol>bdxr-transport-ebms3-as4-v1p0</TransportProtocol>
     <EndpointURL>https://any.server/bla</EndpointURL>
     <ReceiverCertificate>Y3JlZXB5</ReceiverCertificate>
