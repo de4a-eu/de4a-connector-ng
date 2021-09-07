@@ -23,10 +23,12 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.CGlobal;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.io.stream.StreamHelper;
 import com.helger.commons.mime.CMimeType;
 import com.helger.httpclient.HttpClientManager;
+import com.helger.httpclient.HttpClientSettings;
 import com.helger.httpclient.response.ResponseHandlerJson;
 import com.helger.json.IJson;
 import com.helger.json.serialize.JsonWriter;
@@ -59,13 +61,14 @@ public final class MainSendRequestToRomania
       final RDCPayload aPayload = new RDCPayload ();
       aPayload.setValue (StreamHelper.getAllBytes (new ClassPathResource ("xml/dba-ro-1.xml")));
       aPayload.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
-      aPayload.setContentID ("mock-request@de4a");
+      aPayload.setContentID ("RequestTransferEvidence");
       aOM.addPayload (aPayload);
     }
 
     LOGGER.info (RdcRestJAXB.outgoingMessage ().getAsString (aOM));
 
-    try (final HttpClientManager aHCM = new HttpClientManager ())
+    try (final HttpClientManager aHCM = HttpClientManager.create (new HttpClientSettings ().setSocketTimeoutMS ((int) (30 *
+                                                                                                                       CGlobal.MILLISECONDS_PER_SECOND))))
     {
       final HttpPost aPost = new HttpPost ("http://localhost:8090/api/lookup/send");
       aPost.setEntity (new ByteArrayEntity (RdcRestJAXB.outgoingMessage ().getAsBytes (aOM)));

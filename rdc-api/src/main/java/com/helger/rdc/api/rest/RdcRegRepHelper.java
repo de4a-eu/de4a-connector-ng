@@ -85,7 +85,8 @@ public final class RdcRegRepHelper
   private static Element _createConcept ()
   {
     return DOMReader.readXMLDOM ("<cccev:concept xmlns:cccev=\"https://data.europe.eu/semanticassets/ns/cv/cccev_v2.0.0#\"" +
-                                 " xmlns:cbc=\"https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#\">" +
+                                 " xmlns:cbc=\"https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#\"" +
+                                 " xmlns:toop=\"http://toop.eu/registered-organization\">" +
                                  "<cbc:id>ConceptID-1</cbc:id>" +
                                  "<cbc:qName>toop:CompanyData</cbc:qName>" +
                                  "</cccev:concept>")
