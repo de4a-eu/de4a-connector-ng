@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.webapi.user;
+package com.helger.rdc.webapi.as4;
 
 import java.io.IOException;
 import java.util.Map;
@@ -64,9 +64,9 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiPostUserSubmitIem extends AbstractRdcApiInvoker
+public class ApiPostLookendAndSend extends AbstractRdcApiInvoker
 {
-  public ApiPostUserSubmitIem ()
+  public ApiPostLookendAndSend ()
   {}
 
   @Override

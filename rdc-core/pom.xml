@@ -70,14 +70,6 @@
       <artifactId>peppol-smp-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger.phive</groupId>
-      <artifactId>phive-engine</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.helger</groupId>
-      <artifactId>ph-regrep</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.helger.phase4</groupId>
       <artifactId>phase4-lib</artifactId>
     </dependency>

@@ -54,16 +54,16 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.helger.photon</groupId>
-      <artifactId>ph-oton-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.helger.rdc</groupId>
       <artifactId>rdc-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.rdc</groupId>
       <artifactId>rdc-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.helger.photon</groupId>
+      <artifactId>ph-oton-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.phive</groupId>

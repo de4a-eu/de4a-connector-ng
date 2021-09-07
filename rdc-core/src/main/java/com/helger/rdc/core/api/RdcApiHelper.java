@@ -125,6 +125,18 @@ public final class RdcApiHelper
   public static void sendAS4Message (@Nonnull final IMERoutingInformation aRoutingInfo,
                                      @Nonnull final MEMessage aMessage) throws MEOutgoingException
   {
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "Sending from '" +
+                                aRoutingInfo.getSenderID ().getURIEncoded () +
+                                "' to '" +
+                                aRoutingInfo.getReceiverID ().getURIEncoded () +
+                                "' using doctype '" +
+                                aRoutingInfo.getDocumentTypeID ().getURIEncoded () +
+                                "' and process '" +
+                                aRoutingInfo.getProcessID ().getURIEncoded () +
+                                "' to URL " +
+                                aRoutingInfo.getEndpointURL ());
+
     final IMessageExchangeSPI aMEM = MessageExchangeManager.getConfiguredImplementation ();
     aMEM.sendOutgoing (aRoutingInfo, aMessage);
 
@@ -137,6 +149,7 @@ public final class RdcApiHelper
                                 aRoutingInfo.getDocumentTypeID ().getURIEncoded () +
                                 "' and process '" +
                                 aRoutingInfo.getProcessID ().getURIEncoded () +
-                                "'");
+                                "' to URL " +
+                                aRoutingInfo.getEndpointURL ());
   }
 }

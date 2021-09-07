@@ -22,10 +22,10 @@ import javax.annotation.concurrent.Immutable;
 import com.helger.photon.api.APIDescriptor;
 import com.helger.photon.api.APIPath;
 import com.helger.photon.api.IAPIRegistry;
+import com.helger.rdc.webapi.as4.ApiPostLookendAndSend;
 import com.helger.rdc.webapi.as4.ApiPostSend;
 import com.helger.rdc.webapi.smp.ApiGetSmpDocTypes;
 import com.helger.rdc.webapi.smp.ApiGetSmpEndpoints;
-import com.helger.rdc.webapi.user.ApiPostUserSubmitIem;
 
 /**
  * Register all APIs
@@ -46,8 +46,6 @@ public final class RdcApiInit
 
     // AS4 stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
-
-    // User combined stuff
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/user/submit"), new ApiPostUserSubmitIem ()));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/lookup/send"), new ApiPostLookendAndSend ()));
   }
 }
