@@ -35,13 +35,13 @@ import com.helger.commons.url.URLProtocolRegistry;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.response.ResponseHandlerByteArray;
 import com.helger.rdc.api.RdcConfig;
-import com.helger.rdc.api.http.RdcHttpClientSettings;
 import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.api.rest.RDCIncomingMessage;
 import com.helger.rdc.api.rest.RDCIncomingMetadata;
 import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.rdc.api.rest.RdcRestJAXB;
+import com.helger.rdc.core.http.RdcHttpClientSettings;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 

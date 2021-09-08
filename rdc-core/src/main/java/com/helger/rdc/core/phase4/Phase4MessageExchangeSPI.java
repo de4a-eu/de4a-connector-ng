@@ -55,13 +55,13 @@ import com.helger.phase4.sender.AbstractAS4UserMessageBuilder.ESimpleUserMessage
 import com.helger.phase4.servlet.AS4ServerInitializer;
 import com.helger.photon.app.io.WebFileIO;
 import com.helger.rdc.api.error.ERdcErrorCode;
-import com.helger.rdc.api.http.RdcHttpClientSettings;
 import com.helger.rdc.api.me.IMessageExchangeSPI;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
 import com.helger.rdc.api.me.outgoing.IMERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MEOutgoingException;
+import com.helger.rdc.core.http.RdcHttpClientSettings;
 import com.helger.rdc.core.phase4.config.RdcPMode;
 import com.helger.rdc.core.phase4.servlet.AS4MessageProcessorSPI;
 import com.helger.servlet.ServletHelper;

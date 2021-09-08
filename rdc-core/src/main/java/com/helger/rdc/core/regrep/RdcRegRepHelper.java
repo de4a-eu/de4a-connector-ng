@@ -14,16 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.rdc.api.rest;
+package com.helger.rdc.core.regrep;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.regrep.ERegRepResponseStatus;
+import com.helger.regrep.RegRep4Writer;
 import com.helger.regrep.RegRepHelper;
 import com.helger.regrep.query.QueryRequest;
 import com.helger.regrep.query.QueryResponse;
@@ -33,8 +37,10 @@ import com.helger.regrep.rim.RegistryObjectType;
 import com.helger.regrep.slot.ERegRepCollectionType;
 import com.helger.regrep.slot.SlotBuilder;
 import com.helger.regrep.slot.SlotHelper;
+import com.helger.xml.EXMLParserFeature;
 import com.helger.xml.XMLFactory;
 import com.helger.xml.serialize.read.DOMReader;
+import com.helger.xml.serialize.read.DOMReaderSettings;
 
 /**
  * Create a RegRep request/response from existing messages.
@@ -44,6 +50,8 @@ import com.helger.xml.serialize.read.DOMReader;
 @Immutable
 public final class RdcRegRepHelper
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (RdcRegRepHelper.class);
+
   private RdcRegRepHelper ()
   {}
 
@@ -134,5 +142,32 @@ public final class RdcRegRepHelper
       ret.setRegistryObjectList (aROList);
     }
     return ret;
+  }
+
+  @Nonnull
+  public static byte [] wrapInRegRep (@Nonnull final String sContentID, @Nonnull final byte [] aXMLBytes)
+  {
+    ValueEnforcer.notNull (sContentID, "ContentID");
+    ValueEnforcer.notNull (aXMLBytes, "XMLBytes");
+
+    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes, new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
+    if (aDoc == null)
+      throw new IllegalStateException ("Failed to parse first payload as XML");
+
+    LOGGER.info ("Wrapping object with Content ID '" + sContentID + "' into RegRep");
+
+    final byte [] aRegRepPayload;
+    // TODO
+    if (sContentID.contains ("Request"))
+    {
+      final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
+      aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
+    }
+    else
+    {
+      final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
+      aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
+    }
+    return aRegRepPayload;
   }
 }

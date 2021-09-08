@@ -81,6 +81,10 @@
       <groupId>com.helger.phase4</groupId>
       <artifactId>phase4-cef-client</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-regrep</artifactId>
+    </dependency>
     
     <dependency>
       <groupId>javax.servlet</groupId>

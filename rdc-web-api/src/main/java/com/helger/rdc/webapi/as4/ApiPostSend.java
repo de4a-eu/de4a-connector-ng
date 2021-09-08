@@ -22,8 +22,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.w3c.dom.Document;
-
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
 import com.helger.commons.error.level.EErrorLevel;
@@ -38,21 +36,15 @@ import com.helger.rdc.api.me.outgoing.IMERoutingInformation;
 import com.helger.rdc.api.me.outgoing.MERoutingInformation;
 import com.helger.rdc.api.rest.RDCOutgoingMessage;
 import com.helger.rdc.api.rest.RDCPayload;
-import com.helger.rdc.api.rest.RdcRegRepHelper;
 import com.helger.rdc.api.rest.RdcRestJAXB;
 import com.helger.rdc.core.api.RdcApiHelper;
+import com.helger.rdc.core.regrep.RdcRegRepHelper;
 import com.helger.rdc.webapi.ApiParamException;
 import com.helger.rdc.webapi.helper.AbstractRdcApiInvoker;
 import com.helger.rdc.webapi.helper.CommonApiInvoker;
 import com.helger.regrep.CRegRep4;
-import com.helger.regrep.RegRep4Writer;
-import com.helger.regrep.query.QueryRequest;
-import com.helger.regrep.query.QueryResponse;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
-import com.helger.xml.EXMLParserFeature;
-import com.helger.xml.serialize.read.DOMReader;
-import com.helger.xml.serialize.read.DOMReaderSettings;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
@@ -98,23 +90,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
     {
       if (nIndex == 0)
       {
-        final Document aDoc = DOMReader.readXMLDOM (aPayload.getValue (),
-                                                    new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
-        if (aDoc == null)
-          throw new IllegalStateException ("Failed to parse first payload as XML");
-
-        final byte [] aRegRepPayload;
-        // TODO
-        if (true)
-        {
-          final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
-          aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
-        }
-        else
-        {
-          final QueryResponse aRRResp = RdcRegRepHelper.wrapInQueryResponse ("no", "body");
-          aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
-        }
+        final byte [] aRegRepPayload = RdcRegRepHelper.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
 
         // RegRep should be first
         aMessage.addPayload (MEPayload.builder ()

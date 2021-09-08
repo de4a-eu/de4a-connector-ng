@@ -29,7 +29,7 @@ import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.peppolid.factory.BDXR1IdentifierFactory;
 import com.helger.rdc.api.RdcConfig;
-import com.helger.rdc.api.http.RdcHttpClientSettings;
+import com.helger.rdc.core.http.RdcHttpClientSettings;
 import com.helger.smpclient.bdxr1.BDXRClientReadOnly;
 import com.helger.smpclient.bdxr1.IBDXRServiceGroupProvider;
 import com.helger.smpclient.bdxr1.IBDXRServiceMetadataProvider;
