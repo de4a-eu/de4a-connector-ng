@@ -167,7 +167,7 @@ public class ApiPostLookendAndSend extends AbstractRdcApiInvoker
 
             final byte [] aRegRepPayload;
             // TODO
-            if (true)
+            if (aPayload.getContentID ().contains ("Request"))
             {
               final QueryRequest aRRReq = RdcRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
               aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);

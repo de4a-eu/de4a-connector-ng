@@ -16,6 +16,7 @@
  */
 package com.helger.rdc.core.smp;
 
+import java.net.URI;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
@@ -42,6 +43,12 @@ import com.helger.xsds.bdxr.smp1.ServiceInformationType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
 import com.helger.xsds.bdxr.smp1.SignedServiceMetadataType;
 
+/**
+ * Base class for the dynamic discovery solutions. This class honors the
+ * configuration file.
+ *
+ * @author Philip Helger
+ */
 public abstract class AbstractDDClient
 {
   protected AbstractDDClient ()
@@ -61,7 +68,8 @@ public abstract class AbstractDDClient
     else
     {
       // Use a constant SMP URL
-      ret = new BDXRClientReadOnly (RdcConfig.SMP.getStaticSMPUrl ());
+      final URI aSMPURI = RdcConfig.SMP.getStaticSMPUrl ();
+      ret = new BDXRClientReadOnly (aSMPURI);
     }
     if (RdcConfig.SMP.isUseGlobalHttpSettings ())
       ret.httpClientSettings ().setAllFrom (new RdcHttpClientSettings ());
@@ -86,7 +94,7 @@ public abstract class AbstractDDClient
       final X509Certificate aStaticCert = RdcConfig.SMP.getStaticCertificate ();
       if (URLHelper.getAsURL (sStaticEndpoint) != null && aStaticCert != null)
       {
-        // Create a static service metadata
+        // Create a static SignedServiceMetadataType object to return
         return (aServiceGroupID, aDocumentTypeID) -> {
           final SignedServiceMetadataType ret = new SignedServiceMetadataType ();
           final ServiceMetadataType aSM = new ServiceMetadataType ();
@@ -125,7 +133,10 @@ public abstract class AbstractDDClient
           return ret;
         };
       }
+      // fall through - uses the fixed SMP URL instead
     }
+
+    // For the dynamic part, only the recipient is needed
     return _getSMPClient (aRecipientID);
   }
 }

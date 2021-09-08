@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RequestTransferEvidence xmlns="http://www.de4a.eu/2020/data/requestor/pattern/intermediate"
+  xmlns:eilp="http://eidas.europa.eu/attributes/legalperson"
+  xmlns:einp="http://eidas.europa.eu/attributes/naturalperson"
+  xmlns:de4aid="http://www.de4a.eu/2020/commons/identity/type" xmlns:de4a="http://www.de4a.eu/2020/commons/type">
+  <de4a:RequestId>3400a4fd-97ef-4e8d-a496-ecc24c3e8d21</de4a:RequestId>
+  <de4a:SpecificationId>SpecificationId</de4a:SpecificationId>
+  <de4a:TimeStamp>2021-09-07T12:16:48.957Z</de4a:TimeStamp>
+  <de4a:ProcedureId>ProcedureId</de4a:ProcedureId>
+  <de4a:DataEvaluator>
+    <de4a:AgentUrn>iso6523-actorid-upis::9915:de4atest</de4a:AgentUrn>
+    <de4a:AgentName>(BMDW) Bundesministerium für Digitalisierung und Wirtschaftsstandort</de4a:AgentName>
+  </de4a:DataEvaluator>
+  <de4a:DataOwner>
+    <de4a:AgentUrn>iso6523-actorid-upis::9999:se000000013</de4a:AgentUrn>
+    <de4a:AgentName>(BVE) BOLAGSVERKET (Companies Registration Office)</de4a:AgentName>
+  </de4a:DataOwner>
+  <de4a:DataRequestSubject>
+    <de4a:DataSubjectCompany>
+      <de4aid:LegalPersonIdentifier>SE/AT/5591674170</de4aid:LegalPersonIdentifier>
+      <de4aid:LegalName>Företag Ett AB</de4aid:LegalName>
+    </de4a:DataSubjectCompany>
+  </de4a:DataRequestSubject>
+  <de4a:RequestGrounds>
+    <de4a:ExplicitRequest>SDGR14</de4a:ExplicitRequest>
+  </de4a:RequestGrounds>
+  <de4a:CanonicalEvidenceTypeId>urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration</de4a:CanonicalEvidenceTypeId>
+</RequestTransferEvidence>

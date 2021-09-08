@@ -62,6 +62,8 @@ public final class RdcApiHelper
   @Nonnull
   public static ICommonsSortedMap <String, String> querySMPServiceGroups (@Nonnull final IParticipantIdentifier aParticipantID)
   {
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> "Querying SMP service groups for " + aParticipantID.getURIEncoded ());
+
     return RdcApiConfig.getDDServiceGroupHrefProvider ().getAllServiceGroupHrefs (aParticipantID, LoggingRdcErrorHandler.INSTANCE);
   }
 
@@ -71,11 +73,14 @@ public final class RdcApiHelper
    * @param aParticipantID
    *        Participant ID to query. May not be <code>null</code>.
    * @param aDocTypeID
-   *        Document type ID. May not be <code>null</code>.
+   *        Document type ID. May not be <code>null</code>. Required only if the
+   *        usage of DNS is disabled.
    * @param aProcessID
-   *        Process ID. May not be <code>null</code>.
+   *        Process ID. May not be <code>null</code>. Required only if the usage
+   *        of DNS is disabled.
    * @param sTransportProfile
-   *        Transport profile ID. May not be <code>null</code>.
+   *        Transport profile ID. May not be <code>null</code>. Required only if
+   *        the usage of DNS is disabled.
    * @return <code>null</code> if not found.
    */
   @Nullable
@@ -84,7 +89,25 @@ public final class RdcApiHelper
                                                              @Nonnull final IProcessIdentifier aProcessID,
                                                              @Nonnull final String sTransportProfile)
   {
-    return RdcApiConfig.getDDServiceMetadataProvider ().getServiceMetadata (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "Querying SMP service metadata for " +
+                                aParticipantID.getURIEncoded () +
+                                " [and " +
+                                aDocTypeID.getURIEncoded () +
+                                " and " +
+                                aProcessID.getURIEncoded () +
+                                " and " +
+                                sTransportProfile +
+                                "]");
+
+    final ServiceMetadataType ret = RdcApiConfig.getDDServiceMetadataProvider ()
+                                                .getServiceMetadata (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
+
+    if (ret == null)
+      DE4AKafkaClient.send (EErrorLevel.WARN, "Found no matching SMP service metadata");
+    else
+      DE4AKafkaClient.send (EErrorLevel.INFO, "Found matching SMP service metadata");
+    return ret;
   }
 
   /**
@@ -109,6 +132,16 @@ public final class RdcApiHelper
                                                @Nonnull final IProcessIdentifier aProcessID,
                                                @Nonnull final String sTransportProfile)
   {
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "Querying SMP endpoint for " +
+                                aParticipantID.getURIEncoded () +
+                                " and " +
+                                aDocTypeID.getURIEncoded () +
+                                " and " +
+                                aProcessID.getURIEncoded () +
+                                " and " +
+                                sTransportProfile);
+
     return RdcApiConfig.getDDServiceMetadataProvider ().getEndpoint (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
   }
 
@@ -139,17 +172,5 @@ public final class RdcApiHelper
 
     final IMessageExchangeSPI aMEM = MessageExchangeManager.getConfiguredImplementation ();
     aMEM.sendOutgoing (aRoutingInfo, aMessage);
-
-    DE4AKafkaClient.send (EErrorLevel.INFO,
-                          () -> "Sent from '" +
-                                aRoutingInfo.getSenderID ().getURIEncoded () +
-                                "' to '" +
-                                aRoutingInfo.getReceiverID ().getURIEncoded () +
-                                "' using doctype '" +
-                                aRoutingInfo.getDocumentTypeID ().getURIEncoded () +
-                                "' and process '" +
-                                aRoutingInfo.getProcessID ().getURIEncoded () +
-                                "' to URL " +
-                                aRoutingInfo.getEndpointURL ());
   }
 }
