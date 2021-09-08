@@ -192,31 +192,50 @@ public final class RdcConfig
   public static final class Tracker
   {
     public static final boolean DEFAULT_TRACKER_ENABLED = false;
+    public static final boolean DEFAULT_TRACKER_USE_HTTP = false;
     public static final String DEFAULT_TRACKER_TOPIC = "de4a";
 
     private Tracker ()
     {}
 
+    /**
+     * @return <code>true</code> if the remote tracker is enabled,
+     *         <code>false</code> if not.
+     */
     public static boolean isTrackerEnabled ()
     {
       return getConfig ().getAsBoolean ("de4a.tracker.enabled", DEFAULT_TRACKER_ENABLED);
     }
 
+    /**
+     * @return <code>true</code> if the tracker should use http for
+     *         transmission, <code>false</code> if it should use TCP. The
+     *         default is TCP. When using an HTTP proxy, this should be set to
+     *         true, as most HTTP proxies don't let TCP traffic through.
+     */
+    public boolean isTrackerViaHttp ()
+    {
+      return getConfig ().getAsBoolean ("de4a.tracker.viahttp", DEFAULT_TRACKER_USE_HTTP);
+    }
+
+    /**
+     * @return The URL of the tracker. May be <code>null</code>. The layout of
+     *         the URL depends whether TCP or HTTP is used.
+     */
     @Nullable
     public static String getTrackerUrl ()
     {
       return getConfig ().getAsString ("de4a.tracker.url");
     }
 
+    /**
+     * @return The topic for the tracker. This should somehow reflect the
+     *         Connector instance.
+     */
     @Nullable
     public static String getTrackerTopic ()
     {
       return getConfig ().getAsString ("de4a.tracker.topic", DEFAULT_TRACKER_TOPIC);
-    }
-
-    public boolean isTrackerViaHttp ()
-    {
-      return getConfig ().getAsBoolean ("de4a.tracker.viahttp", false);
     }
   }
 
