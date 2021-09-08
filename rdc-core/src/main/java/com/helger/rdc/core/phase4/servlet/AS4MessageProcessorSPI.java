@@ -53,7 +53,6 @@ import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.model.MEMessage;
 import com.helger.rdc.api.me.model.MEPayload;
-import com.helger.rdc.core.phase4.Phase4Config;
 import com.helger.xml.serialize.write.XMLWriter;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
@@ -109,7 +108,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
                                                           @Nonnull final IAS4MessageState aState,
                                                           @Nonnull final ICommonsList <Ebms3Error> aProcessingErrors)
   {
-    if (Phase4Config.isDebugLogIncoming () && LOGGER.isInfoEnabled ())
+    if (RdcConfig.Phase4.isDebugLogIncoming () && LOGGER.isInfoEnabled ())
     {
       LOGGER.info ("Received AS4 message:");
       LOGGER.info ("  UserMessage: " + aUserMessage);

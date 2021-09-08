@@ -54,6 +54,7 @@ import com.helger.phase4.model.pmode.PModePayloadService;
 import com.helger.phase4.sender.AbstractAS4UserMessageBuilder.ESimpleUserMessageSendResult;
 import com.helger.phase4.servlet.AS4ServerInitializer;
 import com.helger.photon.app.io.WebFileIO;
+import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.error.ERdcErrorCode;
 import com.helger.rdc.api.me.IMessageExchangeSPI;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
@@ -135,7 +136,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       final String sServletContextPath = ServletHelper.getServletContextBasePath (aServletContext);
 
       // Get the data path
-      final String sDataPath = Phase4Config.getDataPath ();
+      final String sDataPath = RdcConfig.Phase4.getDataPath ();
       if (StringHelper.hasNoText (sDataPath))
         throw new InitializationException ("No phase4 data path was provided!");
       final File aDataPath = new File (sDataPath).getAbsoluteFile ();
@@ -152,6 +153,13 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       final PrivateKeyEntry aOurKey = m_aCF.getPrivateKeyEntry ();
       if (aOurKey == null)
         throw new InitializationException ("Failed to load configured phase4 key");
+
+      if (StringHelper.hasNoText (RdcConfig.Phase4.getFromPartyID ()))
+        throw new InitializationException ("The phase4 property 'phase4.send.fromparty.id' is missing or empty.");
+      if (StringHelper.hasNoText (RdcConfig.Phase4.getFromPartyIDType ()))
+        throw new InitializationException ("The phase4 property 'phase4.send.fromparty.id.type' is missing or empty.");
+      if (StringHelper.hasNoText (RdcConfig.Phase4.getToPartyIDType ()))
+        throw new InitializationException ("The phase4 property 'phase4.send.toparty.id.type' is missing or empty.");
 
       LOGGER.info ("Verified that the phase4 keystore configuration can be loaded");
     }
@@ -171,10 +179,10 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     AS4MessageProcessorSPI.setIncomingHandler (aIncomingHandler);
 
     // Enable debug (incoming and outgoing)
-    AS4HttpDebug.setEnabled (Phase4Config.isHttpDebugEnabled ());
+    AS4HttpDebug.setEnabled (RdcConfig.Phase4.isHttpDebugEnabled ());
 
     // Set incoming dumper
-    final String sIncomingDumpPath = Phase4Config.getDumpPathIncoming ();
+    final String sIncomingDumpPath = RdcConfig.Phase4.getDumpPathIncoming ();
     if (StringHelper.hasText (sIncomingDumpPath))
     {
       LOGGER.info ("Dumping incoming phase4 AS4 messages to '" + sIncomingDumpPath + "'");
@@ -184,7 +192,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     }
 
     // Set outgoing dumper
-    final String sOutgoingDumpPath = Phase4Config.getDumpPathOutgoing ();
+    final String sOutgoingDumpPath = RdcConfig.Phase4.getDumpPathOutgoing ();
     if (StringHelper.hasText (sOutgoingDumpPath))
     {
       LOGGER.info ("Dumping outgoing phase4 AS4 messages to '" + sOutgoingDumpPath + "'");
@@ -211,10 +219,10 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
                                                                        .documentTypeID (aRoutingInfo.getDocumentTypeID ())
                                                                        .processID (aRoutingInfo.getProcessID ())
                                                                        .conversationID (MessageHelperMethods.createRandomConversationID ())
-                                                                       .fromPartyIDType (Phase4Config.getFromPartyIDType ())
-                                                                       .fromPartyID (Phase4Config.getFromPartyID ())
+                                                                       .fromPartyIDType (RdcConfig.Phase4.getFromPartyIDType ())
+                                                                       .fromPartyID (RdcConfig.Phase4.getFromPartyID ())
                                                                        .fromRole (RdcPMode.PARTY_ROLE)
-                                                                       .toPartyIDType (Phase4Config.getToPartyIDType ())
+                                                                       .toPartyIDType (RdcConfig.Phase4.getToPartyIDType ())
                                                                        .toPartyID (PeppolCertificateHelper.getCNOrNull (aTheirCert.getSubjectX500Principal ()
                                                                                                                                   .getName ()))
                                                                        .toRole (RdcPMode.PARTY_ROLE)

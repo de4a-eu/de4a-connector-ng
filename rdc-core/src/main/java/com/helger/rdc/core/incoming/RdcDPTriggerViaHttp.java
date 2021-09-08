@@ -121,7 +121,7 @@ public final class RdcDPTriggerViaHttp
   @Nonempty
   private static String _getConfiguredDestURL ()
   {
-    final String ret = RdcConfig.MEM.getMEMIncomingURL ();
+    final String ret = RdcConfig.ME.getMEMIncomingURL ();
     if (StringHelper.hasNoText (ret))
       throw new IllegalStateException ("The MEM incoming URL for forwarding to DC/DP is not configured.");
     return ret;

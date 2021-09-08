@@ -30,6 +30,7 @@ import com.helger.datetime.util.PDTIOHelper;
 import com.helger.phase4.client.AS4ClientSentMessage;
 import com.helger.phase4.client.IAS4RawResponseConsumer;
 import com.helger.phase4.util.Phase4Exception;
+import com.helger.rdc.api.RdcConfig;
 
 public class RawResponseWriter implements IAS4RawResponseConsumer
 {
@@ -37,7 +38,7 @@ public class RawResponseWriter implements IAS4RawResponseConsumer
 
   public void handleResponse (final AS4ClientSentMessage <byte []> aResponseEntity) throws Phase4Exception
   {
-    final String sFolderName = Phase4Config.getSendResponseFolderName ();
+    final String sFolderName = RdcConfig.Phase4.getSendResponseFolderName ();
     if (StringHelper.hasText (sFolderName))
     {
       final String sMessageID = aResponseEntity.getMessageID ();

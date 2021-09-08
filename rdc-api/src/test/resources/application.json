@@ -1,9 +1,5 @@
 {
 de4a: {
-  dsd: {
-    service: {
-    }
-  },
   smp: {
     usedns: false
   }

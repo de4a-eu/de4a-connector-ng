@@ -71,7 +71,7 @@ public class MessageExchangeManager
   @Nonnull
   public static IMessageExchangeSPI getConfiguredImplementation ()
   {
-    final String sID = RdcConfig.MEM.getMEMImplementationID ();
+    final String sID = RdcConfig.ME.getMEMImplementationID ();
     final IMessageExchangeSPI ret = getImplementationOfID (sID);
     if (ret == null)
       throw new IllegalStateException ("Failed to resolve MEM implementation with ID '" + sID + "'");
