@@ -40,10 +40,13 @@ import com.helger.commons.string.StringHelper;
 import com.helger.commons.url.IURLProtocol;
 import com.helger.commons.url.URLHelper;
 import com.helger.commons.url.URLProtocolRegistry;
+import com.helger.phase4.crypto.IAS4CryptoFactory;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.MessageExchangeManager;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.core.incoming.RdcIncomingHandlerViaHttp;
+import com.helger.rdc.core.phase4.Phase4Config;
+import com.helger.rdc.core.phase4.Phase4MessageExchangeSPI;
 import com.helger.xservlet.requesttrack.RequestTrackerSettings;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
@@ -162,9 +165,23 @@ public final class RdcInit
       }
     }
 
+    {
+      // Check phase4 configuration
+      if (MessageExchangeManager.getConfiguredImplementation () instanceof Phase4MessageExchangeSPI)
+      {
+        final IAS4CryptoFactory aCF = Phase4Config.getCryptoFactory ();
+        if (aCF == null)
+          throw new InitializationException ("Failed to load the configured phase4 crypto configuration");
+        if (aCF.getPrivateKeyEntry () == null)
+          throw new InitializationException ("Failed to load the private key from the phase4 crypto configuration");
+        if (aCF.getTrustStore () == null)
+          throw new InitializationException ("Failed to load the trust store from the phase4 crypto configuration");
+      }
+    }
+
     // Init incoming message handler
     final IMEIncomingHandler aRealIncomingHandler = aIncomingHandler != null ? aIncomingHandler
-                                                                             : new RdcIncomingHandlerViaHttp (s_sLogPrefix);
+                                                                             : RdcIncomingHandlerViaHttp.create (s_sLogPrefix);
     MessageExchangeManager.getConfiguredImplementation ().registerIncomingHandler (aServletContext, aRealIncomingHandler);
 
     DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector WebApp " + CRdcVersion.BUILD_VERSION + " started");

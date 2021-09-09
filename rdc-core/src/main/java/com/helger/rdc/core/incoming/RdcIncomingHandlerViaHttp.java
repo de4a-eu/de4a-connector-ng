@@ -20,7 +20,9 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.error.level.EErrorLevel;
+import com.helger.commons.string.StringHelper;
 import com.helger.commons.string.ToStringGenerator;
+import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.api.me.incoming.MEIncomingException;
 import com.helger.rdc.api.me.model.MEMessage;
@@ -39,10 +41,12 @@ public class RdcIncomingHandlerViaHttp implements IMEIncomingHandler
   private final String m_sLogPrefix;
 
   /**
+   * Constructor
+   *
    * @param sLogPrefix
    *        The log prefix to use. May not be <code>null</code> but maybe empty.
    */
-  public RdcIncomingHandlerViaHttp (@Nonnull final String sLogPrefix)
+  protected RdcIncomingHandlerViaHttp (@Nonnull final String sLogPrefix)
   {
     m_sLogPrefix = ValueEnforcer.notNull (sLogPrefix, "LogPrefix");
   }
@@ -57,5 +61,23 @@ public class RdcIncomingHandlerViaHttp implements IMEIncomingHandler
   public String toString ()
   {
     return new ToStringGenerator (this).append ("LogPrefix", m_sLogPrefix).getToString ();
+  }
+
+  /**
+   * Factory method to create a new incoming handler
+   *
+   * @param sLogPrefix
+   *        The log prefix to use. May not be <code>null</code> but maybe empty.
+   * @return The incoming handler instance. Never <code>null</code>.
+   */
+  @Nonnull
+  public static RdcIncomingHandlerViaHttp create (@Nonnull final String sLogPrefix)
+  {
+    // Check prerequisites
+    if (StringHelper.hasNoText (RdcConfig.ME.getMEMIncomingURL ()))
+      throw new IllegalStateException ("The MEM incoming URL for forwarding to DC/DP is not configured.");
+
+    // go
+    return new RdcIncomingHandlerViaHttp (sLogPrefix);
   }
 }

@@ -81,6 +81,6 @@ public class MessageExchangeManager
   @Nonnegative
   public static ICommonsMap <String, IMessageExchangeSPI> getAll ()
   {
-    return RW_LOCK.readLockedGet ( () -> s_aMap.getClone ());
+    return RW_LOCK.readLockedGet (s_aMap::getClone);
   }
 }
