@@ -20,6 +20,8 @@ import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.io.ByteArrayWrapper;
 import com.helger.commons.mime.CMimeType;
 import com.helger.commons.state.ESuccess;
+import com.helger.json.IJsonObject;
+import com.helger.json.serialize.JsonWriterSettings;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.api.RdcIdentifierFactory;
 import com.helger.rdc.api.me.EMEProtocol;
@@ -181,6 +183,9 @@ public final class MockDP implements IMEIncomingHandler
     }
     else
     {
+      DE4AKafkaClient.send (EErrorLevel.INFO,
+                            "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' was found - building result");
+
       // Copy whatever needs to be copied
       final CanonicalEvidenceType aCE = new CanonicalEvidenceType ();
       {
@@ -223,13 +228,17 @@ public final class MockDP implements IMEIncomingHandler
       a.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
       aPayloads.add (a);
 
-      ApiPostLookendAndSend.perform (aMessage.getReceiverID (),
-                                     aMessage.getSenderID (),
-                                     aMessage.getDocumentTypeID (),
-                                     RdcConfig.getIdentifierFactory ()
-                                              .createProcessIdentifier (RdcIdentifierFactory.PROCESS_SCHEME, "response"),
-                                     EMEProtocol.AS4.getTransportProfileID (),
-                                     aPayloads);
+      // Swap sender and receiver
+      // Different response type
+      final IJsonObject aJson = ApiPostLookendAndSend.perform (aMessage.getReceiverID (),
+                                                               aMessage.getSenderID (),
+                                                               aMessage.getDocumentTypeID (),
+                                                               RdcConfig.getIdentifierFactory ()
+                                                                        .createProcessIdentifier (RdcIdentifierFactory.PROCESS_SCHEME,
+                                                                                                  "response"),
+                                                               EMEProtocol.AS4.getTransportProfileID (),
+                                                               aPayloads);
+      LOGGER.info ("Sending result:\n" + aJson.getAsJsonString (JsonWriterSettings.DEFAULT_SETTINGS_FORMATTED));
     };
     _waitAndRunAsync (r);
 
