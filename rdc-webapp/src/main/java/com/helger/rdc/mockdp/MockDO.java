@@ -3,6 +3,7 @@ package com.helger.rdc.mockdp;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,9 +48,10 @@ import eu.de4a.iem.xml.de4a.DE4AResponseDocumentHelper;
 import eu.de4a.iem.xml.de4a.EDE4ACanonicalEvidenceType;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
-public final class MockDP implements IMEIncomingHandler
+public final class MockDO implements IMEIncomingHandler
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (MockDP.class);
+  public static final AtomicBoolean DO_ACTIVE = new AtomicBoolean (true);
+  private static final Logger LOGGER = LoggerFactory.getLogger (MockDO.class);
 
   @SuppressWarnings ("unused")
   @Nonnull
@@ -169,62 +171,87 @@ public final class MockDP implements IMEIncomingHandler
 
     final ResponseTransferEvidenceType aResponse = DE4AResponseDocumentHelper.createResponseTransferEvidence (aRequest);
 
-    if (!"AT/NL/???".equals (aCompany.getLegalPersonIdentifier ()))
+    if (!DO_ACTIVE.get ())
     {
       // TODO error message
-      DE4AKafkaClient.send (EErrorLevel.ERROR,
-                            "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' is not supported");
+      DE4AKafkaClient.send (EErrorLevel.ERROR, "We cannot reach our DO - oooooohhhhh :(");
       final ErrorListType aErrorList = new ErrorListType ();
       final ErrorType aError = new ErrorType ();
-      aError.setCode ("12345");
-      aError.setText ("The eIDAS identifier '" + aCompany.getLegalPersonIdentifier () + "' is unknown");
+      aError.setCode ("67890");
+      aError.setText ("Our DO is not reachable - please try again later");
       aErrorList.addError (aError);
       aResponse.setErrorList (aErrorList);
     }
     else
-    {
-      DE4AKafkaClient.send (EErrorLevel.INFO,
-                            "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' was found - building result");
-
-      // Copy whatever needs to be copied
-      final CanonicalEvidenceType aCE = new CanonicalEvidenceType ();
+      if (!"AT/NL/???".equals (aCompany.getLegalPersonIdentifier ()))
       {
-        final eu.de4a.iem.jaxb.t42.v0_6.LegalEntityType p = new eu.de4a.iem.jaxb.t42.v0_6.LegalEntityType ();
-        {
-          final eu.de4a.iem.jaxb.t42.v0_6.NamesType a = new eu.de4a.iem.jaxb.t42.v0_6.NamesType ();
-          final LegalEntityLegalNameType aLegalName = new LegalEntityLegalNameType ();
-          aLegalName.setValue ("Bla Blub GmbH");
-          a.setLegalEntityLegalName (aLegalName);
-          p.addCompanyName (a);
-        }
-        p.setCompanyType ("GmbH");
-        p.setCompanyStatus ("active");
-        {
-          final eu.de4a.iem.jaxb.t42.v0_6.ActivityType a = new eu.de4a.iem.jaxb.t42.v0_6.ActivityType ();
-          a.addNaceCode ("1234");
-          p.setCompanyActivity (a);
-        }
-        p.setRegistrationDate (PDTFactory.getCurrentLocalDate ().minusDays (1000));
-        p.setCompanyEUID ("AT98765");
-        {
-          final eu.de4a.iem.jaxb.t42.v0_6.AddressType a = new eu.de4a.iem.jaxb.t42.v0_6.AddressType ();
-          a.setThoroughfare ("Wien");
-          a.setPostCode ("1010");
-          a.setPoBox ("543");
-          a.setAdminUnitL1 ("Austria");
-          p.addRegisteredAddress (a);
-        }
-        aCE.setAny (eu.de4a.iem.xml.de4a.t42.v0_6.DE4AT42Marshaller.legalEntity ().getAsDocument (p).getDocumentElement ());
+        // TODO error message
+        DE4AKafkaClient.send (EErrorLevel.ERROR,
+                              "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' is not supported");
+        final ErrorListType aErrorList = new ErrorListType ();
+        final ErrorType aError = new ErrorType ();
+        aError.setCode ("12345");
+        aError.setText ("The eIDAS identifier '" + aCompany.getLegalPersonIdentifier () + "' is unknown");
+        aErrorList.addError (aError);
+        aResponse.setErrorList (aErrorList);
       }
-      aResponse.setCanonicalEvidence (aCE);
-    }
+      else
+      {
+        DE4AKafkaClient.send (EErrorLevel.INFO,
+                              "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' was found - building result");
 
-    final byte [] aResponseBytes = DE4AMarshaller.drImResponseMarshaller (EDE4ACanonicalEvidenceType.T42_COMPANY_INFO_V06)
-                                                 .getAsBytes (aResponse);
-    final Runnable r = () -> {
+        // Copy whatever needs to be copied
+        final CanonicalEvidenceType aCE = new CanonicalEvidenceType ();
+        {
+          final eu.de4a.iem.jaxb.t42.v0_6.LegalEntityType p = new eu.de4a.iem.jaxb.t42.v0_6.LegalEntityType ();
+          {
+            final eu.de4a.iem.jaxb.t42.v0_6.NamesType a = new eu.de4a.iem.jaxb.t42.v0_6.NamesType ();
+            final LegalEntityLegalNameType aLegalName = new LegalEntityLegalNameType ();
+            aLegalName.setValue ("Bla Blub GmbH");
+            a.setLegalEntityLegalName (aLegalName);
+            p.addCompanyName (a);
+          }
+          p.setCompanyType ("GmbH");
+          p.setCompanyStatus ("active");
+          {
+            final eu.de4a.iem.jaxb.t42.v0_6.ActivityType a = new eu.de4a.iem.jaxb.t42.v0_6.ActivityType ();
+            a.addNaceCode ("1234");
+            p.setCompanyActivity (a);
+          }
+          p.setRegistrationDate (PDTFactory.getCurrentLocalDate ().minusDays (1000));
+          p.setCompanyEUID ("AT98765");
+          {
+            final eu.de4a.iem.jaxb.t42.v0_6.AddressType a = new eu.de4a.iem.jaxb.t42.v0_6.AddressType ();
+            a.setThoroughfare ("Wien");
+            a.setPostCode ("1010");
+            a.setPoBox ("543");
+            a.setAdminUnitL1 ("Austria");
+            p.addRegisteredAddress (a);
+          }
+          aCE.setAny (eu.de4a.iem.xml.de4a.t42.v0_6.DE4AT42Marshaller.legalEntity ().getAsDocument (p).getDocumentElement ());
+        }
+        aResponse.setCanonicalEvidence (aCE);
+      }
+
+    final DE4AMarshaller <ResponseTransferEvidenceType> aMarshaller = DE4AMarshaller.drImResponseMarshaller (EDE4ACanonicalEvidenceType.T42_COMPANY_INFO_V06);
+    LOGGER.info ("Message to be send back:\n" + aMarshaller.setFormattedOutput (true).getAsString (aResponse));
+
+    _waitAndRunAsync (aMessage, aMarshaller.getAsBytes (aResponse));
+
+    return ESuccess.SUCCESS;
+  }
+
+  private static void _waitAndRunAsync (@Nonnull final MEMessage aMessage, @Nonnull final byte [] aBytes)
+  {
+    final ExecutorService aES = Executors.newFixedThreadPool (1);
+    aES.submit ( () -> {
+      // Ensure sync response is received first
+      ThreadHelper.sleep (1000);
+
+      // Start new transmission
       final ICommonsList <RDCPayload> aPayloads = new CommonsArrayList <> ();
       final RDCPayload a = new RDCPayload ();
-      a.setValue (aResponseBytes);
+      a.setValue (aBytes);
       a.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
       a.setContentID ("ResponseTransferEvidence");
       aPayloads.add (a);
@@ -240,18 +267,6 @@ public final class MockDP implements IMEIncomingHandler
                                                                EMEProtocol.AS4.getTransportProfileID (),
                                                                aPayloads);
       LOGGER.info ("Sending result:\n" + aJson.getAsJsonString (JsonWriterSettings.DEFAULT_SETTINGS_FORMATTED));
-    };
-    _waitAndRunAsync (r);
-
-    return ESuccess.SUCCESS;
-  }
-
-  private static void _waitAndRunAsync (@Nonnull final Runnable aR)
-  {
-    final ExecutorService aES = Executors.newFixedThreadPool (1);
-    aES.submit ( () -> {
-      ThreadHelper.sleep (1000);
-      aR.run ();
     });
     ExecutorServiceHelper.shutdownAndWaitUntilAllTasksAreFinished (aES);
   }

@@ -26,7 +26,7 @@ import com.helger.photon.core.servlet.WebAppListener;
 import com.helger.photon.security.login.LoggedInUserManager;
 import com.helger.rdc.api.RdcConfig;
 import com.helger.rdc.core.RdcInit;
-import com.helger.rdc.mockdp.MockDP;
+import com.helger.rdc.mockdp.MockDO;
 import com.helger.rdc.webapi.RdcApiInit;
 
 /**
@@ -71,7 +71,7 @@ public class RdcWebAppListener extends WebAppListener
   protected void afterContextInitialized (final ServletContext aSC)
   {
     // Use default handler
-    RdcInit.initGlobally (aSC, new MockDP ());
+    RdcInit.initGlobally (aSC, new MockDO ());
 
     // Don't write audit logs
     AuditHelper.setAuditor (new DoNothingAuditor (LoggedInUserManager.getInstance ()));
