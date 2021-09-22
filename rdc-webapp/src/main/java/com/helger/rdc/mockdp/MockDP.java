@@ -107,8 +107,6 @@ public final class MockDP implements IMEIncomingHandler
       return ESuccess.FAILURE;
     }
 
-    final ResponseTransferEvidenceType aResponse = DE4AResponseDocumentHelper.createResponseTransferEvidence (aRequest);
-
     final String sExampleResponse = "<ResponseTransferEvidence xmlns=\"http://www.de4a.eu/2020/data/requestor/pattern/intermediate\"\r\n" +
                                     "                          xmlns:de4a=\"http://www.de4a.eu/2020/commons/type\"\r\n" +
                                     "                          xmlns:de4aid=\"http://www.de4a.eu/2020/commons/identity/type\"\r\n" +
@@ -169,6 +167,8 @@ public final class MockDP implements IMEIncomingHandler
                                     "   </de4a:CanonicalEvidence>\r\n" +
                                     "</ResponseTransferEvidence>";
 
+    final ResponseTransferEvidenceType aResponse = DE4AResponseDocumentHelper.createResponseTransferEvidence (aRequest);
+
     if (!"AT/NL/???".equals (aCompany.getLegalPersonIdentifier ()))
     {
       // TODO error message
@@ -226,6 +226,7 @@ public final class MockDP implements IMEIncomingHandler
       final RDCPayload a = new RDCPayload ();
       a.setValue (aResponseBytes);
       a.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
+      a.setContentID ("ResponseTransferEvidence");
       aPayloads.add (a);
 
       // Swap sender and receiver
