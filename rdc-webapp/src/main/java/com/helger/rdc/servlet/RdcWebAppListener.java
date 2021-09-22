@@ -19,17 +19,14 @@ package com.helger.rdc.servlet;
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 
-import org.slf4j.LoggerFactory;
-
-import com.helger.commons.io.ByteArrayWrapper;
 import com.helger.photon.api.IAPIRegistry;
 import com.helger.photon.audit.AuditHelper;
 import com.helger.photon.audit.DoNothingAuditor;
 import com.helger.photon.core.servlet.WebAppListener;
 import com.helger.photon.security.login.LoggedInUserManager;
 import com.helger.rdc.api.RdcConfig;
-import com.helger.rdc.api.me.incoming.IMEIncomingHandler;
 import com.helger.rdc.core.RdcInit;
+import com.helger.rdc.mockdp.MockDP;
 import com.helger.rdc.webapi.RdcApiInit;
 
 /**
@@ -74,16 +71,7 @@ public class RdcWebAppListener extends WebAppListener
   protected void afterContextInitialized (final ServletContext aSC)
   {
     // Use default handler
-    final IMEIncomingHandler aDummyHdl = aMessage -> {
-      if (aMessage.payloads ().size () >= 2)
-      {
-        final ByteArrayWrapper p = aMessage.payloads ().get (1).getData ();
-        LoggerFactory.getLogger ("bla").info ("Canonical Evidence content:\n" + new String (p.bytes (), p.getOffset (), p.size ()));
-      }
-      else
-        LoggerFactory.getLogger ("bla").info ("Invomcing messages seems to be ill-formatted");
-    };
-    RdcInit.initGlobally (aSC, aDummyHdl);
+    RdcInit.initGlobally (aSC, new MockDP ());
 
     // Don't write audit logs
     AuditHelper.setAuditor (new DoNothingAuditor (LoggedInUserManager.getInstance ()));

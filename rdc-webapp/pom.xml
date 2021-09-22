@@ -61,6 +61,10 @@
       <groupId>com.helger.photon</groupId>
       <artifactId>ph-oton-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>eu.de4a</groupId>
+      <artifactId>de4a-iem</artifactId>
+    </dependency>
 
     <!-- Logging -->
     <dependency>
@@ -125,7 +129,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.42.v20210604</version>
+        <version>9.4.43.v20210629</version>
         <configuration>
           <scanIntervalSeconds>3</scanIntervalSeconds>
         </configuration>

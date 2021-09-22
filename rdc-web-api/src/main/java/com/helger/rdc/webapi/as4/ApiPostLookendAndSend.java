@@ -28,6 +28,9 @@ import com.helger.commons.mime.MimeTypeParser;
 import com.helger.commons.string.StringHelper;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
+import com.helger.peppolid.IDocumentTypeIdentifier;
+import com.helger.peppolid.IParticipantIdentifier;
+import com.helger.peppolid.IProcessIdentifier;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.rdc.api.dd.IDDServiceMetadataProvider;
 import com.helger.rdc.api.me.model.MEMessage;
@@ -61,34 +64,22 @@ public class ApiPostLookendAndSend extends AbstractRdcApiInvoker
   public ApiPostLookendAndSend ()
   {}
 
-  @Override
-  public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
-                                @Nonnull @Nonempty final String sPath,
-                                @Nonnull final Map <String, String> aPathVariables,
-                                @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
+  @Nonnull
+  public static IJsonObject perform (@Nonnull final IParticipantIdentifier aSenderID,
+                                     @Nonnull final IParticipantIdentifier aReceiverID,
+                                     @Nonnull final IDocumentTypeIdentifier aDocumentTypeID,
+                                     @Nonnull final IProcessIdentifier aProcessID,
+                                     @Nonnull final String sTransportProfile,
+                                     @Nonnull final Iterable <RDCPayload> aPayloads)
   {
-    // Read the payload as XML
-    final RDCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
-    if (aOutgoingMsg == null)
-      throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
-
-    // These fields MUST not be present here - they are filled while we go
-    if (StringHelper.hasText (aOutgoingMsg.getMetadata ().getEndpointURL ()))
-      throw new ApiParamException ("The 'OutgoingMessage/Metadata/EndpointURL' element MUST NOT be present");
-    if (ArrayHelper.isNotEmpty (aOutgoingMsg.getMetadata ().getReceiverCertificate ()))
-      throw new ApiParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST NOT be present");
-
-    // Convert metadata
-    final MERoutingInformationInput aRoutingInfoBase = MERoutingInformationInput.createBaseForSending (aOutgoingMsg.getMetadata ());
-
     // Start response
     final IJsonObject aJson = new JsonObject ();
     {
-      aJson.add ("senderid", aRoutingInfoBase.getSenderID ().getURIEncoded ());
-      aJson.add ("receiverid", aRoutingInfoBase.getReceiverID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aRoutingInfoBase.getDocumentTypeID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_PROCESS_ID, aRoutingInfoBase.getProcessID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, aRoutingInfoBase.getTransportProtocol ());
+      aJson.add ("senderid", aSenderID.getURIEncoded ());
+      aJson.add ("receiverid", aReceiverID.getURIEncoded ());
+      aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aDocumentTypeID.getURIEncoded ());
+      aJson.add (SMPJsonResponse.JSON_PROCESS_ID, aProcessID.getURIEncoded ());
+      aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, sTransportProfile);
     }
 
     CommonApiInvoker.invoke (aJson, () -> {
@@ -99,36 +90,34 @@ public class ApiPostLookendAndSend extends AbstractRdcApiInvoker
       {
         final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
-        final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aRoutingInfoBase.getReceiverID (),
-                                                                              aRoutingInfoBase.getDocumentTypeID (),
-                                                                              aRoutingInfoBase.getProcessID (),
-                                                                              aRoutingInfoBase.getTransportProtocol ());
+        final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aReceiverID, aDocumentTypeID, aProcessID, sTransportProfile);
         if (aSM != null)
         {
-          aJsonSMP.addJson ("response",
-                            SMPJsonResponse.convert (aRoutingInfoBase.getReceiverID (), aRoutingInfoBase.getDocumentTypeID (), aSM));
+          aJsonSMP.addJson ("response", SMPJsonResponse.convert (aReceiverID, aDocumentTypeID, aSM));
 
-          final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM,
-                                                                                 aRoutingInfoBase.getProcessID (),
-                                                                                 aRoutingInfoBase.getTransportProtocol ());
+          final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM, aProcessID, sTransportProfile);
           if (aEndpoint != null)
           {
             aJsonSMP.add (SMPJsonResponse.JSON_ENDPOINT_REFERENCE, aEndpoint.getEndpointURI ());
-            aRoutingInfo = MERoutingInformation.create (aRoutingInfoBase,
-                                                        aEndpoint.getEndpointURI (),
-                                                        CertificateHelper.convertByteArrayToCertficateDirect (aEndpoint.getCertificate ()));
+            aRoutingInfo = new MERoutingInformation (aSenderID,
+                                                     aReceiverID,
+                                                     aDocumentTypeID,
+                                                     aProcessID,
+                                                     sTransportProfile,
+                                                     aEndpoint.getEndpointURI (),
+                                                     CertificateHelper.convertByteArrayToCertficateDirect (aEndpoint.getCertificate ()));
           }
           if (aRoutingInfo == null)
           {
             DE4AKafkaClient.send (EErrorLevel.WARN,
                                   () -> "[API] The SMP lookup for '" +
-                                        aRoutingInfoBase.getReceiverID ().getURIEncoded () +
+                                        aReceiverID.getURIEncoded () +
                                         "' and '" +
-                                        aRoutingInfoBase.getDocumentTypeID ().getURIEncoded () +
+                                        aDocumentTypeID.getURIEncoded () +
                                         "' succeeded, but no endpoint matching '" +
-                                        aRoutingInfoBase.getProcessID ().getURIEncoded () +
+                                        aProcessID.getURIEncoded () +
                                         "' and '" +
-                                        aRoutingInfoBase.getTransportProtocol () +
+                                        sTransportProfile +
                                         "' was found.");
           }
 
@@ -148,7 +137,7 @@ public class ApiPostLookendAndSend extends AbstractRdcApiInvoker
         // Add payloads
         final MEMessage.Builder aMessage = MEMessage.builder ();
         int nIndex = 0;
-        for (final RDCPayload aPayload : aOutgoingMsg.getPayload ())
+        for (final RDCPayload aPayload : aPayloads)
         {
           if (nIndex == 0)
           {
@@ -179,5 +168,34 @@ public class ApiPostLookendAndSend extends AbstractRdcApiInvoker
     });
 
     return aJson;
+  }
+
+  @Override
+  public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
+                                @Nonnull @Nonempty final String sPath,
+                                @Nonnull final Map <String, String> aPathVariables,
+                                @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
+  {
+    // Read the payload as XML
+    final RDCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    if (aOutgoingMsg == null)
+      throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
+
+    // These fields MUST not be present here - they are filled while we go
+    if (StringHelper.hasText (aOutgoingMsg.getMetadata ().getEndpointURL ()))
+      throw new ApiParamException ("The 'OutgoingMessage/Metadata/EndpointURL' element MUST NOT be present");
+    if (ArrayHelper.isNotEmpty (aOutgoingMsg.getMetadata ().getReceiverCertificate ()))
+      throw new ApiParamException ("The 'OutgoingMessage/Metadata/ReceiverCertificate' element MUST NOT be present");
+
+    // Convert metadata
+    final MERoutingInformationInput aRoutingInfoBase = MERoutingInformationInput.createBaseForSending (aOutgoingMsg.getMetadata ());
+
+    // Start response
+    return perform (aRoutingInfoBase.getSenderID (),
+                    aRoutingInfoBase.getReceiverID (),
+                    aRoutingInfoBase.getDocumentTypeID (),
+                    aRoutingInfoBase.getProcessID (),
+                    aRoutingInfoBase.getTransportProtocol (),
+                    aOutgoingMsg.getPayload ());
   }
 }

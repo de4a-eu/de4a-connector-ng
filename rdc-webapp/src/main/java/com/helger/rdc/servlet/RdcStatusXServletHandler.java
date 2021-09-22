@@ -35,7 +35,7 @@ import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 import com.helger.xservlet.handler.simple.IXServletSimpleHandler;
 
 /**
- * Main handler for the /tc-status servlet
+ * Main handler for the /status servlet
  *
  * @author Philip Helger
  */
