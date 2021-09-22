@@ -104,7 +104,7 @@ public class RdcRootServlet extends HttpServlet
       aSB.append ("<div>POST /api/send</div>");
 
       aSB.append ("<h3>Utilities</h3>");
-      aSB.append ("<div>POST /api/user/submit/</div>");
+      aSB.append ("<div>POST /api/lookup/send/</div>");
     }
 
     aSB.append ("</body></html>");
