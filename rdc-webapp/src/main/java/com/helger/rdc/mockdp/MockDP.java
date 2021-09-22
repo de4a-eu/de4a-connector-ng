@@ -53,6 +53,8 @@ public final class MockDP implements IMEIncomingHandler
   @Nonnull
   private static ESuccess _handleDBARequest (@Nonnull final MEMessage aMessage, @Nonnull final Document aDoc)
   {
+    LOGGER.info ("Handling as DBA request");
+
     final RequestTransferEvidenceUSIIMDRType aRequest = DE4AMarshaller.drImRequestMarshaller ().read (aDoc);
     if (aRequest == null)
     {
@@ -251,7 +253,8 @@ public final class MockDP implements IMEIncomingHandler
   {
     boolean bHandled = false;
 
-    if ("RequestTransferEvidence".equals (sLocalName) && "http://www.de4a.eu/2020/data/owner/pattern/intermediate".equals (sNamespaceURL))
+    if ("RequestTransferEvidence".equals (sLocalName) &&
+        "http://www.de4a.eu/2020/data/requestor/pattern/intermediate".equals (sNamespaceURL))
     {
       // DBA request at DT/DO
       if (_handleDBARequest (aMessage, aDoc).isSuccess ())
