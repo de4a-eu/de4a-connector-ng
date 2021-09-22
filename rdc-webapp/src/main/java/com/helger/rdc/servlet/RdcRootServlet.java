@@ -97,13 +97,8 @@ public class RdcRootServlet extends HttpServlet
                   sContextPath +
                   "/api/smp/endpoints/iso6523-actorid-upis%3A%3A9915%3Ade4atest/urn:de4a-eu:CanonicalEvidenceType%3A%3ACompanyRegistration:1.0' target='_blank'>test me</a></div>");
 
-      aSB.append ("<h3>Validation</h3>");
-      aSB.append ("<div>POST /api/validate/{vesid}</div>");
-
-      aSB.append ("<h3>AS4</h3>");
+      aSB.append ("<h3>Sending AS4</h3>");
       aSB.append ("<div>POST /api/send</div>");
-
-      aSB.append ("<h3>Utilities</h3>");
       aSB.append ("<div>POST /api/lookup/send/</div>");
     }
 

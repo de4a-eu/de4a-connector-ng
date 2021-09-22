@@ -297,7 +297,7 @@ public final class MockDO implements IMEIncomingHandler
     if (!bHandled)
     {
       // Do something with it
-      LOGGER.info ("Received XML:\n" +
+      LOGGER.info ("Received unhandled XML:\n" +
                    XMLWriter.getNodeAsString (aDoc, new XMLWriterSettings ().setIndent (EXMLSerializeIndent.INDENT_AND_ALIGN)));
     }
   }
