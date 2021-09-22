@@ -251,7 +251,7 @@ public final class MockDP implements IMEIncomingHandler
   {
     boolean bHandled = false;
 
-    if ("RequestExtractEvidence".equals (sLocalName) && "http://www.de4a.eu/2020/data/owner/pattern/intermediate".equals (sNamespaceURL))
+    if ("RequestTransferEvidence".equals (sLocalName) && "http://www.de4a.eu/2020/data/owner/pattern/intermediate".equals (sNamespaceURL))
     {
       // DBA request at DT/DO
       if (_handleDBARequest (aMessage, aDoc).isSuccess ())
