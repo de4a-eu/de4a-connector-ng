@@ -31,8 +31,8 @@ public final class RunInJettyRdc
 {
   public static void main (final String [] args) throws Exception
   {
-    final JettyStarter js = new JettyStarter (RunInJettyRdc.class).setPort (8090)
-                                                                  .setStopPort (9090)
+    final JettyStarter js = new JettyStarter (RunInJettyRdc.class).setPort (9092)
+                                                                  .setStopPort (9093)
                                                                   .setSessionCookieName ("RDC_SESSION")
                                                                   .setContainerIncludeJarPattern (JettyStarter.CONTAINER_INCLUDE_JAR_PATTERN_ALL);
     js.run ();

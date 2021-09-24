@@ -40,7 +40,7 @@ public class MainSendSmpGetDocTypes
 
     try (final HttpClientManager aHCM = new HttpClientManager ())
     {
-      final HttpGet aGet = new HttpGet ("http://localhost:8090/api/smp/doctypes/" + sReceiverID);
+      final HttpGet aGet = new HttpGet ("http://localhost:9092/api/smp/doctypes/" + sReceiverID);
       final IJson aJson = aHCM.execute (aGet, new ResponseHandlerJson ());
       LOGGER.info (new JsonWriter (new JsonWriterSettings ().setIndentEnabled (true)).writeAsString (aJson));
     }

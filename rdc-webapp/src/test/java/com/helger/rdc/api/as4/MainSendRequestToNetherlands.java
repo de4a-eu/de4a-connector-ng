@@ -70,7 +70,7 @@ public final class MainSendRequestToNetherlands
     try (final HttpClientManager aHCM = HttpClientManager.create (new HttpClientSettings ().setSocketTimeoutMS ((int) (30 *
                                                                                                                        CGlobal.MILLISECONDS_PER_SECOND))))
     {
-      final HttpPost aPost = new HttpPost ("http://localhost:8090/api/lookup/send");
+      final HttpPost aPost = new HttpPost ("http://localhost:9092/api/lookup/send");
       aPost.setEntity (new ByteArrayEntity (RdcRestJAXB.outgoingMessage ().getAsBytes (aOM)));
       final IJson aJson = aHCM.execute (aPost, new ResponseHandlerJson ());
       LOGGER.info (new JsonWriter (new JsonWriterSettings ().setIndentEnabled (true)).writeAsString (aJson));

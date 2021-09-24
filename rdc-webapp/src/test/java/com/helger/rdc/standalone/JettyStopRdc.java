@@ -24,6 +24,6 @@ public final class JettyStopRdc
 {
   public static void main (final String [] args) throws IOException
   {
-    new JettyStopper ().setStopPort (9090).run ();
+    new JettyStopper ().setStopPort (9093).run ();
   }
 }
