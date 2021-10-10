@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>rdc-web-api</name>
   <description>Contains the RDC REST API implementations</description>
-  <url>https://github.com/phax/rdc/rdc-web-api</url>
+  <url>https://github.com/de4a-at/rdc/rdc-web-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>

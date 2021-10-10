@@ -36,8 +36,8 @@ import com.helger.rdc.api.me.MessageExchangeManager;
 import com.helger.rdc.core.CRdcVersion;
 
 /**
- * Servlet for handling the initial calls without any path. This servlet
- * redirects to "/index.html".
+ * Servlet for handling the initial calls without any path. This servlet shows
+ * some basic information.
  *
  * @author Philip Helger
  */
@@ -59,7 +59,7 @@ public class RdcRootServlet extends HttpServlet
     aSB.append ("<div>Build timestamp: ").append (CRdcVersion.BUILD_TIMESTAMP).append ("</div>");
     aSB.append ("<div>Current time: ").append (PDTFactory.getCurrentZonedDateTimeUTC ().toString ()).append ("</div>");
     aSB.append ("<div><a href='status'>Check /status</a></div>");
-    aSB.append ("<div><a href='https://github.com/phax/rdc/' target='_blank'>Source code on GitHub</a></div>");
+    aSB.append ("<div><a href='https://github.com/de4a-at/rdc/' target='_blank'>Source code on GitHub</a></div>");
 
     {
       aSB.append ("<h2>Registered Message Exchange implementations</h2>");

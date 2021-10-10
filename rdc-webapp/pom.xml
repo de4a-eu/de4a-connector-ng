@@ -28,7 +28,7 @@
   <packaging>war</packaging>
   <name>rdc-webapp</name>
   <description>Contains the Real DE4A Connector Web Application</description>
-  <url>https://github.com/phax/rdc/rdc-webapp</url>
+  <url>https://github.com/de4a-at/rdc/rdc-webapp</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>

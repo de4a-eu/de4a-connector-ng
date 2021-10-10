@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>rdc-api</name>
   <description>Contains the DE4A Connector shared API</description>
-  <url>https://github.com/phax/rdc/rdc-api</url>
+  <url>https://github.com/de4a-at/rdc/rdc-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>

@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>rdc-core</name>
   <description>Contains the DE4A Connector Core</description>
-  <url>https://github.com/phax/rdc/rdc-core</url>
+  <url>https://github.com/de4a-at/rdc/rdc-core</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>

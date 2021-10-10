@@ -30,7 +30,7 @@
   <packaging>pom</packaging>
   <name>rdc-parent-pom</name>
   <description>Base POM to build the Real DE4A Connector (RDC) projects</description>
-  <url>https://github.com/phax/rdc</url>
+  <url>https://github.com/de4a-at/rdc</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>
@@ -42,9 +42,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:phax/rdc.git</connection>
-    <developerConnection>scm:git:git@github.com:phax/rdc.git</developerConnection>
-    <url>http://github.com/phax/rdc</url>
+    <connection>scm:git:git@github.com:de4a-at/rdc.git</connection>
+    <developerConnection>scm:git:git@github.com:de4a-at/rdc.git</developerConnection>
+    <url>http://github.com/de4a-at/rdc</url>
     <tag>HEAD</tag>
   </scm>
 

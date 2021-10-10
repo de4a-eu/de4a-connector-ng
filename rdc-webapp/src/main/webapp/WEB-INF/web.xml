@@ -23,7 +23,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
   <display-name>Real DE4A Connector</display-name>
-  <description>https://github.com/phax/rdc</description>
+  <description>https://github.com/de4a-at/rdc</description>
 
   <session-config>
     <session-timeout>60</session-timeout>
