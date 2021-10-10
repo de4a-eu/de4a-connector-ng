@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger.rdc</groupId>
     <artifactId>rdc-parent-pom</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>rdc-webapp-it1-im</artifactId>
   <packaging>war</packaging>
