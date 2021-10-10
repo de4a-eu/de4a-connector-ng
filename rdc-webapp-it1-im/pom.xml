@@ -27,8 +27,8 @@
   <artifactId>rdc-webapp</artifactId>
   <packaging>war</packaging>
   <name>rdc-webapp</name>
-  <description>Contains the Real DE4A Connector Web Application</description>
-  <url>https://github.com/de4a-at/rdc/rdc-webapp</url>
+  <description>Contains the Real DE4A Connector Web Application - Iteration 1, IM pattern</description>
+  <url>https://github.com/de4a-at/rdc/rdc-webapp-it1-im</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>
