@@ -268,7 +268,7 @@ public final class RdcConfig
      * and effectively works around the SMP lookup by providing a constant
      * result. This value is only used if it is not empty and if the static
      * certificate is also present.<br>
-     * Additionally #isR2D2UseDNS () must return <code>false</code> for this
+     * Additionally {@link #isUseDNS()} must return <code>false</code> for this
      * method to be used.
      *
      * @return The static endpoint URL to use. May be <code>null</code>.
@@ -299,7 +299,7 @@ public final class RdcConfig
         return null;
       final X509Certificate ret = CertificateHelper.convertStringToCertficateOrNull (sCert);
       if (ret == null)
-        LOGGER.error ("The provided static R2D2 certificate could NOT be parsed");
+        LOGGER.error ("The provided static SMP certificate could NOT be parsed");
       return ret;
     }
 
