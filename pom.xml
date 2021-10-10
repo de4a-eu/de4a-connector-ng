@@ -26,7 +26,7 @@
   </parent>
   <groupId>com.helger.rdc</groupId>
   <artifactId>rdc-parent-pom</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <packaging>pom</packaging>
   <name>rdc-parent-pom</name>
   <description>Base POM to build the Real DE4A Connector (RDC) projects</description>
@@ -45,7 +45,7 @@
     <connection>scm:git:git@github.com:de4a-at/rdc.git</connection>
     <developerConnection>scm:git:git@github.com:de4a-at/rdc.git</developerConnection>
     <url>http://github.com/de4a-at/rdc</url>
-    <tag>HEAD</tag>
+    <tag>rdc-parent-pom-0.1.0</tag>
   </scm>
 
   <organization>
