@@ -50,7 +50,7 @@ public final class MainSendRequestToNetherlands
     {
       final RDCOutgoingMetadata aMetadata = new RDCOutgoingMetadata ();
       aMetadata.setSenderID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
-      aMetadata.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:nl990000106"));
+      aMetadata.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9991:nl990000106"));
       aMetadata.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration"));
       aMetadata.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
       // aMetadata.setPayloadType (RDCPayloadType.REQUEST);

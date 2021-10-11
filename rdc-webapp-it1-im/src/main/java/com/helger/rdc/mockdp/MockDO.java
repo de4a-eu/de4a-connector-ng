@@ -199,7 +199,9 @@ public final class MockDO implements IMEIncomingHandler
       aResponse.setErrorList (aErrorList);
     }
     else
-      if (!"AT/NL/???".equals (aCompany.getLegalPersonIdentifier ()))
+      if (!"AT/NL/???".equals (aCompany.getLegalPersonIdentifier ()) &&
+          !"AT/RO/???".equals (aCompany.getLegalPersonIdentifier ()) &&
+          !"AT/SE/???".equals (aCompany.getLegalPersonIdentifier ()))
       {
         // TODO error message
         DE4AKafkaClient.send (EErrorLevel.ERROR,

@@ -30,7 +30,7 @@
     <de4a:AgentName>(BMDW) Bundesministerium für Digitalisierung und Wirtschaftsstandort</de4a:AgentName>
   </de4a:DataEvaluator>
   <de4a:DataOwner>
-    <de4a:AgentUrn>iso6523-actorid-upis::9999:se000000013</de4a:AgentUrn>
+    <de4a:AgentUrn>iso6523-actorid-upis::9991:se000000013</de4a:AgentUrn>
     <de4a:AgentName>(BVE) BOLAGSVERKET (Companies Registration Office)</de4a:AgentName>
   </de4a:DataOwner>
   <de4a:DataRequestSubject>
