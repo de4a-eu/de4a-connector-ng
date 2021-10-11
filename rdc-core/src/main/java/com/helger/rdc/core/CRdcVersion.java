@@ -44,7 +44,8 @@ public final class CRdcVersion
   {
     String sProjectVersion = null;
     String sProjectTimestamp = null;
-    final ICommonsMap <String, String> p = PropertiesHelper.loadProperties (new ClassPathResource ("rdc-version.properties"));
+    final ICommonsMap <String, String> p = PropertiesHelper.loadProperties (new ClassPathResource ("rdc-version.properties",
+                                                                                                   CRdcVersion.class.getClassLoader ()));
     if (p != null)
     {
       sProjectVersion = p.get ("version");
