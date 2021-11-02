@@ -1,7 +1,7 @@
 # DCNG - DE4A Connector NG
 
 This is the implementation of the DE4A Connector based on the TOOP Connector.
-It includes [phase4](https://github.com/phax/phase4) as the AS4 gateway for sending and receiving messages.
+It includes [phase4](https://github.com/phax/phase4) as the AS4 gateway for sending and receiving messages but can also be extended to use other AS4 Gateways.
 
 The thing is just called "Connector" in the rest of the documentation.
 
@@ -14,22 +14,21 @@ The goals of the Connector are as follows:
 * Be able to send and receive any kind of payload, for any kind of transmission pattern (IM, USI, ...)
 * Provide a solution that can be used in DE4A and later in the context of SDG as well
 * Be technically integrable in as many ways as possible
-* Be technically compatible with the WP5 DE4A Connector
+* Be technically compatible with the WP5 DE4A Connector (where necessary)
+* Provide support for alternative AS4 gateways
 
 The following are non-goals of the Connector:
 * Provide a one-size fits all solution for all DE4A pilots - the specific workflow orchestrations are out of scope of this project
-* Provide support for alternative AS4 gateways
-
-## Functionalities
 
 ## Structure
 
 The Connector is structured in the following sub-modules:
 
 * `dcng-api` - contains all generic interfaces for the message exchange etc. This project may be included as a dependency when programming against the Connector.
-* `dcng-core` - contains the main implementation logic, the configuration, the phase4 AS4 integration, the SMP lookup etc. This module can be integrated into other applications to have the full functionality in a Java API.
+* `dcng-core` - contains the main implementation logic, the configuration, the SMP lookup etc. This module can be integrated into other applications to have the full functionality in a Java API. It does not contain the AS4 gateway.
+* `dcng-phase4` - contains the phase4 AS4 Gateway
 * `dcng-web-api` - contains the web integration of the core components (REST APIs), but only as a solution to be integrated (library) and not self-contained. This may be used to provide alternative implementations in another web application. Compared to `dcng-core` it offers an HTTP API.
-* `dcng-webapp-it1-im` - is a standalone web application (WAR) to be deployed in a Java JEE application server like Tomcat or Jetty, based on the `dcng-web-api` project. It may also serve as the basis for Docker images. This is the specific solution for Iteration 1 for the intermediation pattern (IM).
+* `dcng-webapp-it1-im` - is a standalone web application (WAR) to be deployed in a Java JEE application server like Tomcat or Jetty, based on the `dcng-web-api` project. It may also serve as the demo for Docker images. This is the specific solution for Iteration 1 for the intermediation pattern (IM).
 
 ## Running the Connector
 
