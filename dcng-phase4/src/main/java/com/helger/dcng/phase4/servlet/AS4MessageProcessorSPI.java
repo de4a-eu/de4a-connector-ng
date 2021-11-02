@@ -37,6 +37,7 @@ import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
+import com.helger.dcng.phase4.Phase4Config;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.factory.IIdentifierFactory;
 import com.helger.phase4.CAS4;
@@ -108,7 +109,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
                                                           @Nonnull final IAS4MessageState aState,
                                                           @Nonnull final ICommonsList <Ebms3Error> aProcessingErrors)
   {
-    if (DcngConfig.Phase4.isDebugLogIncoming () && LOGGER.isInfoEnabled ())
+    if (Phase4Config.isDebugLogIncoming () && LOGGER.isInfoEnabled ())
     {
       LOGGER.info ("Received AS4 message:");
       LOGGER.info ("  UserMessage: " + aUserMessage);

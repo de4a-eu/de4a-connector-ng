@@ -36,7 +36,6 @@ import com.helger.commons.mime.EMimeContentType;
 import com.helger.commons.string.StringHelper;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.wrapper.Wrapper;
-import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.error.EDcngErrorCode;
 import com.helger.dcng.api.me.IMessageExchangeSPI;
 import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
@@ -146,7 +145,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       final String sServletContextPath = ServletHelper.getServletContextBasePath (aServletContext);
 
       // Get the data path
-      final String sDataPath = DcngConfig.Phase4.getDataPath ();
+      final String sDataPath = Phase4Config.getDataPath ();
       if (StringHelper.hasNoText (sDataPath))
         throw new InitializationException ("No phase4 data path was provided!");
       final File aDataPath = new File (sDataPath).getAbsoluteFile ();
@@ -164,11 +163,11 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       if (aOurKey == null)
         throw new InitializationException ("Failed to load configured phase4 key");
 
-      if (StringHelper.hasNoText (DcngConfig.Phase4.getFromPartyID ()))
+      if (StringHelper.hasNoText (Phase4Config.getFromPartyID ()))
         throw new InitializationException ("The phase4 property 'phase4.send.fromparty.id' is missing or empty.");
-      if (StringHelper.hasNoText (DcngConfig.Phase4.getFromPartyIDType ()))
+      if (StringHelper.hasNoText (Phase4Config.getFromPartyIDType ()))
         throw new InitializationException ("The phase4 property 'phase4.send.fromparty.id.type' is missing or empty.");
-      if (StringHelper.hasNoText (DcngConfig.Phase4.getToPartyIDType ()))
+      if (StringHelper.hasNoText (Phase4Config.getToPartyIDType ()))
         throw new InitializationException ("The phase4 property 'phase4.send.toparty.id.type' is missing or empty.");
 
       LOGGER.info ("Verified that the phase4 keystore configuration can be loaded");
@@ -189,10 +188,10 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     AS4MessageProcessorSPI.setIncomingHandler (aIncomingHandler);
 
     // Enable debug (incoming and outgoing)
-    AS4HttpDebug.setEnabled (DcngConfig.Phase4.isHttpDebugEnabled ());
+    AS4HttpDebug.setEnabled (Phase4Config.isHttpDebugEnabled ());
 
     // Set incoming dumper
-    final String sIncomingDumpPath = DcngConfig.Phase4.getDumpPathIncoming ();
+    final String sIncomingDumpPath = Phase4Config.getDumpPathIncoming ();
     if (StringHelper.hasText (sIncomingDumpPath))
     {
       LOGGER.info ("Dumping incoming phase4 AS4 messages to '" + sIncomingDumpPath + "'");
@@ -202,7 +201,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     }
 
     // Set outgoing dumper
-    final String sOutgoingDumpPath = DcngConfig.Phase4.getDumpPathOutgoing ();
+    final String sOutgoingDumpPath = Phase4Config.getDumpPathOutgoing ();
     if (StringHelper.hasText (sOutgoingDumpPath))
     {
       LOGGER.info ("Dumping outgoing phase4 AS4 messages to '" + sOutgoingDumpPath + "'");
@@ -229,10 +228,10 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
                                                                        .documentTypeID (aRoutingInfo.getDocumentTypeID ())
                                                                        .processID (aRoutingInfo.getProcessID ())
                                                                        .conversationID (MessageHelperMethods.createRandomConversationID ())
-                                                                       .fromPartyIDType (DcngConfig.Phase4.getFromPartyIDType ())
-                                                                       .fromPartyID (DcngConfig.Phase4.getFromPartyID ())
+                                                                       .fromPartyIDType (Phase4Config.getFromPartyIDType ())
+                                                                       .fromPartyID (Phase4Config.getFromPartyID ())
                                                                        .fromRole (DcngPMode.PARTY_ROLE)
-                                                                       .toPartyIDType (DcngConfig.Phase4.getToPartyIDType ())
+                                                                       .toPartyIDType (Phase4Config.getToPartyIDType ())
                                                                        .toPartyID (PeppolCertificateHelper.getCNOrNull (aTheirCert.getSubjectX500Principal ()
                                                                                                                                   .getName ()))
                                                                        .toRole (DcngPMode.PARTY_ROLE)

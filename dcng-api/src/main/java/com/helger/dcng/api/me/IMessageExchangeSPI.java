@@ -29,7 +29,7 @@ import com.helger.dcng.api.me.outgoing.MEOutgoingException;
 /**
  * Abstract API to be implemented for sending and receiving AS4 messages. This
  * interface is used to differentiate the different AS4 implementations and
- * integrations like Holodeck and phase4. It requires the usage of Java SPI
+ * integrations like phase4 or Holodeck. It requires the usage of Java SPI
  * technology for registration.
  *
  * @author Philip Helger

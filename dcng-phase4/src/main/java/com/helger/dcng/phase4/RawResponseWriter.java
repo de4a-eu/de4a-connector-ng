@@ -27,7 +27,6 @@ import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.io.file.SimpleFileIO;
 import com.helger.commons.string.StringHelper;
 import com.helger.datetime.util.PDTIOHelper;
-import com.helger.dcng.api.DcngConfig;
 import com.helger.phase4.client.AS4ClientSentMessage;
 import com.helger.phase4.client.IAS4RawResponseConsumer;
 import com.helger.phase4.util.Phase4Exception;
@@ -38,7 +37,7 @@ public class RawResponseWriter implements IAS4RawResponseConsumer
 
   public void handleResponse (final AS4ClientSentMessage <byte []> aResponseEntity) throws Phase4Exception
   {
-    final String sFolderName = DcngConfig.Phase4.getSendResponseFolderName ();
+    final String sFolderName = Phase4Config.getSendResponseFolderName ();
     if (StringHelper.hasText (sFolderName))
     {
       final String sMessageID = aResponseEntity.getMessageID ();
