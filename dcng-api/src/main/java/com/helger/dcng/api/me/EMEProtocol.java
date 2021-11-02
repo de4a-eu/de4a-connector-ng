@@ -32,7 +32,7 @@ import com.helger.peppol.smp.ESMPTransportProfile;
 public enum EMEProtocol implements IHasID <String>
 {
   /**
-   * AS4 using the common transport profile introduced by eSENS
+   * CEF AS4.
    */
   AS4 ("as4", ESMPTransportProfile.TRANSPORT_PROFILE_BDXR_AS4.getID ());
 

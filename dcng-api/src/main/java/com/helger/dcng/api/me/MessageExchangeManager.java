@@ -21,6 +21,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.collection.impl.CommonsLinkedHashMap;
 import com.helger.commons.collection.impl.ICommonsMap;
 import com.helger.commons.concurrent.SimpleReadWriteLock;
@@ -28,26 +31,32 @@ import com.helger.commons.exception.InitializationException;
 import com.helger.commons.lang.ServiceLoaderHelper;
 import com.helger.dcng.api.DcngConfig;
 
+/**
+ * The main class managing the {@link IMessageExchangeSPI}.
+ *
+ * @author Philip Helger
+ */
 public class MessageExchangeManager
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (MessageExchangeManager.class);
   private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
   @GuardedBy ("RW_LOCK")
-  private static ICommonsMap <String, IMessageExchangeSPI> s_aMap = new CommonsLinkedHashMap <> ();
+  private static final ICommonsMap <String, IMessageExchangeSPI> MAP = new CommonsLinkedHashMap <> ();
 
   public static void reinitialize ()
   {
     RW_LOCK.writeLocked ( () -> {
-      s_aMap.clear ();
+      MAP.clear ();
       for (final IMessageExchangeSPI aImpl : ServiceLoaderHelper.getAllSPIImplementations (IMessageExchangeSPI.class))
       {
         final String sID = aImpl.getID ();
-        if (s_aMap.containsKey (sID))
+        if (MAP.containsKey (sID))
           throw new InitializationException ("The IMessageExchangeSPI ID '" +
                                              sID +
                                              "' is already in use - please provide a different one!");
-        s_aMap.put (sID, aImpl);
+        MAP.put (sID, aImpl);
       }
-      if (s_aMap.isEmpty ())
+      if (MAP.isEmpty ())
         throw new InitializationException ("No IMessageExchangeSPI implementation is registered!");
     });
   }
@@ -65,13 +74,16 @@ public class MessageExchangeManager
   public static IMessageExchangeSPI getImplementationOfID (@Nullable final String sID)
   {
     // Fallback to default
-    return RW_LOCK.readLockedGet ( () -> s_aMap.get (sID));
+    return RW_LOCK.readLockedGet ( () -> MAP.get (sID));
   }
 
   @Nonnull
   public static IMessageExchangeSPI getConfiguredImplementation ()
   {
     final String sID = DcngConfig.ME.getMEMImplementationID ();
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("Trying to find MEM implementation with ID '" + sID + "'");
+
     final IMessageExchangeSPI ret = getImplementationOfID (sID);
     if (ret == null)
       throw new IllegalStateException ("Failed to resolve MEM implementation with ID '" + sID + "'");
@@ -81,6 +93,6 @@ public class MessageExchangeManager
   @Nonnegative
   public static ICommonsMap <String, IMessageExchangeSPI> getAll ()
   {
-    return RW_LOCK.readLockedGet (s_aMap::getClone);
+    return RW_LOCK.readLockedGet (MAP::getClone);
   }
 }
