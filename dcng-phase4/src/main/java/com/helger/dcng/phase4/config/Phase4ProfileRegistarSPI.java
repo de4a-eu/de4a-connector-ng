@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.dcng.core.phase4.config;
+package com.helger.dcng.phase4.config;
 
 import java.util.function.Supplier;
 

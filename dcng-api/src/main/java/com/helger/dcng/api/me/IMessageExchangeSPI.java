@@ -50,10 +50,10 @@ public interface IMessageExchangeSPI
    * Register an incoming handler that takes the request/response to handle. The
    * differentiation between step 2/4 and 4/4 must be inside of the SPI
    * implementation. This method is only called once for the chosen
-   * implementation, so the implementation can act as an "init" method and
-   * perform further implementation activities. If this method is not called, it
-   * is ensured that {@link #sendOutgoing(IMERoutingInformation, MEMessage)} of
-   * this implementation are also never called.
+   * implementation and perform further implementation activities. If this
+   * method is not called, it is ensured that
+   * {@link #sendOutgoing(IMERoutingInformation, MEMessage)} of this
+   * implementation are also never called.
    *
    * @param aServletContext
    *        The servlet context in which the handler should be registered. Never
@@ -61,7 +61,7 @@ public interface IMessageExchangeSPI
    * @param aIncomingHandler
    *        The handler to use. May not be <code>null</code>.
    */
-  void registerIncomingHandler (@Nonnull ServletContext aServletContext, @Nonnull IMEIncomingHandler aIncomingHandler);
+  void init (@Nonnull ServletContext aServletContext, @Nonnull IMEIncomingHandler aIncomingHandler);
 
   /**
    * Trigger the message transmission in step 1/4 and 3/4.
@@ -73,8 +73,7 @@ public interface IMessageExchangeSPI
    * @throws MEOutgoingException
    *         In case of error.
    */
-  void sendOutgoing (@Nonnull IMERoutingInformation aRoutingInfo,
-                     @Nonnull MEMessage aMessage) throws MEOutgoingException;
+  void sendOutgoing (@Nonnull IMERoutingInformation aRoutingInfo, @Nonnull MEMessage aMessage) throws MEOutgoingException;
 
   /**
    * Shutdown the Message Exchange.

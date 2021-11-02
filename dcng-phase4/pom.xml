@@ -24,11 +24,11 @@
     <artifactId>dcng-parent-pom</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
-  <artifactId>dcng-core</artifactId>
+  <artifactId>dcng-phase4</artifactId>
   <packaging>bundle</packaging>
-  <name>dcng-core</name>
-  <description>Contains the DE4A Connector NG Core</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-core</url>
+  <name>dcng-phase4</name>
+  <description>Contains the DE4A Connector NG phase4 Gateway</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-phase4</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
@@ -58,6 +58,10 @@
       <artifactId>dcng-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.helger.dcng</groupId>
+      <artifactId>dcng-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>eu.de4a</groupId>
       <artifactId>de4a-kafka-client</artifactId>
     </dependency>
@@ -66,12 +70,16 @@
       <artifactId>ph-xservlet</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger.peppol</groupId>
-      <artifactId>peppol-smp-client</artifactId>
+      <groupId>com.helger.phase4</groupId>
+      <artifactId>phase4-lib</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger</groupId>
-      <artifactId>ph-regrep</artifactId>
+      <groupId>com.helger.phase4</groupId>
+      <artifactId>phase4-profile-cef</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.helger.phase4</groupId>
+      <artifactId>phase4-cef-client</artifactId>
     </dependency>
     
     <dependency>
@@ -119,8 +127,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Automatic-Module-Name>com.helger.dcng.core</Automatic-Module-Name>
-            <Export-Package>com.helger.dcng.core.*</Export-Package>
+            <Automatic-Module-Name>com.helger.dcng.phase4</Automatic-Module-Name>
+            <Export-Package>com.helger.dcng.phase4.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>

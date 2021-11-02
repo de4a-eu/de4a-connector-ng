@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.dcng.core.phase4;
+package com.helger.dcng.phase4;
 
 import java.io.File;
 import java.security.KeyStore;
@@ -45,8 +45,8 @@ import com.helger.dcng.api.me.model.MEPayload;
 import com.helger.dcng.api.me.outgoing.IMERoutingInformation;
 import com.helger.dcng.api.me.outgoing.MEOutgoingException;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
-import com.helger.dcng.core.phase4.config.DcngPMode;
-import com.helger.dcng.core.phase4.servlet.AS4MessageProcessorSPI;
+import com.helger.dcng.phase4.config.DcngPMode;
+import com.helger.dcng.phase4.servlet.AS4MessageProcessorSPI;
 import com.helger.peppol.utils.PeppolCertificateHelper;
 import com.helger.phase4.attachment.EAS4CompressionMode;
 import com.helger.phase4.attachment.Phase4OutgoingAttachment;
@@ -96,9 +96,8 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
   /**
    * Change the crypto factory deduced from the configuration file. MUST be
-   * called before
-   * {@link #registerIncomingHandler(ServletContext, IMEIncomingHandler)} to
-   * have an effect!
+   * called before {@link #init(ServletContext, IMEIncomingHandler)} to have an
+   * effect!
    *
    * @param aCF
    *        The crypto factory to use. May not be <code>null</code>.
@@ -125,10 +124,21 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     return ret;
   }
 
-  public void registerIncomingHandler (@Nonnull final ServletContext aServletContext, @Nonnull final IMEIncomingHandler aIncomingHandler)
+  public void init (@Nonnull final ServletContext aServletContext, @Nonnull final IMEIncomingHandler aIncomingHandler)
   {
     ValueEnforcer.notNull (aServletContext, "ServletContext");
     ValueEnforcer.notNull (aIncomingHandler, "IncomingHandler");
+
+    {
+      // Check phase4 configuration
+      final IAS4CryptoFactory aCF = Phase4Config.getCryptoFactory ();
+      if (aCF == null)
+        throw new InitializationException ("Failed to load the configured phase4 crypto configuration");
+      if (aCF.getPrivateKeyEntry () == null)
+        throw new InitializationException ("Failed to load the private key from the phase4 crypto configuration");
+      if (aCF.getTrustStore () == null)
+        throw new InitializationException ("Failed to load the trust store from the phase4 crypto configuration");
+    }
 
     if (!WebFileIO.isInited ())
     {
