@@ -20,15 +20,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.helger.rdc</groupId>
-    <artifactId>rdc-parent-pom</artifactId>
+    <groupId>com.helger.dcng</groupId>
+    <artifactId>dcng-parent-pom</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
-  <artifactId>rdc-web-api</artifactId>
+  <artifactId>dcng-web-api</artifactId>
   <packaging>bundle</packaging>
-  <name>rdc-web-api</name>
-  <description>Contains the RDC REST API implementations</description>
-  <url>https://github.com/de4a-at/rdc/rdc-web-api</url>
+  <name>dcng-web-api</name>
+  <description>Contains the DE4A Connector NG REST API implementations</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-web-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
@@ -54,12 +54,12 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.helger.rdc</groupId>
-      <artifactId>rdc-api</artifactId>
+      <groupId>com.helger.dcng</groupId>
+      <artifactId>dcng-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.helger.rdc</groupId>
-      <artifactId>rdc-core</artifactId>
+      <groupId>com.helger.dcng</groupId>
+      <artifactId>dcng-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.photon</groupId>
@@ -95,8 +95,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Automatic-Module-Name>com.helger.rdc.webapi</Automatic-Module-Name>
-            <Export-Package>com.helger.rdc.webapi.*</Export-Package>
+            <Automatic-Module-Name>com.helger.dcng.webapi</Automatic-Module-Name>
+            <Export-Package>com.helger.dcng.webapi.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>

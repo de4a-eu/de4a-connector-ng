@@ -20,15 +20,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.helger.rdc</groupId>
-    <artifactId>rdc-parent-pom</artifactId>
+    <groupId>com.helger.dcng</groupId>
+    <artifactId>dcng-parent-pom</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
-  <artifactId>rdc-core</artifactId>
+  <artifactId>dcng-core</artifactId>
   <packaging>bundle</packaging>
-  <name>rdc-core</name>
-  <description>Contains the DE4A Connector Core</description>
-  <url>https://github.com/de4a-at/rdc/rdc-core</url>
+  <name>dcng-core</name>
+  <description>Contains the DE4A Connector NG Core</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-core</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
@@ -54,8 +54,8 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.helger.rdc</groupId>
-      <artifactId>rdc-api</artifactId>
+      <groupId>com.helger.dcng</groupId>
+      <artifactId>dcng-api</artifactId>
     </dependency>
     <dependency>
       <groupId>eu.de4a</groupId>
@@ -131,8 +131,8 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Automatic-Module-Name>com.helger.rdc.core</Automatic-Module-Name>
-            <Export-Package>com.helger.rdc.core.*</Export-Package>
+            <Automatic-Module-Name>com.helger.dcng.core</Automatic-Module-Name>
+            <Export-Package>com.helger.dcng.core.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>

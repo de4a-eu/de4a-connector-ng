@@ -20,15 +20,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.helger.rdc</groupId>
-    <artifactId>rdc-parent-pom</artifactId>
+    <groupId>com.helger.dcng</groupId>
+    <artifactId>dcng-parent-pom</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
-  <artifactId>rdc-api</artifactId>
+  <artifactId>dcng-api</artifactId>
   <packaging>bundle</packaging>
-  <name>rdc-api</name>
-  <description>Contains the DE4A Connector shared API</description>
-  <url>https://github.com/de4a-at/rdc/rdc-api</url>
+  <name>dcng-api</name>
+  <description>Contains the DE4A Connector NG shared API</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
@@ -100,11 +100,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Automatic-Module-Name>com.helger.rdc.api</Automatic-Module-Name>
-            <Export-Package>com.helger.rdc.api.*</Export-Package>
+            <Automatic-Module-Name>com.helger.dcng.api</Automatic-Module-Name>
+            <Export-Package>com.helger.dcng.api.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
             <Require-Capability>osgi.extender; filter:="(osgi.extender=osgi.serviceloader.processor)",
-osgi.serviceloader; filter:="(osgi.serviceloader=com.helger.rdc.api.me.IMessageExchangeSPI)"; cardinality:=multiple; resolution:=optional</Require-Capability>
+osgi.serviceloader; filter:="(osgi.serviceloader=com.helger.dcng.api.me.IMessageExchangeSPI)"; cardinality:=multiple; resolution:=optional</Require-Capability>
           </instructions>
         </configuration>
       </plugin>

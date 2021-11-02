@@ -20,15 +20,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.helger.rdc</groupId>
-    <artifactId>rdc-parent-pom</artifactId>
+    <groupId>com.helger.dcng</groupId>
+    <artifactId>dcng-parent-pom</artifactId>
     <version>0.1.1-SNAPSHOT</version>
   </parent>
-  <artifactId>rdc-webapp-it1-im</artifactId>
+  <artifactId>dcng-webapp-it1-im</artifactId>
   <packaging>war</packaging>
-  <name>rdc-webapp-it1-im</name>
-  <description>Contains the Real DE4A Connector Web Application - Iteration 1, IM pattern</description>
-  <url>https://github.com/de4a-at/rdc/rdc-webapp-it1-im</url>
+  <name>dcng-webapp-it1-im</name>
+  <description>Contains the DE4A Connector NG Web Application - Iteration 1, IM pattern</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-webapp-it1-im</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>
@@ -54,8 +54,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.helger.rdc</groupId>
-      <artifactId>rdc-web-api</artifactId>
+      <groupId>com.helger.dcng</groupId>
+      <artifactId>dcng-web-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.photon</groupId>
