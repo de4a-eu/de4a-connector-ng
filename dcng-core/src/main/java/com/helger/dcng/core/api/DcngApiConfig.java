@@ -27,7 +27,7 @@ import com.helger.dcng.core.smp.DDServiceGroupHrefProviderSMP;
 import com.helger.dcng.core.smp.DDServiceMetadataProviderSMP;
 
 /**
- * Global RDC API configuration.<br>
+ * Global DCNG API configuration.<br>
  * This configuration is e.g. changed by the Simulator to install "mock"
  * handler.
  *

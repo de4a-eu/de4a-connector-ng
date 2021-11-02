@@ -169,7 +169,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = DcngPMode.createRDCMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
+      final PMode aPMode = DcngPMode.createDCNGMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
       aPMode.setPayloadService (new PModePayloadService (EAS4CompressionMode.GZIP));
       aPMode.getReceptionAwareness ().setRetry (false);
       aPModeMgr.createOrUpdatePMode (aPMode);
@@ -203,7 +203,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
                                                                                                                                                    nTry))));
     }
 
-    MessageHelperMethods.setCustomMessageIDSuffix ("de4a.rdc");
+    MessageHelperMethods.setCustomMessageIDSuffix ("de4a.dcng");
   }
 
   private static void _sendOutgoing (@Nonnull final IAS4CryptoFactory aCF,

@@ -23,7 +23,7 @@ import org.junit.Test;
 import com.helger.peppolid.IParticipantIdentifier;
 
 /**
- * Test class for class {@link RdcIdentifierFactory}.
+ * Test class for class {@link DcngIdentifierFactory}.
  *
  * @author Philip Helger
  */

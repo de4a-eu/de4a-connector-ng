@@ -53,7 +53,7 @@ public class DcngIncomingHandlerViaHttp implements IMEIncomingHandler
 
   public void handleIncomingRequest (@Nonnull final MEMessage aRequest) throws MEIncomingException
   {
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> m_sLogPrefix + "RDC got incoming request");
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> m_sLogPrefix + "DCNG got incoming request");
     DcngDPTriggerViaHttp.forwardMessage (aRequest);
   }
 

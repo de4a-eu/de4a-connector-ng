@@ -34,7 +34,7 @@ import com.helger.dcng.api.DcngIdentifierFactory;
 import com.helger.dcng.api.me.EMEProtocol;
 
 /**
- * Test class for class {@link RdcRestJAXB}.
+ * Test class for class {@link DcngRestJAXB}.
  *
  * @author Philip Helger
  */

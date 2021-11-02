@@ -53,13 +53,13 @@ public class DcngRootServlet extends HttpServlet
                         " code { font-family:monospace; color:#e83e8c; }";
 
     final StringBuilder aSB = new StringBuilder ();
-    aSB.append ("<html><head><title>RDC - Real DE4A Connector</title><style>").append (sCSS).append ("</style></head><body>");
-    aSB.append ("<h1>RDC - Real DE4A Connector</h1>");
+    aSB.append ("<html><head><title>DE4A Connector NG</title><style>").append (sCSS).append ("</style></head><body>");
+    aSB.append ("<h1>DE4A Connector NG</h1>");
     aSB.append ("<div>Version: ").append (CDcngVersion.BUILD_VERSION).append ("</div>");
     aSB.append ("<div>Build timestamp: ").append (CDcngVersion.BUILD_TIMESTAMP).append ("</div>");
     aSB.append ("<div>Current time: ").append (PDTFactory.getCurrentZonedDateTimeUTC ().toString ()).append ("</div>");
     aSB.append ("<div><a href='status'>Check /status</a></div>");
-    aSB.append ("<div><a href='https://github.com/de4a-at/rdc/' target='_blank'>Source code on GitHub</a></div>");
+    aSB.append ("<div><a href='https://github.com/de4a-at/de4a-connector-ng/' target='_blank'>Source code on GitHub</a></div>");
 
     {
       aSB.append ("<h2>Registered Message Exchange implementations</h2>");

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
- * Test class for class {@link RdcConfig}.
+ * Test class for class {@link DcngConfig}.
  *
  * @author Philip Helger
  */

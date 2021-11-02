@@ -70,7 +70,7 @@ public final class DcngPMode
   }
 
   /**
-   * One-Way RDC pmode uses one-way push
+   * One-Way DCNG pmode uses one-way push
    *
    * @param sInitiatorID
    *        Initiator ID
@@ -86,11 +86,11 @@ public final class DcngPMode
    * @return New PMode
    */
   @Nonnull
-  public static PMode createRDCMode (@Nonnull @Nonempty final String sInitiatorID,
-                                     @Nonnull @Nonempty final String sResponderID,
-                                     @Nullable final String sResponderAddress,
-                                     @Nonnull final String sPModeID,
-                                     final boolean bPersist)
+  public static PMode createDCNGMode (@Nonnull @Nonempty final String sInitiatorID,
+                                      @Nonnull @Nonempty final String sResponderID,
+                                      @Nullable final String sResponderAddress,
+                                      @Nonnull final String sPModeID,
+                                      final boolean bPersist)
   {
     final PModeParty aInitiator = PModeParty.createSimple (sInitiatorID, PARTY_ROLE);
     final PModeParty aResponder = PModeParty.createSimple (sResponderID, PARTY_ROLE);

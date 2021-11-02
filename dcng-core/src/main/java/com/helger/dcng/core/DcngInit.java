@@ -87,7 +87,7 @@ public final class DcngInit
     if (!INITED.compareAndSet (false, true))
       throw new IllegalStateException ("DE4A Connector is already initialized");
 
-    GlobalIDFactory.setPersistentStringIDFactory (new StringIDFromGlobalPersistentLongIDFactory ("rdc-"));
+    GlobalIDFactory.setPersistentStringIDFactory (new StringIDFromGlobalPersistentLongIDFactory ("dcng-"));
     GlobalDebug.setDebugModeDirect (DcngConfig.Global.isGlobalDebug ());
     GlobalDebug.setProductionModeDirect (DcngConfig.Global.isGlobalProduction ());
 
