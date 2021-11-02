@@ -31,6 +31,8 @@ import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
 import com.helger.dcng.api.me.outgoing.MERoutingInformation;
 import com.helger.dcng.api.me.outgoing.MERoutingInformationInput;
+import com.helger.dcng.api.rest.DCNGOutgoingMessage;
+import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.api.DcngApiHelper;
 import com.helger.dcng.core.regrep.DcngRegRepHelper;
@@ -43,8 +45,6 @@ import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.photon.api.IAPIDescriptor;
-import com.helger.rdc.api.rest.RDCOutgoingMessage;
-import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.regrep.CRegRep4;
 import com.helger.security.certificate.CertificateHelper;
 import com.helger.smpclient.json.SMPJsonResponse;
@@ -70,7 +70,7 @@ public class ApiPostLookendAndSend extends AbstractDcngApiInvoker
                                      @Nonnull final IDocumentTypeIdentifier aDocumentTypeID,
                                      @Nonnull final IProcessIdentifier aProcessID,
                                      @Nonnull final String sTransportProfile,
-                                     @Nonnull final Iterable <RDCPayload> aPayloads)
+                                     @Nonnull final Iterable <DCNGPayload> aPayloads)
   {
     // Start response
     final IJsonObject aJson = new JsonObject ();
@@ -137,7 +137,7 @@ public class ApiPostLookendAndSend extends AbstractDcngApiInvoker
         // Add payloads
         final MEMessage.Builder aMessage = MEMessage.builder ();
         int nIndex = 0;
-        for (final RDCPayload aPayload : aPayloads)
+        for (final DCNGPayload aPayload : aPayloads)
         {
           if (nIndex == 0)
           {
@@ -177,7 +177,7 @@ public class ApiPostLookendAndSend extends AbstractDcngApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final RDCOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 

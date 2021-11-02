@@ -35,13 +35,13 @@ import com.helger.commons.url.URLProtocolRegistry;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
+import com.helger.dcng.api.rest.DCNGIncomingMessage;
+import com.helger.dcng.api.rest.DCNGIncomingMetadata;
+import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.response.ResponseHandlerByteArray;
-import com.helger.rdc.api.rest.RDCIncomingMessage;
-import com.helger.rdc.api.rest.RDCIncomingMetadata;
-import com.helger.rdc.api.rest.RDCPayload;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
@@ -57,7 +57,7 @@ public final class DcngDPTriggerViaHttp
   {}
 
   @Nonnull
-  private static ESuccess _forwardMessage (@Nonnull final RDCIncomingMessage aMsg, @Nonnull @Nonempty final String sDestURL)
+  private static ESuccess _forwardMessage (@Nonnull final DCNGIncomingMessage aMsg, @Nonnull @Nonempty final String sDestURL)
   {
     ValueEnforcer.notNull (aMsg, "Msg");
     ValueEnforcer.notEmpty (sDestURL, "Destination URL");
@@ -76,7 +76,7 @@ public final class DcngDPTriggerViaHttp
 
     DE4AKafkaClient.send (EErrorLevel.INFO, () -> "Sending inbound message to '" + sDestURL + "' with " + aPayload.length + " bytes");
 
-    // Main sending, using RDC http settings
+    // Main sending, using DCNG http settings
     try (final HttpClientManager aHCM = HttpClientManager.create (new DcngHttpClientSettings ()))
     {
       final HttpPost aPost = new HttpPost (sDestURL);
@@ -95,22 +95,22 @@ public final class DcngDPTriggerViaHttp
   }
 
   @Nonnull
-  private static RDCIncomingMetadata _createMetadata (@Nonnull final MEMessage aRequest)
+  private static DCNGIncomingMetadata _createMetadata (@Nonnull final MEMessage aRequest)
   {
-    final RDCIncomingMetadata ret = new RDCIncomingMetadata ();
-    ret.setSenderID (DcngRestJAXB.createRDCID (aRequest.getSenderID ()));
-    ret.setReceiverID (DcngRestJAXB.createRDCID (aRequest.getReceiverID ()));
-    ret.setDocTypeID (DcngRestJAXB.createRDCID (aRequest.getDocumentTypeID ()));
-    ret.setProcessID (DcngRestJAXB.createRDCID (aRequest.getProcessID ()));
+    final DCNGIncomingMetadata ret = new DCNGIncomingMetadata ();
+    ret.setSenderID (DcngRestJAXB.createDCNGID (aRequest.getSenderID ()));
+    ret.setReceiverID (DcngRestJAXB.createDCNGID (aRequest.getReceiverID ()));
+    ret.setDocTypeID (DcngRestJAXB.createDCNGID (aRequest.getDocumentTypeID ()));
+    ret.setProcessID (DcngRestJAXB.createDCNGID (aRequest.getProcessID ()));
     return ret;
   }
 
   @Nonnull
-  private static RDCPayload _createPayload (@Nonnull final byte [] aValue,
-                                            @Nullable final String sContentID,
-                                            @Nonnull final IMimeType aMimeType)
+  private static DCNGPayload _createPayload (@Nonnull final byte [] aValue,
+                                             @Nullable final String sContentID,
+                                             @Nonnull final IMimeType aMimeType)
   {
-    final RDCPayload ret = new RDCPayload ();
+    final DCNGPayload ret = new DCNGPayload ();
     ret.setValue (aValue);
     ret.setContentID (sContentID);
     ret.setMimeType (aMimeType.getAsString ());
@@ -138,8 +138,8 @@ public final class DcngDPTriggerViaHttp
   {
     ValueEnforcer.notEmpty (sDestURL, "Destination URL");
 
-    // Convert from MEMessage to RDCIncomingMessage
-    final RDCIncomingMessage aMsg = new RDCIncomingMessage ();
+    // Convert from MEMessage to DCNGIncomingMessage
+    final DCNGIncomingMessage aMsg = new DCNGIncomingMessage ();
     aMsg.setMetadata (_createMetadata (aRequest));
     for (final MEPayload aPayload : aRequest.payloads ())
       aMsg.addPayload (_createPayload (aPayload.getData ().bytes (), aPayload.getContentID (), aPayload.getMimeType ()));

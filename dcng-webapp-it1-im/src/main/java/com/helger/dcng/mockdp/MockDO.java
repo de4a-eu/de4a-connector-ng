@@ -43,10 +43,10 @@ import com.helger.dcng.api.me.EMEProtocol;
 import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.incoming.MEIncomingException;
 import com.helger.dcng.api.me.model.MEMessage;
+import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.webapi.as4.ApiPostLookendAndSend;
 import com.helger.json.IJsonObject;
 import com.helger.json.serialize.JsonWriterSettings;
-import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.xml.serialize.read.DOMReader;
 import com.helger.xml.serialize.write.EXMLSerializeIndent;
 import com.helger.xml.serialize.write.XMLWriter;
@@ -267,8 +267,8 @@ public final class MockDO implements IMEIncomingHandler
       ThreadHelper.sleep (1000);
 
       // Start new transmission
-      final ICommonsList <RDCPayload> aPayloads = new CommonsArrayList <> ();
-      final RDCPayload a = new RDCPayload ();
+      final ICommonsList <DCNGPayload> aPayloads = new CommonsArrayList <> ();
+      final DCNGPayload a = new DCNGPayload ();
       a.setValue (aBytes);
       a.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
       a.setContentID ("ResponseTransferEvidence");
@@ -280,8 +280,8 @@ public final class MockDO implements IMEIncomingHandler
                                                                aMessage.getSenderID (),
                                                                aMessage.getDocumentTypeID (),
                                                                DcngConfig.getIdentifierFactory ()
-                                                                        .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
-                                                                                                  "response"),
+                                                                         .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
+                                                                                                   "response"),
                                                                EMEProtocol.AS4.getTransportProfileID (),
                                                                aPayloads);
       LOGGER.info ("Sending result:\n" + aJson.getAsJsonString (JsonWriterSettings.DEFAULT_SETTINGS_FORMATTED));

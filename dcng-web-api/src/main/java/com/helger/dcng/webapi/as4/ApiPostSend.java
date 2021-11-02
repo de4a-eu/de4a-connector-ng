@@ -31,6 +31,8 @@ import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
 import com.helger.dcng.api.me.outgoing.IMERoutingInformation;
 import com.helger.dcng.api.me.outgoing.MERoutingInformation;
+import com.helger.dcng.api.rest.DCNGOutgoingMessage;
+import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.api.DcngApiHelper;
 import com.helger.dcng.core.regrep.DcngRegRepHelper;
@@ -40,8 +42,6 @@ import com.helger.dcng.webapi.helper.CommonApiInvoker;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
 import com.helger.photon.api.IAPIDescriptor;
-import com.helger.rdc.api.rest.RDCOutgoingMessage;
-import com.helger.rdc.api.rest.RDCPayload;
 import com.helger.regrep.CRegRep4;
 import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
@@ -62,7 +62,7 @@ public class ApiPostSend extends AbstractDcngApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final RDCOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
@@ -86,7 +86,7 @@ public class ApiPostSend extends AbstractDcngApiInvoker
     // Add payloads
     final MEMessage.Builder aMessage = MEMessage.builder ();
     int nIndex = 0;
-    for (final RDCPayload aPayload : aOutgoingMsg.getPayload ())
+    for (final DCNGPayload aPayload : aOutgoingMsg.getPayload ())
     {
       if (nIndex == 0)
       {

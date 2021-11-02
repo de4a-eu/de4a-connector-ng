@@ -29,6 +29,9 @@ import com.helger.commons.io.stream.StreamHelper;
 import com.helger.commons.mime.CMimeType;
 import com.helger.dcng.api.DcngIdentifierFactory;
 import com.helger.dcng.api.me.EMEProtocol;
+import com.helger.dcng.api.rest.DCNGOutgoingMessage;
+import com.helger.dcng.api.rest.DCNGOutgoingMetadata;
+import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.HttpClientSettings;
@@ -36,9 +39,6 @@ import com.helger.httpclient.response.ResponseHandlerJson;
 import com.helger.json.IJson;
 import com.helger.json.serialize.JsonWriter;
 import com.helger.json.serialize.JsonWriterSettings;
-import com.helger.rdc.api.rest.RDCOutgoingMessage;
-import com.helger.rdc.api.rest.RDCOutgoingMetadata;
-import com.helger.rdc.api.rest.RDCPayload;
 
 public final class MainSendRequestToSweden
 {
@@ -46,19 +46,19 @@ public final class MainSendRequestToSweden
 
   public static void main (final String [] args) throws IOException
   {
-    final RDCOutgoingMessage aOM = new RDCOutgoingMessage ();
+    final DCNGOutgoingMessage aOM = new DCNGOutgoingMessage ();
     {
-      final RDCOutgoingMetadata aMetadata = new RDCOutgoingMetadata ();
-      aMetadata.setSenderID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
-      aMetadata.setReceiverID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9991:se000000013"));
-      aMetadata.setDocTypeID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration"));
-      aMetadata.setProcessID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
-      // aMetadata.setPayloadType (RDCPayloadType.REQUEST);
+      final DCNGOutgoingMetadata aMetadata = new DCNGOutgoingMetadata ();
+      aMetadata.setSenderID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
+      aMetadata.setReceiverID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9991:se000000013"));
+      aMetadata.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration"));
+      aMetadata.setProcessID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
+      // aMetadata.setPayloadType (DCNGPayloadType.REQUEST);
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
       aOM.setMetadata (aMetadata);
     }
     {
-      final RDCPayload aPayload = new RDCPayload ();
+      final DCNGPayload aPayload = new DCNGPayload ();
       aPayload.setValue (StreamHelper.getAllBytes (new ClassPathResource ("xml/dba-se-1.xml")));
       if (aPayload.getValue () == null || aPayload.getValue ().length == 0)
         throw new IllegalStateException ("Payload is empty");
