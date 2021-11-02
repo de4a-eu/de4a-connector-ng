@@ -24,13 +24,13 @@
     <artifactId>parent-pom</artifactId>
     <version>1.11.4</version>
   </parent>
-  <groupId>com.helger.rdc</groupId>
-  <artifactId>rdc-parent-pom</artifactId>
+  <groupId>com.helger.dcng</groupId>
+  <artifactId>dcng-parent-pom</artifactId>
   <version>0.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>rdc-parent-pom</name>
-  <description>Base POM to build the Real DE4A Connector (RDC) projects</description>
-  <url>https://github.com/de4a-at/rdc</url>
+  <name>dcng-parent-pom</name>
+  <description>Base POM to build the DE4A Connector NG (DCNG) projects</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>
@@ -42,9 +42,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:de4a-at/rdc.git</connection>
-    <developerConnection>scm:git:git@github.com:de4a-at/rdc.git</developerConnection>
-    <url>http://github.com/de4a-at/rdc</url>
+    <connection>scm:git:git@github.com:de4a-at/de4a-connector-ng.git</connection>
+    <developerConnection>scm:git:git@github.com:de4a-at/de4a-connector-ng.git</developerConnection>
+    <url>http://github.com/de4a-at/de4a-connector-ng</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -95,14 +95,14 @@
       <dependency>
         <groupId>com.helger.schematron</groupId>
         <artifactId>ph-schematron-parent-pom</artifactId>
-        <version>6.2.2</version>
+        <version>6.2.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>com.helger.peppol</groupId>
         <artifactId>peppol-commons-parent-pom</artifactId>
-        <version>8.6.2</version>
+        <version>8.6.4</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -154,23 +154,23 @@
 
       <!-- The sub-projects of this project have a constant version -->
       <dependency>
-        <groupId>com.helger.rdc</groupId>
-        <artifactId>rdc-api</artifactId>
+        <groupId>com.helger.dcng</groupId>
+        <artifactId>dcng-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.helger.rdc</groupId>
-        <artifactId>rdc-core</artifactId>
+        <groupId>com.helger.dcng</groupId>
+        <artifactId>dcng-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.helger.rdc</groupId>
-        <artifactId>rdc-web-api</artifactId>
+        <groupId>com.helger.dcng</groupId>
+        <artifactId>dcng-web-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.helger.rdc</groupId>
-        <artifactId>rdc-webapp-it1-im</artifactId>
+        <groupId>com.helger.dcng</groupId>
+        <artifactId>dcng-webapp-it1-im</artifactId>
         <version>${project.version}</version>
         <classifier>classes</classifier>
       </dependency>
@@ -188,10 +188,10 @@
 
   <!-- Sub-projects - must match child directory names; order is important! -->
   <modules>
-    <module>rdc-api</module>
-    <module>rdc-core</module>
-    <module>rdc-web-api</module>
-    <module>rdc-webapp-it1-im</module>
+    <module>dcng-api</module>
+    <module>dcng-core</module>
+    <module>dcng-web-api</module>
+    <module>dcng-webapp-it1-im</module>
   </modules>
 
   <build>
