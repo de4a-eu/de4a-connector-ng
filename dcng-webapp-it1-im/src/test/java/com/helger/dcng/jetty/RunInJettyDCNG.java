@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.dcng.standalone;
+package com.helger.dcng.jetty;
 
 import javax.annotation.concurrent.Immutable;
 

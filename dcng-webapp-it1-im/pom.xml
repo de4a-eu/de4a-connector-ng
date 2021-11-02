@@ -58,6 +58,10 @@
       <artifactId>dcng-web-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.helger.dcng</groupId>
+      <artifactId>dcng-phase4</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.helger.photon</groupId>
       <artifactId>ph-oton-core</artifactId>
     </dependency>
