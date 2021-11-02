@@ -182,10 +182,9 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
 
     // To test returning with a failure works as intended
     if (aUserMessage.getCollaborationInfo ().getAction ().equals (ACTION_FAILURE))
-
-    {
       return AS4MessageProcessorResult.createFailure (ACTION_FAILURE);
-    }
+
+    // By default: success
     return AS4MessageProcessorResult.createSuccess ();
   }
 

@@ -170,6 +170,11 @@
       </dependency>
       <dependency>
         <groupId>com.helger.dcng</groupId>
+        <artifactId>dcng-holodeck</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger.dcng</groupId>
         <artifactId>dcng-web-api</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -190,6 +195,7 @@
     <module>dcng-api</module>
     <module>dcng-core</module>
     <module>dcng-phase4</module>
+    <module>dcng-holodeck</module>
     <module>dcng-web-api</module>
     <module>dcng-webapp-phase4-it1-im</module>
   </modules>

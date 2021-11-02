@@ -54,6 +54,7 @@ import com.helger.phase4.crypto.IAS4CryptoFactory;
 import com.helger.phase4.dump.AS4DumpManager;
 import com.helger.phase4.dump.AS4IncomingDumperFileBased;
 import com.helger.phase4.dump.AS4OutgoingDumperFileBased;
+import com.helger.phase4.dump.AS4RawResponseConsumerWriteToFile;
 import com.helger.phase4.dynamicdiscovery.AS4EndpointDetailProviderConstant;
 import com.helger.phase4.http.AS4HttpDebug;
 import com.helger.phase4.messaging.domain.MessageHelperMethods;
@@ -236,7 +237,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
                                                                                                                                   .getName ()))
                                                                        .toRole (DcngPMode.PARTY_ROLE)
                                                                        .useOriginalSenderFinalRecipientTypeAttr (false)
-                                                                       .rawResponseConsumer (new RawResponseWriter ())
+                                                                       .rawResponseConsumer (new AS4RawResponseConsumerWriteToFile ())
                                                                        .endpointDetailProvider (new AS4EndpointDetailProviderConstant (aRoutingInfo.getCertificate (),
                                                                                                                                        aRoutingInfo.getEndpointURL ()));
 

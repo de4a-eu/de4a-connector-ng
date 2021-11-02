@@ -1,0 +1,35 @@
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+  <env:Header>
+    <eb:Messaging xmlns:eb="http://docs.oasis-open.org/ebxml-msg/ebms/v3.0/ns/core/200704/" xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope" soapenv:mustUnderstand="true">
+      <eb:UserMessage>
+        <eb:MessageInfo>
+          <eb:Timestamp>${timestamp}</eb:Timestamp>
+          <eb:MessageId>${messageId}</eb:MessageId>
+        </eb:MessageInfo>
+        <eb:PartyInfo>
+          <eb:From>
+            <eb:PartyId>GW</eb:PartyId>
+            <eb:Role>http://www.toop.eu/edelivery/gateway</eb:Role>
+          </eb:From>
+          <eb:To>
+            <eb:PartyId>BACKEND</eb:PartyId>
+            <eb:Role>http://www.toop.eu/edelivery/backend</eb:Role>
+          </eb:To>
+        </eb:PartyInfo>
+        <eb:CollaborationInfo>
+          <eb:Service>http://www.toop.eu/edelivery/bit</eb:Service>
+          <eb:Action>${action}</eb:Action>
+          <eb:ConversationId>1</eb:ConversationId>
+        </eb:CollaborationInfo>
+        <eb:MessageProperties>
+          <eb:Property name="MessageId">${propMessageId}</eb:Property>
+          <eb:Property name="RefToMessageId">${propRefToMessageId}</eb:Property>
+          <eb:Property name="Result">${result}</eb:Property>
+          <eb:Property name="ErrorCode">${errorCode}</eb:Property>
+          <eb:Property name="Description">${description}</eb:Property>
+        </eb:MessageProperties>
+      </eb:UserMessage>
+    </eb:Messaging>
+  </env:Header>
+  <env:Body/>
+</env:Envelope>
