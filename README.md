@@ -1,7 +1,8 @@
 # DCNG - DE4A Connector NG
 
 This is the implementation of the DE4A Connector based on the TOOP Connector.
-It includes [phase4](https://github.com/phax/phase4) as the AS4 gateway for sending and receiving messages but can also be extended to use other AS4 Gateways.
+
+It includes [phase4](https://github.com/phax/phase4) as the AS4 gateway for sending and receiving messages but also supports Holodeck as an external AS4 Gateway (using the TOOP setup).
 
 The thing is just called "Connector" in the rest of the documentation.
 
@@ -26,7 +27,8 @@ The Connector is structured in the following sub-modules:
 
 * `dcng-api` - contains all generic interfaces for the message exchange etc. This project may be included as a dependency when programming against the Connector.
 * `dcng-core` - contains the main implementation logic, the configuration, the SMP lookup etc. This module can be integrated into other applications to have the full functionality in a Java API. It does not contain the AS4 gateway.
-* `dcng-phase4` - contains the phase4 AS4 Gateway
+* `dcng-phase4` - contains support for the phase4 AS4 Gateway
+* `dcng-holodeck` - contains support for the Holodeck AS4 Gateway
 * `dcng-web-api` - contains the web integration of the core components (REST APIs), but only as a solution to be integrated (library) and not self-contained. This may be used to provide alternative implementations in another web application. Compared to `dcng-core` it offers an HTTP API.
 * `dcng-webapp-phase4-it1-im` - is a standalone **demo** web application (WAR) to be deployed in a Java JEE application server like Tomcat or Jetty, based on the `dcng-web-api` and `dcng-phase4` projects. It may also serve as the demo for Docker images. This is the specific solution for Iteration 1 for the intermediation pattern (IM) using the phase4 AS4 Gateway.
 
@@ -43,6 +45,11 @@ The main way to do it is, to integrate the Connector into your Java application 
 No matter what you choose, you need to pick an AS4 Gateway implementation. Without the AS4 Gateway, the Connector will not work.
 
 Alternatively you may choose one of the prebuilt web applications (WARs) as your implementation. But this limits your choice of the supported patterns as well as of the AS4 Gateway.
+
+## Support
+
+Most of the components can be supported on a best-effort basis.
+The Holodeck connection cannot be supported, as it is out of the author's hands.
 
 ## Developing the Connector
 
