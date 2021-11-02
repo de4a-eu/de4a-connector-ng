@@ -24,11 +24,11 @@
     <artifactId>dcng-parent-pom</artifactId>
     <version>0.2.0-SNAPSHOT</version>
   </parent>
-  <artifactId>dcng-webapp-it1-im</artifactId>
+  <artifactId>dcng-webapp-phase4-it1-im</artifactId>
   <packaging>war</packaging>
-  <name>dcng-webapp-it1-im</name>
-  <description>Contains the DE4A Connector NG Web Application - Iteration 1, IM pattern</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-webapp-it1-im</url>
+  <name>dcng-webapp-phase4-it1-im</name>
+  <description>Contains the DE4A Connector NG Web Application - phase4, Iteration 1, IM pattern</description>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-webapp-phase4-it1-im</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>

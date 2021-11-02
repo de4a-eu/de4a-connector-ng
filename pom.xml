@@ -173,12 +173,6 @@
         <artifactId>dcng-web-api</artifactId>
         <version>${project.version}</version>
       </dependency>
-      <dependency>
-        <groupId>com.helger.dcng</groupId>
-        <artifactId>dcng-webapp-it1-im</artifactId>
-        <version>${project.version}</version>
-        <classifier>classes</classifier>
-      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -197,7 +191,7 @@
     <module>dcng-core</module>
     <module>dcng-phase4</module>
     <module>dcng-web-api</module>
-    <module>dcng-webapp-it1-im</module>
+    <module>dcng-webapp-phase4-it1-im</module>
   </modules>
 
   <build>
