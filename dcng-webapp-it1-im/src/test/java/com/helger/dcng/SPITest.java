@@ -19,7 +19,7 @@ package com.helger.dcng;
 import org.junit.Test;
 
 import com.helger.commons.mock.SPITestHelper;
-import com.helger.dcng.api.RdcConfig;
+import com.helger.dcng.api.DcngConfig;
 import com.helger.photon.core.mock.PhotonCoreValidator;
 
 /**
@@ -40,6 +40,6 @@ public final class SPITest
   public void testConfig () throws Exception
   {
     // Required to test the ph-config bug when building on the commandline
-    RdcConfig.Tracker.isTrackerEnabled ();
+    DcngConfig.Tracker.isTrackerEnabled ();
   }
 }

@@ -22,15 +22,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
-  <display-name>Real DE4A Connector</display-name>
-  <description>https://github.com/de4a-at/rdc</description>
+  <display-name>DE4A Connector NG</display-name>
+  <description>https://github.com/de4a-at/de4a-connector-ng</description>
 
   <session-config>
     <session-timeout>60</session-timeout>
   </session-config>
   
   <listener>
-    <listener-class>com.helger.rdc.servlet.RdcWebAppListener</listener-class>
+    <listener-class>com.helger.dcng.servlet.DcngWebAppListener</listener-class>
   </listener>
   
   <servlet>

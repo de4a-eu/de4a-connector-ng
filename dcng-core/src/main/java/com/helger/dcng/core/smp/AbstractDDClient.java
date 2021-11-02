@@ -24,8 +24,8 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.url.URLHelper;
-import com.helger.dcng.api.RdcConfig;
-import com.helger.dcng.core.http.RdcHttpClientSettings;
+import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.core.http.DcngHttpClientSettings;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
@@ -58,21 +58,21 @@ public abstract class AbstractDDClient
   private static BDXRClientReadOnly _getSMPClient (@Nonnull final IParticipantIdentifier aRecipientID) throws SMPDNSResolutionException
   {
     final BDXRClientReadOnly ret;
-    if (RdcConfig.SMP.isUseDNS ())
+    if (DcngConfig.SMP.isUseDNS ())
     {
       ValueEnforcer.notNull (aRecipientID, "RecipientID");
 
       // Use dynamic lookup via DNS - can throw exception
-      ret = new BDXRClientReadOnly (BDXLURLProvider.INSTANCE, aRecipientID, RdcConfig.SMP.getSML ());
+      ret = new BDXRClientReadOnly (BDXLURLProvider.INSTANCE, aRecipientID, DcngConfig.SMP.getSML ());
     }
     else
     {
       // Use a constant SMP URL
-      final URI aSMPURI = RdcConfig.SMP.getStaticSMPUrl ();
+      final URI aSMPURI = DcngConfig.SMP.getStaticSMPUrl ();
       ret = new BDXRClientReadOnly (aSMPURI);
     }
-    if (RdcConfig.SMP.isUseGlobalHttpSettings ())
-      ret.httpClientSettings ().setAllFrom (new RdcHttpClientSettings ());
+    if (DcngConfig.SMP.isUseGlobalHttpSettings ())
+      ret.httpClientSettings ().setAllFrom (new DcngHttpClientSettings ());
     return ret;
   }
 
@@ -88,10 +88,10 @@ public abstract class AbstractDDClient
                                                                          @Nonnull final IProcessIdentifier aProcessID,
                                                                          @Nonnull final String sTransportProfile) throws SMPDNSResolutionException
   {
-    if (!RdcConfig.SMP.isUseDNS ())
+    if (!DcngConfig.SMP.isUseDNS ())
     {
-      final String sStaticEndpoint = RdcConfig.SMP.getStaticEndpointURL ();
-      final X509Certificate aStaticCert = RdcConfig.SMP.getStaticCertificate ();
+      final String sStaticEndpoint = DcngConfig.SMP.getStaticEndpointURL ();
+      final X509Certificate aStaticCert = DcngConfig.SMP.getStaticCertificate ();
       if (URLHelper.getAsURL (sStaticEndpoint) != null && aStaticCert != null)
       {
         // Create a static SignedServiceMetadataType object to return

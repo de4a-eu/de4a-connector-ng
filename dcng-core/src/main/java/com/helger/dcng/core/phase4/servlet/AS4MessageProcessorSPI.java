@@ -33,7 +33,7 @@ import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.http.HttpHeaderMap;
 import com.helger.commons.io.stream.StreamHelper;
 import com.helger.commons.mime.MimeTypeParser;
-import com.helger.dcng.api.RdcConfig;
+import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
@@ -86,7 +86,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     if (aProp == null)
       return null;
 
-    final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();
+    final IIdentifierFactory aIF = DcngConfig.getIdentifierFactory ();
     final String sType = aProp.getType ();
     final String sValue = aProp.getValue ();
     if (sType == null)
@@ -108,7 +108,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
                                                           @Nonnull final IAS4MessageState aState,
                                                           @Nonnull final ICommonsList <Ebms3Error> aProcessingErrors)
   {
-    if (RdcConfig.Phase4.isDebugLogIncoming () && LOGGER.isInfoEnabled ())
+    if (DcngConfig.Phase4.isDebugLogIncoming () && LOGGER.isInfoEnabled ())
     {
       LOGGER.info ("Received AS4 message:");
       LOGGER.info ("  UserMessage: " + aUserMessage);
@@ -141,7 +141,7 @@ public class AS4MessageProcessorSPI implements IAS4ServletMessageProcessorSPI
     {
       try
       {
-        final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();
+        final IIdentifierFactory aIF = DcngConfig.getIdentifierFactory ();
         final ICommonsList <Ebms3Property> aProps = new CommonsArrayList <> (aUserMessage.getMessageProperties ().getProperty ());
         final Ebms3Property aPropOS = aProps.findFirst (x -> x.getName ().equals (CAS4.ORIGINAL_SENDER));
         final Ebms3Property aPropFR = aProps.findFirst (x -> x.getName ().equals (CAS4.FINAL_RECIPIENT));

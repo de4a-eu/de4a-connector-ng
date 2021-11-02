@@ -24,9 +24,9 @@
           xmlns="http://java.sun.com/xml/ns/jaxb">
   <globalBindings typesafeEnumMaxMembers="2000" typesafeEnumMemberName="generateError">
   </globalBindings>
-  <bindings schemaLocation="../resources/schemas/rdc-rest.xsd" node="/xs:schema">
+  <bindings schemaLocation="../resources/schemas/dcng-rest.xsd" node="/xs:schema">
     <schemaBindings>
-      <package name="com.helger.rdc.api.rest" />
+      <package name="com.helger.dcng.api.rest" />
     </schemaBindings>
   </bindings>
 </bindings>

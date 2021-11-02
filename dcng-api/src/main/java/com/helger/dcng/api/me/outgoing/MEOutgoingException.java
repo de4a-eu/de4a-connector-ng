@@ -19,7 +19,7 @@ package com.helger.dcng.api.me.outgoing;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.dcng.api.error.IRdcErrorCode;
+import com.helger.dcng.api.error.IDcngErrorCode;
 import com.helger.dcng.api.me.MEException;
 
 /**
@@ -29,9 +29,9 @@ import com.helger.dcng.api.me.MEException;
  */
 public class MEOutgoingException extends MEException
 {
-  private final IRdcErrorCode m_aErrorCode;
+  private final IDcngErrorCode m_aErrorCode;
 
-  protected MEOutgoingException (@Nullable final String sMsg, @Nullable final Throwable aCause, @Nullable final IRdcErrorCode aErrorCode)
+  protected MEOutgoingException (@Nullable final String sMsg, @Nullable final Throwable aCause, @Nullable final IDcngErrorCode aErrorCode)
   {
     super (sMsg, aCause);
     m_aErrorCode = aErrorCode;
@@ -47,18 +47,18 @@ public class MEOutgoingException extends MEException
     this (sMsg, aCause, null);
   }
 
-  public MEOutgoingException (@Nonnull final IRdcErrorCode aErrorCode, @Nullable final Throwable aCause)
+  public MEOutgoingException (@Nonnull final IDcngErrorCode aErrorCode, @Nullable final Throwable aCause)
   {
-    this ("RDC Error " + aErrorCode.getID (), aCause, aErrorCode);
+    this ("DCNG Error " + aErrorCode.getID (), aCause, aErrorCode);
   }
 
-  public MEOutgoingException (@Nonnull final IRdcErrorCode aErrorCode, @Nullable final String sMsg)
+  public MEOutgoingException (@Nonnull final IDcngErrorCode aErrorCode, @Nullable final String sMsg)
   {
-    this ("RDC Error " + aErrorCode.getID () + " - " + sMsg, null, aErrorCode);
+    this ("DCNG Error " + aErrorCode.getID () + " - " + sMsg, null, aErrorCode);
   }
 
   @Nullable
-  public final IRdcErrorCode getErrorCode ()
+  public final IDcngErrorCode getErrorCode ()
   {
     return m_aErrorCode;
   }

@@ -25,8 +25,8 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.impl.CommonsTreeMap;
 import com.helger.commons.collection.impl.ICommonsSortedMap;
 import com.helger.dcng.api.dd.IDDServiceGroupHrefProvider;
-import com.helger.dcng.api.error.ERdcErrorCode;
-import com.helger.dcng.api.error.IRdcErrorHandler;
+import com.helger.dcng.api.error.EDcngErrorCode;
+import com.helger.dcng.api.error.IDcngErrorHandler;
 import com.helger.peppolid.CIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.smpclient.bdxr1.IBDXRServiceGroupProvider;
@@ -44,7 +44,7 @@ public class DDServiceGroupHrefProviderSMP extends AbstractDDClient implements I
 
   @Nonnull
   public ICommonsSortedMap <String, String> getAllServiceGroupHrefs (@Nonnull final IParticipantIdentifier aParticipantID,
-                                                                     @Nonnull final IRdcErrorHandler aErrorHandler)
+                                                                     @Nonnull final IDcngErrorHandler aErrorHandler)
   {
     ValueEnforcer.notNull (aParticipantID, "ParticipantID");
     ValueEnforcer.notNull (aErrorHandler, "ErrorHandler");
@@ -65,7 +65,7 @@ public class DDServiceGroupHrefProviderSMP extends AbstractDDClient implements I
           // Decoded href is important for unification
           final String sHref = CIdentifier.createPercentDecoded (aSMR.getHref ());
           if (ret.put (sHref, aSMR.getHref ()) != null)
-            aErrorHandler.onWarning ("The SMP ServiceGroup list contains the duplicate URL '" + sHref + "'", ERdcErrorCode.GEN);
+            aErrorHandler.onWarning ("The SMP ServiceGroup list contains the duplicate URL '" + sHref + "'", EDcngErrorCode.GEN);
         }
       }
       return ret;

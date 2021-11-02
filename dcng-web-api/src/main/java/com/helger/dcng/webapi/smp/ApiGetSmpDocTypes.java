@@ -23,10 +23,10 @@ import javax.annotation.Nonnull;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.impl.ICommonsSortedMap;
 import com.helger.commons.error.level.EErrorLevel;
-import com.helger.dcng.api.RdcConfig;
-import com.helger.dcng.core.api.RdcApiHelper;
+import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.core.api.DcngApiHelper;
 import com.helger.dcng.webapi.ApiParamException;
-import com.helger.dcng.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
@@ -43,7 +43,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiGetSmpDocTypes extends AbstractRdcApiInvoker
+public class ApiGetSmpDocTypes extends AbstractDcngApiInvoker
 {
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -52,7 +52,7 @@ public class ApiGetSmpDocTypes extends AbstractRdcApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
     final String sParticipantID = aPathVariables.get ("pid");
-    final IParticipantIdentifier aParticipantID = RdcConfig.getIdentifierFactory ().parseParticipantIdentifier (sParticipantID);
+    final IParticipantIdentifier aParticipantID = DcngConfig.getIdentifierFactory ().parseParticipantIdentifier (sParticipantID);
     if (aParticipantID == null)
       throw new ApiParamException ("Invalid participant ID '" + sParticipantID + "' provided.");
 
@@ -62,11 +62,11 @@ public class ApiGetSmpDocTypes extends AbstractRdcApiInvoker
     aJson.add (SMPJsonResponse.JSON_PARTICIPANT_ID, aParticipantID.getURIEncoded ());
     CommonApiInvoker.invoke (aJson, () -> {
       // Query SMP
-      final ICommonsSortedMap <String, String> aSGHrefs = RdcApiHelper.querySMPServiceGroups (aParticipantID);
+      final ICommonsSortedMap <String, String> aSGHrefs = DcngApiHelper.querySMPServiceGroups (aParticipantID);
 
       aJson.add (JSON_SUCCESS, true);
       aJson.addJson ("response",
-                     SMPJsonResponse.convert (ESMPAPIType.OASIS_BDXR_V1, aParticipantID, aSGHrefs, RdcConfig.getIdentifierFactory ()));
+                     SMPJsonResponse.convert (ESMPAPIType.OASIS_BDXR_V1, aParticipantID, aSGHrefs, DcngConfig.getIdentifierFactory ()));
     });
 
     return aJson;

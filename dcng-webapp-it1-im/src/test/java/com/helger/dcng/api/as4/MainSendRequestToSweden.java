@@ -27,9 +27,9 @@ import com.helger.commons.CGlobal;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.io.stream.StreamHelper;
 import com.helger.commons.mime.CMimeType;
-import com.helger.dcng.api.RdcIdentifierFactory;
+import com.helger.dcng.api.DcngIdentifierFactory;
 import com.helger.dcng.api.me.EMEProtocol;
-import com.helger.dcng.api.rest.RdcRestJAXB;
+import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.HttpClientSettings;
 import com.helger.httpclient.response.ResponseHandlerJson;
@@ -49,10 +49,10 @@ public final class MainSendRequestToSweden
     final RDCOutgoingMessage aOM = new RDCOutgoingMessage ();
     {
       final RDCOutgoingMetadata aMetadata = new RDCOutgoingMetadata ();
-      aMetadata.setSenderID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
-      aMetadata.setReceiverID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9991:se000000013"));
-      aMetadata.setDocTypeID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration"));
-      aMetadata.setProcessID (RdcRestJAXB.createRDCID (RdcIdentifierFactory.PROCESS_SCHEME, "request"));
+      aMetadata.setSenderID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
+      aMetadata.setReceiverID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9991:se000000013"));
+      aMetadata.setDocTypeID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration"));
+      aMetadata.setProcessID (DcngRestJAXB.createRDCID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
       // aMetadata.setPayloadType (RDCPayloadType.REQUEST);
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
       aOM.setMetadata (aMetadata);
@@ -67,13 +67,13 @@ public final class MainSendRequestToSweden
       aOM.addPayload (aPayload);
     }
 
-    LOGGER.info (RdcRestJAXB.outgoingMessage ().getAsString (aOM));
+    LOGGER.info (DcngRestJAXB.outgoingMessage ().getAsString (aOM));
 
     try (final HttpClientManager aHCM = HttpClientManager.create (new HttpClientSettings ().setSocketTimeoutMS ((int) (30 *
                                                                                                                        CGlobal.MILLISECONDS_PER_SECOND))))
     {
       final HttpPost aPost = new HttpPost ("http://localhost:9092/api/lookup/send");
-      aPost.setEntity (new ByteArrayEntity (RdcRestJAXB.outgoingMessage ().getAsBytes (aOM)));
+      aPost.setEntity (new ByteArrayEntity (DcngRestJAXB.outgoingMessage ().getAsBytes (aOM)));
       final IJson aJson = aHCM.execute (aPost, new ResponseHandlerJson ());
       LOGGER.info (new JsonWriter (new JsonWriterSettings ().setIndentEnabled (true)).writeAsString (aJson));
     }

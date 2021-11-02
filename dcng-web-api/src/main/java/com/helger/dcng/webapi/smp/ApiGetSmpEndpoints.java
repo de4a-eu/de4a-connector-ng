@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.error.level.EErrorLevel;
-import com.helger.dcng.api.RdcConfig;
-import com.helger.dcng.core.api.RdcApiHelper;
+import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.core.api.DcngApiHelper;
 import com.helger.dcng.webapi.ApiParamException;
-import com.helger.dcng.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
@@ -45,7 +45,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
+public class ApiGetSmpEndpoints extends AbstractDcngApiInvoker
 {
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -53,7 +53,7 @@ public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
                                 @Nonnull final Map <String, String> aPathVariables,
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
   {
-    final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();
+    final IIdentifierFactory aIF = DcngConfig.getIdentifierFactory ();
 
     // Get participant ID
     final String sParticipantID = aPathVariables.get ("pid");
@@ -81,7 +81,7 @@ public class ApiGetSmpEndpoints extends AbstractRdcApiInvoker
 
     CommonApiInvoker.invoke (aJson, () -> {
       // Main query
-      final ServiceMetadataType aSM = RdcApiHelper.querySMPServiceMetadata (aParticipantID,
+      final ServiceMetadataType aSM = DcngApiHelper.querySMPServiceMetadata (aParticipantID,
                                                                             aDocTypeID,
                                                                             aIF.createProcessIdentifier ("dummy-procid", "procid-fake"),
                                                                             ESMPTransportProfile.TRANSPORT_PROFILE_BDXR_AS4.getID ());

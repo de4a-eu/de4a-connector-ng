@@ -19,7 +19,7 @@ package com.helger.dcng.api.dd;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.collection.impl.ICommonsSortedMap;
-import com.helger.dcng.api.error.IRdcErrorHandler;
+import com.helger.dcng.api.error.IDcngErrorHandler;
 import com.helger.peppolid.IParticipantIdentifier;
 
 /**
@@ -40,5 +40,5 @@ public interface IDDServiceGroupHrefProvider
    */
   @Nonnull
   ICommonsSortedMap <String, String> getAllServiceGroupHrefs (@Nonnull IParticipantIdentifier aParticipantID,
-                                                              @Nonnull IRdcErrorHandler aErrorHandler);
+                                                              @Nonnull IDcngErrorHandler aErrorHandler);
 }

@@ -18,14 +18,14 @@ package com.helger.dcng.core.phase4;
 
 import javax.annotation.Nonnull;
 
-import com.helger.dcng.api.RdcConfig;
+import com.helger.dcng.api.DcngConfig;
 import com.helger.phase4.crypto.AS4CryptoFactoryProperties;
 import com.helger.phase4.crypto.AS4CryptoProperties;
 import com.helger.phase4.crypto.IAS4CryptoFactory;
 
 /**
  * Wrapper to access the configuration for the phase4 module. The configuration
- * file resolution resides in class {@link com.helger.dcng.api.RdcConfig.Phase4}.
+ * file resolution resides in class {@link com.helger.dcng.api.DcngConfig.Phase4}.
  *
  * @author Philip Helger
  */
@@ -37,13 +37,13 @@ public final class Phase4Config
   @Nonnull
   public static IAS4CryptoFactory getCryptoFactory ()
   {
-    return new AS4CryptoFactoryProperties (new AS4CryptoProperties ().setKeyStoreType (RdcConfig.Phase4.getKeyStoreType ())
-                                                                     .setKeyStorePath (RdcConfig.Phase4.getKeyStorePath ())
-                                                                     .setKeyStorePassword (RdcConfig.Phase4.getKeyStorePassword ())
-                                                                     .setKeyAlias (RdcConfig.Phase4.getKeyStoreKeyAlias ())
-                                                                     .setKeyPassword (RdcConfig.Phase4.getKeyStoreKeyPassword ())
-                                                                     .setTrustStoreType (RdcConfig.Phase4.getTrustStoreType ())
-                                                                     .setTrustStorePath (RdcConfig.Phase4.getTrustStorePath ())
-                                                                     .setTrustStorePassword (RdcConfig.Phase4.getTrustStorePassword ()));
+    return new AS4CryptoFactoryProperties (new AS4CryptoProperties ().setKeyStoreType (DcngConfig.Phase4.getKeyStoreType ())
+                                                                     .setKeyStorePath (DcngConfig.Phase4.getKeyStorePath ())
+                                                                     .setKeyStorePassword (DcngConfig.Phase4.getKeyStorePassword ())
+                                                                     .setKeyAlias (DcngConfig.Phase4.getKeyStoreKeyAlias ())
+                                                                     .setKeyPassword (DcngConfig.Phase4.getKeyStoreKeyPassword ())
+                                                                     .setTrustStoreType (DcngConfig.Phase4.getTrustStoreType ())
+                                                                     .setTrustStorePath (DcngConfig.Phase4.getTrustStorePath ())
+                                                                     .setTrustStorePassword (DcngConfig.Phase4.getTrustStorePassword ()));
   }
 }

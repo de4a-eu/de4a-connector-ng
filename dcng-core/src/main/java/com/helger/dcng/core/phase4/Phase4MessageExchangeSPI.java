@@ -36,16 +36,16 @@ import com.helger.commons.mime.EMimeContentType;
 import com.helger.commons.string.StringHelper;
 import com.helger.commons.string.ToStringGenerator;
 import com.helger.commons.wrapper.Wrapper;
-import com.helger.dcng.api.RdcConfig;
-import com.helger.dcng.api.error.ERdcErrorCode;
+import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.api.error.EDcngErrorCode;
 import com.helger.dcng.api.me.IMessageExchangeSPI;
 import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
 import com.helger.dcng.api.me.outgoing.IMERoutingInformation;
 import com.helger.dcng.api.me.outgoing.MEOutgoingException;
-import com.helger.dcng.core.http.RdcHttpClientSettings;
-import com.helger.dcng.core.phase4.config.RdcPMode;
+import com.helger.dcng.core.http.DcngHttpClientSettings;
+import com.helger.dcng.core.phase4.config.DcngPMode;
 import com.helger.dcng.core.phase4.servlet.AS4MessageProcessorSPI;
 import com.helger.peppol.utils.PeppolCertificateHelper;
 import com.helger.phase4.attachment.EAS4CompressionMode;
@@ -136,7 +136,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       final String sServletContextPath = ServletHelper.getServletContextBasePath (aServletContext);
 
       // Get the data path
-      final String sDataPath = RdcConfig.Phase4.getDataPath ();
+      final String sDataPath = DcngConfig.Phase4.getDataPath ();
       if (StringHelper.hasNoText (sDataPath))
         throw new InitializationException ("No phase4 data path was provided!");
       final File aDataPath = new File (sDataPath).getAbsoluteFile ();
@@ -154,11 +154,11 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
       if (aOurKey == null)
         throw new InitializationException ("Failed to load configured phase4 key");
 
-      if (StringHelper.hasNoText (RdcConfig.Phase4.getFromPartyID ()))
+      if (StringHelper.hasNoText (DcngConfig.Phase4.getFromPartyID ()))
         throw new InitializationException ("The phase4 property 'phase4.send.fromparty.id' is missing or empty.");
-      if (StringHelper.hasNoText (RdcConfig.Phase4.getFromPartyIDType ()))
+      if (StringHelper.hasNoText (DcngConfig.Phase4.getFromPartyIDType ()))
         throw new InitializationException ("The phase4 property 'phase4.send.fromparty.id.type' is missing or empty.");
-      if (StringHelper.hasNoText (RdcConfig.Phase4.getToPartyIDType ()))
+      if (StringHelper.hasNoText (DcngConfig.Phase4.getToPartyIDType ()))
         throw new InitializationException ("The phase4 property 'phase4.send.toparty.id.type' is missing or empty.");
 
       LOGGER.info ("Verified that the phase4 keystore configuration can be loaded");
@@ -169,7 +169,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = RdcPMode.createRDCMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
+      final PMode aPMode = DcngPMode.createRDCMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
       aPMode.setPayloadService (new PModePayloadService (EAS4CompressionMode.GZIP));
       aPMode.getReceptionAwareness ().setRetry (false);
       aPModeMgr.createOrUpdatePMode (aPMode);
@@ -179,10 +179,10 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     AS4MessageProcessorSPI.setIncomingHandler (aIncomingHandler);
 
     // Enable debug (incoming and outgoing)
-    AS4HttpDebug.setEnabled (RdcConfig.Phase4.isHttpDebugEnabled ());
+    AS4HttpDebug.setEnabled (DcngConfig.Phase4.isHttpDebugEnabled ());
 
     // Set incoming dumper
-    final String sIncomingDumpPath = RdcConfig.Phase4.getDumpPathIncoming ();
+    final String sIncomingDumpPath = DcngConfig.Phase4.getDumpPathIncoming ();
     if (StringHelper.hasText (sIncomingDumpPath))
     {
       LOGGER.info ("Dumping incoming phase4 AS4 messages to '" + sIncomingDumpPath + "'");
@@ -192,7 +192,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     }
 
     // Set outgoing dumper
-    final String sOutgoingDumpPath = RdcConfig.Phase4.getDumpPathOutgoing ();
+    final String sOutgoingDumpPath = DcngConfig.Phase4.getDumpPathOutgoing ();
     if (StringHelper.hasText (sOutgoingDumpPath))
     {
       LOGGER.info ("Dumping outgoing phase4 AS4 messages to '" + sOutgoingDumpPath + "'");
@@ -212,20 +212,20 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
   {
     final X509Certificate aTheirCert = aRoutingInfo.getCertificate ();
 
-    final CEFUserMessageBuilder aBuilder = new CEFUserMessageBuilder ().httpClientFactory (new RdcHttpClientSettings ())
+    final CEFUserMessageBuilder aBuilder = new CEFUserMessageBuilder ().httpClientFactory (new DcngHttpClientSettings ())
                                                                        .cryptoFactory (aCF)
                                                                        .senderParticipantID (aRoutingInfo.getSenderID ())
                                                                        .receiverParticipantID (aRoutingInfo.getReceiverID ())
                                                                        .documentTypeID (aRoutingInfo.getDocumentTypeID ())
                                                                        .processID (aRoutingInfo.getProcessID ())
                                                                        .conversationID (MessageHelperMethods.createRandomConversationID ())
-                                                                       .fromPartyIDType (RdcConfig.Phase4.getFromPartyIDType ())
-                                                                       .fromPartyID (RdcConfig.Phase4.getFromPartyID ())
-                                                                       .fromRole (RdcPMode.PARTY_ROLE)
-                                                                       .toPartyIDType (RdcConfig.Phase4.getToPartyIDType ())
+                                                                       .fromPartyIDType (DcngConfig.Phase4.getFromPartyIDType ())
+                                                                       .fromPartyID (DcngConfig.Phase4.getFromPartyID ())
+                                                                       .fromRole (DcngPMode.PARTY_ROLE)
+                                                                       .toPartyIDType (DcngConfig.Phase4.getToPartyIDType ())
                                                                        .toPartyID (PeppolCertificateHelper.getCNOrNull (aTheirCert.getSubjectX500Principal ()
                                                                                                                                   .getName ()))
-                                                                       .toRole (RdcPMode.PARTY_ROLE)
+                                                                       .toRole (DcngPMode.PARTY_ROLE)
                                                                        .useOriginalSenderFinalRecipientTypeAttr (false)
                                                                        .rawResponseConsumer (new RawResponseWriter ())
                                                                        .endpointDetailProvider (new AS4EndpointDetailProviderConstant (aRoutingInfo.getCertificate (),
@@ -260,7 +260,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     else
     {
       LOGGER.error ("[phase4] Failed to send message: " + eRet);
-      throw new MEOutgoingException (ERdcErrorCode.ME_001, aKeeper.get ());
+      throw new MEOutgoingException (EDcngErrorCode.ME_001, aKeeper.get ());
     }
   }
 

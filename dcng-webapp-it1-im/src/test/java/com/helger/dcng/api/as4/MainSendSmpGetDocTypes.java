@@ -22,7 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.dcng.api.RdcIdentifierFactory;
+import com.helger.dcng.api.DcngIdentifierFactory;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.response.ResponseHandlerJson;
 import com.helger.json.IJson;
@@ -36,7 +36,7 @@ public class MainSendSmpGetDocTypes
 
   public static void main (final String [] args) throws IOException
   {
-    final String sReceiverID = CIdentifier.getURIPercentEncoded (RdcIdentifierFactory.PARTICIPANT_SCHEME, "9999:ro000000006");
+    final String sReceiverID = CIdentifier.getURIPercentEncoded (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:ro000000006");
 
     try (final HttpClientManager aHCM = new HttpClientManager ())
     {

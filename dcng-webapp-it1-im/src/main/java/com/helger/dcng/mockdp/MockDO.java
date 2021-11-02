@@ -37,8 +37,8 @@ import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.io.ByteArrayWrapper;
 import com.helger.commons.mime.CMimeType;
 import com.helger.commons.state.ESuccess;
-import com.helger.dcng.api.RdcConfig;
-import com.helger.dcng.api.RdcIdentifierFactory;
+import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.api.DcngIdentifierFactory;
 import com.helger.dcng.api.me.EMEProtocol;
 import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.incoming.MEIncomingException;
@@ -279,8 +279,8 @@ public final class MockDO implements IMEIncomingHandler
       final IJsonObject aJson = ApiPostLookendAndSend.perform (aMessage.getReceiverID (),
                                                                aMessage.getSenderID (),
                                                                aMessage.getDocumentTypeID (),
-                                                               RdcConfig.getIdentifierFactory ()
-                                                                        .createProcessIdentifier (RdcIdentifierFactory.PROCESS_SCHEME,
+                                                               DcngConfig.getIdentifierFactory ()
+                                                                        .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
                                                                                                   "response"),
                                                                EMEProtocol.AS4.getTransportProfileID (),
                                                                aPayloads);

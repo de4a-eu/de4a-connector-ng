@@ -24,10 +24,10 @@ import javax.annotation.Nonnull;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.string.ToStringGenerator;
+import com.helger.dcng.api.rest.DCNGOutgoingMetadata;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
-import com.helger.rdc.api.rest.RDCOutgoingMetadata;
 import com.helger.security.certificate.CertificateHelper;
 
 /**
@@ -94,7 +94,7 @@ public class MERoutingInformation extends MERoutingInformationInput implements I
   }
 
   @Nonnull
-  public static MERoutingInformation createForSending (@Nonnull final RDCOutgoingMetadata aMetadata) throws CertificateException
+  public static MERoutingInformation createForSending (@Nonnull final DCNGOutgoingMetadata aMetadata) throws CertificateException
   {
     ValueEnforcer.notNull (aMetadata, "Metadata");
     return create (createBaseForSending (aMetadata),

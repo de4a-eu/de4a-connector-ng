@@ -31,11 +31,11 @@ import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
 import com.helger.dcng.api.me.outgoing.IMERoutingInformation;
 import com.helger.dcng.api.me.outgoing.MERoutingInformation;
-import com.helger.dcng.api.rest.RdcRestJAXB;
-import com.helger.dcng.core.api.RdcApiHelper;
-import com.helger.dcng.core.regrep.RdcRegRepHelper;
+import com.helger.dcng.api.rest.DcngRestJAXB;
+import com.helger.dcng.core.api.DcngApiHelper;
+import com.helger.dcng.core.regrep.DcngRegRepHelper;
 import com.helger.dcng.webapi.ApiParamException;
-import com.helger.dcng.webapi.helper.AbstractRdcApiInvoker;
+import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
 import com.helger.json.IJsonObject;
 import com.helger.json.JsonObject;
@@ -53,7 +53,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiPostSend extends AbstractRdcApiInvoker
+public class ApiPostSend extends AbstractDcngApiInvoker
 {
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -62,7 +62,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final RDCOutgoingMessage aOutgoingMsg = RdcRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final RDCOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
@@ -90,7 +90,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
     {
       if (nIndex == 0)
       {
-        final byte [] aRegRepPayload = RdcRegRepHelper.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
+        final byte [] aRegRepPayload = DcngRegRepHelper.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
 
         // RegRep should be first
         aMessage.addPayload (MEPayload.builder ()
@@ -120,7 +120,7 @@ public class ApiPostSend extends AbstractRdcApiInvoker
 
     CommonApiInvoker.invoke (aJson, () -> {
       // Main sending - throws Exception on error
-      RdcApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
+      DcngApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
       aJson.add (JSON_SUCCESS, true);
     });
 

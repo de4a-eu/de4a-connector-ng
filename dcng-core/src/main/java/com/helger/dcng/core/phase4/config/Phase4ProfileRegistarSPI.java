@@ -46,7 +46,7 @@ public final class Phase4ProfileRegistarSPI implements IAS4ProfileRegistrarSPI
     final IAS4Profile aProfile = new AS4Profile (AS4_PROFILE_ID,
                                                  AS4_PROFILE_NAME,
                                                  aProfileValidatorProvider,
-                                                 (i, r, a) -> RdcPMode.createRDCMode (i, r, a, i + "-" + r, true),
+                                                 (i, r, a) -> DcngPMode.createRDCMode (i, r, a, i + "-" + r, true),
                                                  aPModeIDProvider,
                                                  false);
     aRegistrar.registerProfile (aProfile);

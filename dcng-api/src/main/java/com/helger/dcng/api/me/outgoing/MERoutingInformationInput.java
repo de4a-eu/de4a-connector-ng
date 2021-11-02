@@ -21,12 +21,12 @@ import javax.annotation.Nonnull;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.string.ToStringGenerator;
-import com.helger.dcng.api.RdcConfig;
+import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.api.rest.DCNGOutgoingMetadata;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.peppolid.factory.IIdentifierFactory;
-import com.helger.rdc.api.rest.RDCOutgoingMetadata;
 
 /**
  * Base class for {@link MERoutingInformation}
@@ -103,10 +103,10 @@ public class MERoutingInformationInput
   }
 
   @Nonnull
-  public static MERoutingInformationInput createBaseForSending (@Nonnull final RDCOutgoingMetadata aMetadata)
+  public static MERoutingInformationInput createBaseForSending (@Nonnull final DCNGOutgoingMetadata aMetadata)
   {
     ValueEnforcer.notNull (aMetadata, "Metadata");
-    final IIdentifierFactory aIF = RdcConfig.getIdentifierFactory ();
+    final IIdentifierFactory aIF = DcngConfig.getIdentifierFactory ();
     return new MERoutingInformationInput (aIF.createParticipantIdentifier (aMetadata.getSenderID ().getScheme (),
                                                                            aMetadata.getSenderID ().getValue ()),
                                           aIF.createParticipantIdentifier (aMetadata.getReceiverID ().getScheme (),

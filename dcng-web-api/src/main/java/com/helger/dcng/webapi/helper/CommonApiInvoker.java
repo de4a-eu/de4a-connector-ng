@@ -44,7 +44,7 @@ public final class CommonApiInvoker
     }
     catch (final Exception ex)
     {
-      aJson.add (AbstractRdcApiInvoker.JSON_SUCCESS, false);
+      aJson.add (AbstractDcngApiInvoker.JSON_SUCCESS, false);
       aJson.addJson ("exception", PhiveJsonHelper.getJsonStackTrace (ex));
     }
     aSW.stop ();
