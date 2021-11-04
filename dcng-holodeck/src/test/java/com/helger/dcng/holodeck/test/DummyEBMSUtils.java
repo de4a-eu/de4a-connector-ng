@@ -16,14 +16,14 @@
  */
 package com.helger.dcng.holodeck.test;
 
-import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 import com.helger.commons.io.stream.StreamHelper;
+import com.helger.commons.io.stream.StringInputStream;
+import com.helger.commons.string.StringHelper;
 import com.helger.dcng.api.me.incoming.MEIncomingException;
 import com.helger.dcng.holodeck.DateTimeUtils;
 import com.helger.dcng.holodeck.EBMSUtils;
@@ -61,26 +61,27 @@ final class DummyEBMSUtils
       throw new MEIncomingException (e.getMessage (), e);
     }
 
-    String xml = xmlTemplate.replace ("${timestamp}", DateTimeUtils.getCurrentTimestamp ())
-                            .replace ("${messageId}", EBMSUtils.genereateEbmsMessageId ("test"))
-                            .replace ("${action}", action)
-                            .replace ("${propMessageId}", theAS4Message)
-                            .replace ("${propRefToMessageId}", EBMSUtils.getMessageId (receivedMessage));
+    String xml = xmlTemplate;
+    xml = StringHelper.replaceAll (xml, "${timestamp}", DateTimeUtils.getCurrentTimestamp ());
+    xml = StringHelper.replaceAll (xml, "${messageId}", EBMSUtils.genereateEbmsMessageId ("test"));
+    xml = StringHelper.replaceAll (xml, "${action}", action);
+    xml = StringHelper.replaceAll (xml, "${propMessageId}", theAS4Message);
+    xml = StringHelper.replaceAll (xml, "${propRefToMessageId}", EBMSUtils.getMessageId (receivedMessage));
 
     if (failOnSubmissionResult)
     {
-      xml = xml.replace ("${result}", "Error");
-      xml = xml.replace ("${description}", "Shit happens!");
-      xml = xml.replace ("${errorCode}", "Shit happens!");
+      xml = StringHelper.replaceAll (xml, "${result}", "Error");
+      xml = StringHelper.replaceAll (xml, "${description}", "Shit happens!");
+      xml = StringHelper.replaceAll (xml, "${errorCode}", "Shit happens!");
     }
     else
     {
-      xml = xml.replace ("${result}", "Receipt");
+      xml = StringHelper.replaceAll (xml, "${result}", "Receipt");
     }
 
     try
     {
-      return SoapUtil.createMessage (null, new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
+      return SoapUtil.createMessage (null, new StringInputStream (xml, StandardCharsets.UTF_8));
     }
     catch (final Exception e)
     {
@@ -106,25 +107,26 @@ final class DummyEBMSUtils
       throw new MEIncomingException (e.getMessage (), e);
     }
 
-    String xml = xmlTemplate.replace ("${timestamp}", DateTimeUtils.getCurrentTimestamp ())
-                            .replace ("${messageId}", EBMSUtils.genereateEbmsMessageId ("test"))
-                            .replace ("${action}", action)
-                            .replace ("${propMessageId}", refToMessageId)
-                            .replace ("${propRefToMessageId}", refToMessageId);
+    String xml = xmlTemplate;
+    xml = StringHelper.replaceAll (xml, "${timestamp}", DateTimeUtils.getCurrentTimestamp ());
+    xml = StringHelper.replaceAll (xml, "${messageId}", EBMSUtils.genereateEbmsMessageId ("test"));
+    xml = StringHelper.replaceAll (xml, "${action}", action);
+    xml = StringHelper.replaceAll (xml, "${propMessageId}", refToMessageId);
+    xml = StringHelper.replaceAll (xml, "${propRefToMessageId}", refToMessageId);
 
     if (failOnRelayResult)
     {
-      xml = xml.replace ("${result}", "Error");
-      xml = xml.replace ("${errorCode}", relayEbmsError);
+      xml = StringHelper.replaceAll (xml, "${result}", "Error");
+      xml = StringHelper.replaceAll (xml, "${errorCode}", relayEbmsError);
     }
     else
     {
-      xml = xml.replace ("${result}", "Receipt");
+      xml = StringHelper.replaceAll (xml, "${result}", "Receipt");
     }
 
     try
     {
-      return SoapUtil.createMessage (null, new ByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
+      return SoapUtil.createMessage (null, new StringInputStream (xml, StandardCharsets.UTF_8));
     }
     catch (final Exception e)
     {

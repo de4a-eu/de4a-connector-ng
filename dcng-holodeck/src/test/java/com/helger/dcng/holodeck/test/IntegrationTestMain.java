@@ -16,9 +16,9 @@
  */
 package com.helger.dcng.holodeck.test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.commons.io.stream.NonBlockingBufferedReader;
 import com.helger.config.Config;
 import com.helger.config.source.res.ConfigurationSourceProperties;
 import com.helger.dcng.api.DcngConfig;
@@ -72,7 +73,8 @@ public class IntegrationTestMain
     LOG.info ("Initialize corner4");
     BackendServletContainer.createServletOn (8686, "/msh");
 
-    final BufferedReader bufferedReader = new BufferedReader (new InputStreamReader (System.in));
+    final NonBlockingBufferedReader bufferedReader = new NonBlockingBufferedReader (new InputStreamReader (System.in,
+                                                                                                           Charset.defaultCharset ()));
 
     // wait for the other side to receive the message
     final DeliveryWatcher deliveryWatcher = new DeliveryWatcher ();
@@ -168,7 +170,7 @@ public class IntegrationTestMain
     }
   }
 
-  private static String waitForUserInput (final BufferedReader bufferedReader) throws IOException
+  private static String waitForUserInput (final NonBlockingBufferedReader bufferedReader) throws IOException
   {
     LOG.info ("Wait for user input.");
     LOG.info ("e2f: send a message from elonia to freedonia");
