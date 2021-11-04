@@ -124,10 +124,16 @@
     
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
         <configuration>
-          <attachClasses>true</attachClasses>
+          <excludes>
+            <exclude>**/LICENSE</exclude>
+            <exclude>**/NOTICE</exclude>
+            <exclude>conf/**</exclude>
+            <exclude>*.p12</exclude>
+            <exclude>*.jks</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
