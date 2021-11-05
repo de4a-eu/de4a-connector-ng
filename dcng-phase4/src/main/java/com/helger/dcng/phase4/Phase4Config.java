@@ -68,8 +68,8 @@ public final class Phase4Config
   }
 
   /**
-   * @return <code>true</code> to debug log details of incoming AS4 messages.
-   *         This is evaluated for each incoming message.
+   * @return <code>true</code> to debug log certain details of incoming AS4
+   *         messages. This is evaluated for each incoming message.
    */
   public static boolean isDebugLogIncoming ()
   {
@@ -102,8 +102,8 @@ public final class Phase4Config
 
   /**
    * @return The <code>From/PartyId</code> value for receiving party id. This
-   *         value must be set in the configuration file and should be the CN
-   *         part of the senders X509 AS4 certificate.
+   *         value must be set in the configuration and should be the CN part of
+   *         the sender's X.509 AS4 certificate.
    */
   @Nullable
   public static String getFromPartyID ()
@@ -129,20 +129,6 @@ public final class Phase4Config
   public static String getToPartyIDType ()
   {
     return _getConfig ().getAsString ("phase4.send.toparty.id.type", "ignore-me");
-  }
-
-  /**
-   * @return Optional folder where to store responses of send messages to. If
-   *         this property is enabled, it has a certain overlap with the dumping
-   *         of incoming messages, just that it is limited to the responses of
-   *         "sent messages". Messages that are received via AS4 are not
-   *         captured by this method.
-   */
-  @Nullable
-  public static String getSendResponseFolderName ()
-  {
-    // Can be relative or absolute
-    return _getConfig ().getAsString ("phase4.send.response.folder");
   }
 
   // Key store stuff

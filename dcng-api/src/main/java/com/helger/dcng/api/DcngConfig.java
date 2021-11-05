@@ -210,7 +210,7 @@ public final class DcngConfig
      * @return <code>true</code> if the tracker should use http for
      *         transmission, <code>false</code> if it should use TCP. The
      *         default is TCP. When using an HTTP proxy, this should be set to
-     *         true, as most HTTP proxies don't let TCP traffic through.
+     *         true, as most HTTP proxies don't let plain TCP traffic through.
      */
     public boolean isTrackerViaHttp ()
     {
@@ -252,7 +252,7 @@ public final class DcngConfig
     {}
 
     /**
-     * @return <code>true</code> to use the global settings (see
+     * @return <code>true</code> to use the global configuration items (see
      *         {@link DcngConfig.HTTP}) or <code>false</code> to use the custom
      *         ones from "smp client configuration". Defaults to
      *         <code>true</code>.
@@ -260,6 +260,17 @@ public final class DcngConfig
     public static boolean isUseGlobalHttpSettings ()
     {
       return getConfig ().getAsBoolean ("de4a.smp.http.useglobalsettings", true);
+    }
+
+    /**
+     * @return <code>true</code> to use SML lookup, <code>false</code> to not do
+     *         it.
+     * @see #getSML()
+     * @see #getStaticSMPUrl()
+     */
+    public static boolean isUseDNS ()
+    {
+      return getConfig ().getAsBoolean ("de4a.smp.usedns", DEFAULT_USE_SML);
     }
 
     /**
@@ -303,14 +314,15 @@ public final class DcngConfig
     }
 
     /**
-     * @return <code>true</code> to use SML lookup, <code>false</code> to not do
-     *         it.
-     * @see #getSML()
-     * @see #getStaticSMPUrl()
+     * @return The constant SMP URI to be used. Must only contain a value if
+     *         {@link #isUseDNS()} returned <code>false</code>.
      */
-    public static boolean isUseDNS ()
+    @Nullable
+    public static URI getStaticSMPUrl ()
     {
-      return getConfig ().getAsBoolean ("de4a.smp.usedns", DEFAULT_USE_SML);
+      // E.g. http://smp.central.de4a
+      final String sURI = getConfig ().getAsString ("de4a.smp.static.smpurl");
+      return URLHelper.getAsURI (sURI);
     }
 
     /**
@@ -346,18 +358,6 @@ public final class DcngConfig
         s_aCachedSMLInfo = ret;
       }
       return ret;
-    }
-
-    /**
-     * @return The constant SMP URI to be used. Must only contain a value if
-     *         {@link #isUseDNS()} returned <code>false</code>.
-     */
-    @Nullable
-    public static URI getStaticSMPUrl ()
-    {
-      // E.g. http://smp.central.de4a
-      final String sURI = getConfig ().getAsString ("de4a.smp.static.smpurl");
-      return URLHelper.getAsURI (sURI);
     }
   }
 
