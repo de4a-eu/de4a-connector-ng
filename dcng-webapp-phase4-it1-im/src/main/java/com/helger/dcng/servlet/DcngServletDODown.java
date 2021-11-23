@@ -27,7 +27,8 @@ import com.helger.xservlet.AbstractXServlet;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
- * The servlet to stop the DO.
+ * The servlet to stop the DO. This is only required for Connectathons, to mimic
+ * a non-responsive DO. To turn in on again, see {@link DcngServletDOUp}.
  *
  * @author Philip Helger
  */
