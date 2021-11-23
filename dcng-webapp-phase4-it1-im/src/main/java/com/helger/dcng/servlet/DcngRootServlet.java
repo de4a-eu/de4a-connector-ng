@@ -27,6 +27,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.collection.CollectionHelper;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.http.CHttpHeader;
@@ -44,6 +47,8 @@ import com.helger.dcng.core.CDcngVersion;
 @WebServlet ("")
 public class DcngRootServlet extends HttpServlet
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRootServlet.class);
+
   @Override
   protected void doGet (@Nonnull final HttpServletRequest req, @Nonnull final HttpServletResponse resp) throws ServletException, IOException
   {
@@ -105,7 +110,14 @@ public class DcngRootServlet extends HttpServlet
     aSB.append ("</body></html>");
 
     resp.addHeader (CHttpHeader.CONTENT_TYPE, CMimeType.TEXT_HTML.getAsString ());
-    resp.getWriter ().write (aSB.toString ());
-    resp.getWriter ().flush ();
+    try
+    {
+      resp.getWriter ().write (aSB.toString ());
+      resp.getWriter ().flush ();
+    }
+    catch (final IOException ex)
+    {
+      LOGGER.error ("Failed to write result", ex);
+    }
   }
 }

@@ -124,7 +124,7 @@ public class AS4InterfaceServlet extends HttpServlet
       if (LOGGER.isDebugEnabled ())
         LOGGER.debug ("Done processing inbound AS4 message");
     }
-    catch (final IOException | SOAPException | MEIncomingException ex)
+    catch (final IOException | SOAPException | MEIncomingException | RuntimeException ex)
     {
       LOGGER.error ("Error processing the message", ex);
       try
