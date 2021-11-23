@@ -52,28 +52,28 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  */
 public class SoapUtil
 {
-  private static final MessageFactory messageFactory;
-  private static final SOAPConnectionFactory soapConnectionFactory;
-  private static final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance ();
+  private static final MessageFactory MESSAGE_FACTORY;
+  private static final SOAPConnectionFactory SOAP_CON_FACTORY;
+  private static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance ();
 
-  private static final Transformer serializer;
+  private static final Transformer SERIALIZER;
 
   static
   {
     try
     {
       // Ensure to use SOAP 1.2
-      messageFactory = MessageFactory.newInstance (SOAPConstants.SOAP_1_2_PROTOCOL);
-      soapConnectionFactory = SOAPConnectionFactory.newInstance ();
-      serializer = TransformerFactory.newInstance ().newTransformer ();
-      serializer.setOutputProperty (OutputKeys.INDENT, "yes");
-      serializer.setOutputProperty ("{http://xml.apache.org/xslt}indent-amount", "2");
+      MESSAGE_FACTORY = MessageFactory.newInstance (SOAPConstants.SOAP_1_2_PROTOCOL);
+      SOAP_CON_FACTORY = SOAPConnectionFactory.newInstance ();
+      SERIALIZER = TransformerFactory.newInstance ().newTransformer ();
+      SERIALIZER.setOutputProperty (OutputKeys.INDENT, "yes");
+      SERIALIZER.setOutputProperty ("{http://xml.apache.org/xslt}indent-amount", "2");
     }
     catch (final Exception e)
     {
       throw new InitializationException ("Failed to initialize factories", e);
     }
-    factory.setNamespaceAware (true);
+    DBF.setNamespaceAware (true);
   }
 
   /**
@@ -93,7 +93,7 @@ public class SoapUtil
   {
     try
     {
-      return messageFactory.createMessage ();
+      return MESSAGE_FACTORY.createMessage ();
     }
     catch (final SOAPException e)
     {
@@ -118,7 +118,7 @@ public class SoapUtil
     MEMDumper.dumpOutgoingMessage (message);
     try
     {
-      final SOAPConnection connection = soapConnectionFactory.createConnection ();
+      final SOAPConnection connection = SOAP_CON_FACTORY.createConnection ();
       return connection.call (message, endpoint);
     }
     catch (final SOAPException e)
@@ -144,7 +144,7 @@ public class SoapUtil
    */
   public static SOAPMessage createMessage (final MimeHeaders headers, final InputStream is) throws IOException, SOAPException
   {
-    return messageFactory.createMessage (headers, is);
+    return MESSAGE_FACTORY.createMessage (headers, is);
   }
 
   /**
@@ -167,9 +167,10 @@ public class SoapUtil
       {
         attSummary.append ("   LEN: ").append (ap.getRawContentBytes ().length).append ("\n");
       }
-      catch (final SOAPException e)
-      {}
-
+      catch (final SOAPException ex)
+      {
+        // Then we don't log it
+      }
     });
 
     return prettyPrint (message.getSOAPPart ()) + "\n\n" + attSummary;
@@ -187,10 +188,9 @@ public class SoapUtil
     try (final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ())
     {
       final Source xmlSource = new DOMSource (node);
-
       final StreamResult res = new StreamResult (aBAOS);
-      serializer.transform (xmlSource, res);
-      serializer.reset ();
+      SERIALIZER.transform (xmlSource, res);
+      SERIALIZER.reset ();
       return aBAOS.getAsString (StandardCharsets.UTF_8);
     }
     catch (final Exception e)

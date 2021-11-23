@@ -90,7 +90,7 @@ public final class MEMDumper
 
   @Nonnull
   @Nonempty
-  private static final File _getTargetFolder (@Nonnull final String sPath)
+  private static File _getTargetFolder (@Nonnull final String sPath)
   {
     final LocalDate aLD = PDTFactory.getCurrentLocalDate ();
     final File ret = new File (sPath,
@@ -105,7 +105,7 @@ public final class MEMDumper
 
   @Nonnull
   @Nonempty
-  private static final String _getFileID ()
+  private static String _getFileID ()
   {
     return PDTIOHelper.getCurrentLocalDateTimeForFilename () + "-" + GlobalIDFactory.getNewIntID ();
   }

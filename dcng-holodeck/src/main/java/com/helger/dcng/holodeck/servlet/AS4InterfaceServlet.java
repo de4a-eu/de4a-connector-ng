@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import org.slf4j.Logger;
@@ -47,13 +48,12 @@ import com.helger.dcng.holodeck.SoapXPathUtil;
 public class AS4InterfaceServlet extends HttpServlet
 {
 
-  private static final Logger LOG = LoggerFactory.getLogger (AS4InterfaceServlet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (AS4InterfaceServlet.class);
 
   @Override
   protected void doPost (final HttpServletRequest req, final HttpServletResponse resp) throws IOException
   {
-
-    LOG.info ("Received a mem 'external' message from the gateway");
+    LOGGER.info ("Received a mem 'external' message from the gateway");
 
     // Convert the request headers into MimeHeaders
     final MimeHeaders mimeHeaders = readMimeHeaders (req);
@@ -65,10 +65,9 @@ public class AS4InterfaceServlet extends HttpServlet
     try
     {
       final byte [] bytes = StreamHelper.getAllBytes (req.getInputStream ());
-
-      if (LOG.isDebugEnabled ())
+      if (LOGGER.isDebugEnabled ())
       {
-        LOG.debug ("Read inbound message");
+        LOGGER.debug ("Read inbound message");
       }
 
       MEMDumper.dumpIncomingMessage (bytes);
@@ -81,9 +80,9 @@ public class AS4InterfaceServlet extends HttpServlet
 
       // check if the message is a notification message
 
-      if (LOG.isTraceEnabled ())
+      if (LOGGER.isTraceEnabled ())
       {
-        LOG.trace (SoapUtil.describe (receivedMessage));
+        LOGGER.trace (SoapUtil.describe (receivedMessage));
       }
 
       // get the action from the soap message
@@ -108,32 +107,39 @@ public class AS4InterfaceServlet extends HttpServlet
           throw new UnsupportedOperationException ("Action '" + action + "' is not supported");
       }
 
-      if (LOG.isDebugEnabled ())
+      if (LOGGER.isDebugEnabled ())
       {
-        LOG.debug ("Create success receipt");
+        LOGGER.debug ("Create success receipt");
       }
       final byte [] successReceipt = EBMSUtils.createSuccessReceipt (receivedMessage);
 
-      if (LOG.isDebugEnabled ())
+      if (LOGGER.isDebugEnabled ())
       {
-        LOG.debug ("Send success receipt");
+        LOGGER.debug ("Send success receipt");
       }
       resp.setStatus (HttpServletResponse.SC_OK);
       resp.getOutputStream ().write (successReceipt);
       resp.getOutputStream ().flush ();
 
-      if (LOG.isDebugEnabled ())
-        LOG.debug ("Done processing inbound AS4 message");
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Done processing inbound AS4 message");
     }
-    catch (final Exception ex)
+    catch (final IOException | SOAPException | MEIncomingException ex)
     {
-      LOG.error ("Error processing the message", ex);
-      sendBackFault (resp, receivedMessage, ex);
+      LOGGER.error ("Error processing the message", ex);
+      try
+      {
+        sendBackFault (resp, receivedMessage, ex);
+      }
+      catch (final IOException ex2)
+      {
+        LOGGER.error ("Exception in Exception handling", ex2);
+      }
     }
     finally
     {
-      if (LOG.isDebugEnabled ())
-        LOG.debug ("End doPost");
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("End doPost");
     }
 
     // Don't close output stream
@@ -155,10 +161,10 @@ public class AS4InterfaceServlet extends HttpServlet
    */
   protected void sendBackFault (final HttpServletResponse resp, final SOAPMessage receivedMessage, final Throwable th) throws IOException
   {
-    LOG.error ("Failed to process incoming AS4 message", th);
-    if (LOG.isDebugEnabled ())
+    LOGGER.error ("Failed to process incoming AS4 message", th);
+    if (LOGGER.isDebugEnabled ())
     {
-      LOG.debug ("Create fault");
+      LOGGER.debug ("Create fault");
     }
     byte [] fault;
     try
@@ -167,12 +173,12 @@ public class AS4InterfaceServlet extends HttpServlet
     }
     catch (final MEIncomingException ex)
     {
-      LOG.error ("Error in creating fault to send back", ex);
+      LOGGER.error ("Error in creating fault to send back", ex);
       fault = null;
     }
-    if (LOG.isDebugEnabled ())
+    if (LOGGER.isDebugEnabled ())
     {
-      LOG.debug ("Write fault to the stream");
+      LOGGER.debug ("Write fault to the stream");
     }
     resp.setStatus (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     resp.getOutputStream ().write (fault);
@@ -181,11 +187,11 @@ public class AS4InterfaceServlet extends HttpServlet
 
   protected void processSubmissionResult (final SOAPMessage submissionResult) throws MEIncomingException
   {
-    if (LOG.isDebugEnabled ())
+    if (LOGGER.isDebugEnabled ())
     {
-      LOG.debug ("------->> Received SubmissionResult <<-------");
-      LOG.debug ("Dispatch SubmissionResult");
-      LOG.debug ("\n" + SoapUtil.describe (submissionResult));
+      LOGGER.debug ("------->> Received SubmissionResult <<-------");
+      LOGGER.debug ("Dispatch SubmissionResult");
+      LOGGER.debug ("\n" + SoapUtil.describe (submissionResult));
     }
 
     MEMDelegate.getInstance ().dispatchSubmissionResult (submissionResult);
@@ -193,11 +199,11 @@ public class AS4InterfaceServlet extends HttpServlet
 
   protected void processRelayResult (final SOAPMessage notification) throws MEIncomingException
   {
-    if (LOG.isDebugEnabled ())
+    if (LOGGER.isDebugEnabled ())
     {
-      LOG.debug ("------->> Received RelayResult <<-------");
-      LOG.debug ("Dispatch notification");
-      LOG.debug ("\n" + SoapUtil.describe (notification));
+      LOGGER.debug ("------->> Received RelayResult <<-------");
+      LOGGER.debug ("Dispatch notification");
+      LOGGER.debug ("\n" + SoapUtil.describe (notification));
     }
 
     MEMDelegate.getInstance ().dispatchRelayResult (notification);
@@ -205,11 +211,11 @@ public class AS4InterfaceServlet extends HttpServlet
 
   protected void processDelivery (final SOAPMessage receivedMessage) throws MEIncomingException
   {
-    if (LOG.isDebugEnabled ())
+    if (LOGGER.isDebugEnabled ())
     {
-      LOG.debug ("------->> Received Delivery <<-------");
-      LOG.debug ("Dispatch inbound message");
-      LOG.debug ("\n" + SoapUtil.describe (receivedMessage));
+      LOGGER.debug ("------->> Received Delivery <<-------");
+      LOGGER.debug ("Dispatch inbound message");
+      LOGGER.debug ("\n" + SoapUtil.describe (receivedMessage));
     }
 
     MEMDelegate.getInstance ().dispatchInboundMessage (receivedMessage);
@@ -223,9 +229,9 @@ public class AS4InterfaceServlet extends HttpServlet
     {
       final String header = headerNames.nextElement ();
       final String reqHeader = req.getHeader (header);
-      if (LOG.isDebugEnabled ())
+      if (LOGGER.isDebugEnabled ())
       {
-        LOG.debug ("HEADER " + header + " " + reqHeader);
+        LOGGER.debug ("HEADER " + header + " " + reqHeader);
       }
       mimeHeaders.addHeader (header, reqHeader);
     }

@@ -16,7 +16,6 @@
  */
 package com.helger.dcng.api.me.model;
 
-import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
@@ -41,7 +40,7 @@ import com.helger.commons.string.ToStringGenerator;
  */
 @Immutable
 @MustImplementEqualsAndHashcode
-public final class MEPayload implements Serializable
+public final class MEPayload
 {
   /**
    * Type of the payload

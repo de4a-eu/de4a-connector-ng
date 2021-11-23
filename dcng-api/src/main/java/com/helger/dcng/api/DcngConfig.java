@@ -212,7 +212,7 @@ public final class DcngConfig
      *         default is TCP. When using an HTTP proxy, this should be set to
      *         true, as most HTTP proxies don't let plain TCP traffic through.
      */
-    public boolean isTrackerViaHttp ()
+    public static boolean isTrackerViaHttp ()
     {
       return getConfig ().getAsBoolean ("de4a.tracker.viahttp", DEFAULT_TRACKER_USE_HTTP);
     }

@@ -84,7 +84,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
 public final class EBMSUtils
 {
 
-  private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger (EBMSUtils.class);
+  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger (EBMSUtils.class);
   // SOAP 1.2 NS
   public static final String NS_SOAPENV = "http://www.w3.org/2003/05/soap-envelope";
   public static final String NS_EBMS = "http://docs.oasis-open.org/ebxml-msg/ebms/v3.0/ns/core/200704/";
@@ -224,9 +224,9 @@ public final class EBMSUtils
   public static SOAPMessage convert2MEOutboundAS4Message (final SubmissionMessageProperties metadata,
                                                           final MEMessage meMessage) throws MEOutgoingException
   {
-    if (LOG.isDebugEnabled ())
+    if (LOGGER.isDebugEnabled ())
     {
-      LOG.debug ("Convert submission data to SOAP Message");
+      LOGGER.debug ("Convert submission data to SOAP Message");
     }
 
     try
@@ -341,19 +341,13 @@ public final class EBMSUtils
       }
 
       if (message.saveRequired ())
-      {
         message.saveChanges ();
-      }
 
-      if (LOG.isTraceEnabled ())
-      {
-        LOG.trace (SoapUtil.describe (message));
-      }
+      if (LOGGER.isTraceEnabled ())
+        LOGGER.trace (SoapUtil.describe (message));
       return message;
     }
-    catch (final RuntimeException |
-
-           SOAPException ex)
+    catch (final RuntimeException | SOAPException ex)
     {
       throw new MEOutgoingException ("Unspecific error", ex);
     }
@@ -372,10 +366,8 @@ public final class EBMSUtils
   {
     ValueEnforcer.notNull (message, "SOAPMessage");
 
-    if (LOG.isDebugEnabled ())
-    {
-      LOG.debug ("Convert message to submission data");
-    }
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("Convert message to submission data");
 
     final MEMessage.Builder meMessage = MEMessage.builder ();
 
@@ -387,7 +379,7 @@ public final class EBMSUtils
     }
     catch (final SOAPException e)
     {
-      throw new MEIncomingException (e.getMessage (), e);
+      throw new MEIncomingException ("Failed to get SOAP Header", e);
     }
 
     if (message.countAttachments () > 0)
@@ -405,7 +397,7 @@ public final class EBMSUtils
           // throws exception if part info does not exist
           partInfo = SoapXPathUtil.safeFindSingleNode (soapHeader, "//:PayloadInfo/:PartInfo[@href='cid:" + href + "']");
         }
-        catch (final Exception ex)
+        catch (final IllegalArgumentException ex)
         {
           throw new MEIncomingException ("ContentId: " + href + " was not found in PartInfo");
         }
@@ -423,17 +415,16 @@ public final class EBMSUtils
         }
         catch (final MimeTypeParserException ex)
         {
-          LOG.warn ("Error parsing MIME type '" + sMimeType + "': " + ex.getMessage ());
+          LOGGER.warn ("Error parsing MIME type '" + sMimeType + "': " + ex.getMessage ());
           // if there is a problem wrt the processing of the mimetype, simply
-          // grab the
-          // content type
+          // grab the content type
           try
           {
             mimeType = MimeTypeParser.parseMimeType (att.getContentType ());
           }
           catch (final MimeTypeParserException ex2)
           {
-            LOG.warn ("Error parsing fallback MIME type '" + att.getContentType () + "': " + ex2.getMessage ());
+            LOGGER.warn ("Error parsing fallback MIME type '" + att.getContentType () + "': " + ex2.getMessage ());
             mimeType = new MimeType (CMimeType.APPLICATION_OCTET_STREAM);
           }
         }
@@ -467,10 +458,10 @@ public final class EBMSUtils
         }
 
         final MEPayload payload = MEPayload.builder ().mimeType (mimeType).contentID (href).data (rawContentBytes).build ();
-        if (LOG.isDebugEnabled ())
+        if (LOGGER.isDebugEnabled ())
         {
-          LOG.debug ("\tpayload.payloadId: " + payload.getContentID ());
-          LOG.debug ("\tpayload.mimeType: " + payload.getMimeTypeString ());
+          LOGGER.debug ("\tpayload.payloadId: " + payload.getContentID ());
+          LOGGER.debug ("\tpayload.mimeType: " + payload.getMimeTypeString ());
         }
 
         meMessage.addPayload (payload);
@@ -520,18 +511,18 @@ public final class EBMSUtils
     final IParticipantIdentifier sender = sSenderIdType != null ? aIF.createParticipantIdentifier (sSenderIdType, sSenderId)
                                                                 : aIF.parseParticipantIdentifier (sSenderId);
     if (sender == null)
-      LOG.warn ("Failed to create/parse sender participant identifier '" + sSenderIdType + "' and '" + sSenderId + "'");
+      LOGGER.warn ("Failed to create/parse sender participant identifier '" + sSenderIdType + "' and '" + sSenderId + "'");
     final IParticipantIdentifier receiver = sReceiverIdType != null ? aIF.createParticipantIdentifier (sReceiverIdType, sReceiverId)
                                                                     : aIF.parseParticipantIdentifier (sReceiverId);
     if (receiver == null)
-      LOG.warn ("Failed to create/parse receiver participant identifier '" + sReceiverIdType + "' and '" + sReceiverId + "'");
+      LOGGER.warn ("Failed to create/parse receiver participant identifier '" + sReceiverIdType + "' and '" + sReceiverId + "'");
     final IDocumentTypeIdentifier doctypeid = aIF.parseDocumentTypeIdentifier (sDoctypeId);
     if (doctypeid == null)
-      LOG.warn ("Failed to parse document type identifier '" + sDoctypeId + "'");
+      LOGGER.warn ("Failed to parse document type identifier '" + sDoctypeId + "'");
     final IProcessIdentifier procid = sProcidType != null ? aIF.createProcessIdentifier (sProcidType, sProcid)
                                                           : aIF.parseProcessIdentifier (sProcid);
     if (procid == null)
-      LOG.warn ("Failed to create/parse process identifier '" + sProcidType + "' and '" + sProcid + "'");
+      LOGGER.warn ("Failed to create/parse process identifier '" + sProcidType + "' and '" + sProcid + "'");
 
     return meMessage.senderID (sender).receiverID (receiver).processID (procid).docTypeID (doctypeid).build ();
   }
@@ -567,7 +558,7 @@ public final class EBMSUtils
           final String errorCode = SoapXPathUtil.getSingleNodeTextContent (messagePropsNode, ".//:Property[@name='ErrorCode']");
           notification.setErrorCode (errorCode);
         }
-        catch (final RuntimeException e)
+        catch (final IllegalArgumentException e)
         {
           throw new IllegalStateException ("ErrorCode is mandatory for relay result errors.");
         }
@@ -577,7 +568,7 @@ public final class EBMSUtils
           final String severity = SoapXPathUtil.getSingleNodeTextContent (messagePropsNode, ".//:Property[@name='severity']");
           notification.setSeverity (severity);
         }
-        catch (final RuntimeException e)
+        catch (final IllegalArgumentException e)
         {
           // TODO so what?
         }
@@ -587,7 +578,7 @@ public final class EBMSUtils
           final String shortDesc = SoapXPathUtil.getSingleNodeTextContent (messagePropsNode, ".//:Property[@name='ShortDescription']");
           notification.setShortDescription (shortDesc);
         }
-        catch (final RuntimeException ignored)
+        catch (final IllegalArgumentException ignored)
         {
           // TODO so what?
         }
@@ -597,7 +588,7 @@ public final class EBMSUtils
           final String desc = SoapXPathUtil.getSingleNodeTextContent (messagePropsNode, ".//:Property[@name='Description']");
           notification.setDescription (desc);
         }
-        catch (final RuntimeException ignored)
+        catch (final IllegalArgumentException ignored)
         {
           // TODO so what?
         }
@@ -743,17 +734,17 @@ public final class EBMSUtils
     ValueEnforcer.notNull (soapMessage, "SOAP Message");
     ValueEnforcer.notNull (url, "Target url");
 
-    if (LOG.isTraceEnabled ())
+    if (LOGGER.isTraceEnabled ())
     {
-      LOG.trace (SoapUtil.describe (soapMessage));
+      LOGGER.trace (SoapUtil.describe (soapMessage));
     }
     final SOAPMessage response = SoapUtil.sendSOAPMessage (soapMessage, url);
 
     if (response != null)
     {
-      if (LOG.isTraceEnabled ())
+      if (LOGGER.isTraceEnabled ())
       {
-        LOG.trace (SoapUtil.describe (response));
+        LOGGER.trace (SoapUtil.describe (response));
       }
       validateReceipt (response);
     } // else the receipt is null and we received a HTTP.OK, isn't that great?
