@@ -64,10 +64,45 @@ import eu.de4a.iem.xml.de4a.DE4AResponseDocumentHelper;
 import eu.de4a.iem.xml.de4a.EDE4ACanonicalEvidenceType;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
+/**
+ * This is a mock handler for an incoming message.
+ *
+ * @author Philip Helger
+ */
 public final class MockDO implements IMEIncomingHandler
 {
   public static final AtomicBoolean DO_ACTIVE = new AtomicBoolean (true);
   private static final Logger LOGGER = LoggerFactory.getLogger (MockDO.class);
+
+  private static void _waitAndRunAsync (@Nonnull final MEMessage aMessage, @Nonnull final byte [] aBytes)
+  {
+    final ExecutorService aES = Executors.newFixedThreadPool (1);
+    aES.submit ( () -> {
+      // Ensure sync response is received first
+      ThreadHelper.sleep (1000);
+
+      // Start new transmission
+      final ICommonsList <DCNGPayload> aPayloads = new CommonsArrayList <> ();
+      final DCNGPayload a = new DCNGPayload ();
+      a.setValue (aBytes);
+      a.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
+      a.setContentID ("ResponseTransferEvidence");
+      aPayloads.add (a);
+
+      // Swap sender and receiver
+      // Different response type
+      final IJsonObject aJson = ApiPostLookendAndSend.perform (aMessage.getReceiverID (),
+                                                               aMessage.getSenderID (),
+                                                               aMessage.getDocumentTypeID (),
+                                                               DcngConfig.getIdentifierFactory ()
+                                                                         .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
+                                                                                                   "response"),
+                                                               EMEProtocol.AS4.getTransportProfileID (),
+                                                               aPayloads);
+      LOGGER.info ("Sending result:\n" + aJson.getAsJsonString (JsonWriterSettings.DEFAULT_SETTINGS_FORMATTED));
+    });
+    ExecutorServiceHelper.shutdownAndWaitUntilAllTasksAreFinished (aES);
+  }
 
   @SuppressWarnings ("unused")
   @Nonnull
@@ -257,36 +292,6 @@ public final class MockDO implements IMEIncomingHandler
     _waitAndRunAsync (aMessage, aMarshaller.getAsBytes (aResponse));
 
     return ESuccess.SUCCESS;
-  }
-
-  private static void _waitAndRunAsync (@Nonnull final MEMessage aMessage, @Nonnull final byte [] aBytes)
-  {
-    final ExecutorService aES = Executors.newFixedThreadPool (1);
-    aES.submit ( () -> {
-      // Ensure sync response is received first
-      ThreadHelper.sleep (1000);
-
-      // Start new transmission
-      final ICommonsList <DCNGPayload> aPayloads = new CommonsArrayList <> ();
-      final DCNGPayload a = new DCNGPayload ();
-      a.setValue (aBytes);
-      a.setMimeType (CMimeType.APPLICATION_XML.getAsString ());
-      a.setContentID ("ResponseTransferEvidence");
-      aPayloads.add (a);
-
-      // Swap sender and receiver
-      // Different response type
-      final IJsonObject aJson = ApiPostLookendAndSend.perform (aMessage.getReceiverID (),
-                                                               aMessage.getSenderID (),
-                                                               aMessage.getDocumentTypeID (),
-                                                               DcngConfig.getIdentifierFactory ()
-                                                                         .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
-                                                                                                   "response"),
-                                                               EMEProtocol.AS4.getTransportProfileID (),
-                                                               aPayloads);
-      LOGGER.info ("Sending result:\n" + aJson.getAsJsonString (JsonWriterSettings.DEFAULT_SETTINGS_FORMATTED));
-    });
-    ExecutorServiceHelper.shutdownAndWaitUntilAllTasksAreFinished (aES);
   }
 
   private static void _handleXML (@Nonnull final MEMessage aMessage,

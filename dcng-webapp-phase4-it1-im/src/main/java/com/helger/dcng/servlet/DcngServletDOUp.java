@@ -27,7 +27,8 @@ import com.helger.xservlet.AbstractXServlet;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
- * The servlet to start the DO.
+ * The servlet to start the DO. This is only required for Connectathons, to
+ * mimic a responsive DO. To turn in off, see {@link DcngServletDODown}.
  *
  * @author Philip Helger
  */

@@ -30,7 +30,7 @@ import com.helger.photon.core.servlet.WebAppListener;
 import com.helger.photon.security.login.LoggedInUserManager;
 
 /**
- * Global startup etc. listener.
+ * Global startup etc. listener. Initializes everything.
  *
  * @author Philip Helger
  */
