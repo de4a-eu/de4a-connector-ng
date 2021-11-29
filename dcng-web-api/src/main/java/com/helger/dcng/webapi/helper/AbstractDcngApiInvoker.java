@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.CGlobal;
 import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.annotation.OverrideOnDemand;
 import com.helger.commons.error.level.EErrorLevel;
 import com.helger.commons.http.CHttp;
 import com.helger.commons.http.EHttpMethod;
@@ -45,6 +46,30 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
 public abstract class AbstractDcngApiInvoker implements IAPIExecutor
 {
   protected static final String JSON_SUCCESS = "success";
+
+  /**
+   * @param aRequestScope
+   *        Current request
+   * @return <code>true</code> to cache the result, <code>false</code> to not
+   *         cache it.
+   */
+  @OverrideOnDemand
+  protected boolean isCacheResult (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return aRequestScope.getHttpMethod () == EHttpMethod.GET;
+  }
+
+  /**
+   * @param aRequestScope
+   *        Current request
+   * @return Number of seconds to cache. Must be &gt; 0.
+   * @see #isCacheResult(IRequestWebScopeWithoutResponse)
+   */
+  @OverrideOnDemand
+  protected int getCachingSeconds (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope)
+  {
+    return 3 * CGlobal.SECONDS_PER_HOUR;
+  }
 
   @Nonnull
   public abstract IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -70,8 +95,8 @@ public abstract class AbstractDcngApiInvoker implements IAPIExecutor
     if (!bSuccess)
       aPUR.setAllowContentOnStatusCode (true).setStatus (CHttp.HTTP_BAD_REQUEST);
     else
-      if (aRequestScope.getHttpMethod () == EHttpMethod.GET)
-        aPUR.enableCaching (3 * CGlobal.SECONDS_PER_HOUR);
+      if (isCacheResult (aRequestScope))
+        aPUR.enableCaching (getCachingSeconds (aRequestScope));
       else
         aPUR.disableCaching ();
 
