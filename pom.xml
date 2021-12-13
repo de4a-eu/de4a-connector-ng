@@ -26,7 +26,7 @@
   </parent>
   <groupId>com.helger.dcng</groupId>
   <artifactId>dcng-parent-pom</artifactId>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.2.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>dcng-parent-pom</name>
   <description>Base POM to build the DE4A Connector NG (DCNG) projects</description>
@@ -61,6 +61,10 @@
       <url>http://www.helger.com</url>
     </developer>
   </developers>
+  
+  <properties>
+    <log4j.version>2.15.0</log4j.version>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
@@ -150,6 +154,27 @@
         <groupId>com.helger</groupId>
         <artifactId>ph-regrep</artifactId>
         <version>1.2.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-web</artifactId>
+        <version>${log4j.version}</version>
       </dependency>
 
       <!-- The sub-projects of this project have a constant version -->
