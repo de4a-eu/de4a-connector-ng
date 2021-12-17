@@ -26,7 +26,7 @@
   </parent>
   <groupId>com.helger.dcng</groupId>
   <artifactId>dcng-parent-pom</artifactId>
-  <version>0.2.2-SNAPSHOT</version>
+  <version>0.2.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>dcng-parent-pom</name>
   <description>Base POM to build the DE4A Connector NG (DCNG) projects</description>
@@ -63,7 +63,7 @@
   </developers>
   
   <properties>
-    <log4j.version>2.15.0</log4j.version>
+    <log4j.version>2.16.0</log4j.version>
   </properties>
 
   <dependencyManagement>
@@ -113,7 +113,7 @@
       <dependency>
         <groupId>com.helger.photon</groupId>
         <artifactId>ph-oton-parent-pom</artifactId>
-        <version>8.3.2</version>
+        <version>8.3.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -134,7 +134,7 @@
       <dependency>
         <groupId>com.helger.phase4</groupId>
         <artifactId>phase4-parent-pom</artifactId>
-        <version>1.3.3</version>
+        <version>1.3.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
