@@ -121,14 +121,25 @@ public final class DcngInit
       DE4AKafkaSettings.setKafkaEnabled (DcngConfig.Tracker.isTrackerEnabled ());
       if (DcngConfig.Tracker.isTrackerEnabled ())
       {
+        // Use TCP or HTTPS?
+        DE4AKafkaSettings.setKafkaHttp (DcngConfig.Tracker.isTrackerViaHttp ());
+
         // Set tracker URL
         final String sTrackerUrl = DcngConfig.Tracker.getTrackerUrl ();
         if (StringHelper.hasNoText (sTrackerUrl))
           throw new InitializationException ("If the tracker is enabled, the tracker URL MUST be provided in the configuration file!");
         // Consistency check - no protocol like "http://" or so may be present
         final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sTrackerUrl);
-        if (aProtocol != null)
-          throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" + aProtocol.getProtocol () + "'!");
+        if (DcngConfig.Tracker.isTrackerViaHttp ())
+        {
+          if (aProtocol == null)
+            throw new InitializationException ("The tracker URL MUST start with a protocol like 'https'!");
+        }
+        else
+        {
+          if (aProtocol != null)
+            throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" + aProtocol.getProtocol () + "'!");
+        }
         DE4AKafkaSettings.defaultProperties ().put (ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, sTrackerUrl);
 
         // Set the topic
