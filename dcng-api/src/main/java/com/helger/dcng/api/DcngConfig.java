@@ -218,13 +218,30 @@ public final class DcngConfig
     }
 
     /**
-     * @return The URL of the tracker. May be <code>null</code>. The layout of
-     *         the URL depends whether TCP or HTTP is used.
+     * @return The URL of the tracker when using TCP. May be <code>null</code>.
+     * @since 0.2.3
      */
     @Nullable
-    public static String getTrackerUrl ()
+    public static String getTrackerUrlTCP ()
     {
-      return getConfig ().getAsString ("de4a.tracker.url");
+      String ret = getConfig ().getAsString ("de4a.tracker.url.tcp");
+      if (ret == null)
+      {
+        // Legacy name
+        ret = getConfig ().getAsString ("de4a.tracker.url");
+        LOGGER.warn ("Do not use the property 'de4a.tracker.url' anymore. Use 'de4a.tracker.url.tcp' and 'de4a.tracker.url.http' instead.");
+      }
+      return ret;
+    }
+
+    /**
+     * @return The URL of the tracker when using HTTP. May be <code>null</code>.
+     * @since 0.2.3
+     */
+    @Nullable
+    public static String getTrackerUrlHTTP ()
+    {
+      return getConfig ().getAsString ("de4a.tracker.url.http");
     }
 
     /**

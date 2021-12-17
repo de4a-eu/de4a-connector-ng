@@ -118,25 +118,35 @@ public final class DcngInit
 
     {
       // Init tracker client
-      DE4AKafkaSettings.setKafkaEnabled (DcngConfig.Tracker.isTrackerEnabled ());
-      if (DcngConfig.Tracker.isTrackerEnabled ())
+      final boolean bEnabled = DcngConfig.Tracker.isTrackerEnabled ();
+      DE4AKafkaSettings.setKafkaEnabled (bEnabled);
+      if (bEnabled)
       {
-        // Use TCP or HTTPS?
-        DE4AKafkaSettings.setKafkaHttp (DcngConfig.Tracker.isTrackerViaHttp ());
+        // Use TCP or HTTP?
+        final boolean bUseHTTP = DcngConfig.Tracker.isTrackerViaHttp ();
+        DE4AKafkaSettings.setKafkaHttp (bUseHTTP);
 
         // Set tracker URL
-        final String sTrackerUrl = DcngConfig.Tracker.getTrackerUrl ();
-        if (StringHelper.hasNoText (sTrackerUrl))
-          throw new InitializationException ("If the tracker is enabled, the tracker URL MUST be provided in the configuration file!");
-        // Consistency check - no protocol like "http://" or so may be present
-        final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sTrackerUrl);
-        if (DcngConfig.Tracker.isTrackerViaHttp ())
+        final String sTrackerUrl;
+        if (bUseHTTP)
         {
+          sTrackerUrl = DcngConfig.Tracker.getTrackerUrlHTTP ();
+          if (StringHelper.hasNoText (sTrackerUrl))
+            throw new InitializationException ("If the tracker is enabled, the tracker URL MUST be provided in the configuration file!");
+
+          // Consistency check - protocol like "http://" or so must be present
+          final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sTrackerUrl);
           if (aProtocol == null)
             throw new InitializationException ("The tracker URL MUST start with a protocol like 'https'!");
         }
         else
         {
+          sTrackerUrl = DcngConfig.Tracker.getTrackerUrlTCP ();
+          if (StringHelper.hasNoText (sTrackerUrl))
+            throw new InitializationException ("If the tracker is enabled, the tracker URL MUST be provided in the configuration file!");
+
+          // Consistency check - no protocol like "http://" or so may be present
+          final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sTrackerUrl);
           if (aProtocol != null)
             throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" + aProtocol.getProtocol () + "'!");
         }
