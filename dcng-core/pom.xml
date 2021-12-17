@@ -122,6 +122,8 @@
             <Automatic-Module-Name>com.helger.dcng.core</Automatic-Module-Name>
             <Export-Package>com.helger.dcng.core.*</Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
+            <!-- The latter one has precedence -->
+            <Include-Resource>{maven-resources},dcng-version.properties=target/classes/dcng-version.properties</Include-Resource>
           </instructions>
         </configuration>
       </plugin>
