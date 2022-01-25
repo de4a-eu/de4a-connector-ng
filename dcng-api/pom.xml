@@ -113,9 +113,9 @@ osgi.serviceloader; filter:="(osgi.serviceloader=com.helger.dcng.api.me.IMessage
         </configuration>
       </plugin>
       <plugin>
-        <groupId>com.helger.maven</groupId>
-        <artifactId>maven-jaxb2-plugin</artifactId>
-        <version>0.14.3</version>
+        <groupId>com.evolvedbinary.maven.jvnet</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>0.15.0</version>
         <executions>
           <execution>
             <goals>
