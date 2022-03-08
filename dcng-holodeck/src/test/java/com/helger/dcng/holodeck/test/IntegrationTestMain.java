@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,6 @@ public class IntegrationTestMain
   {
     DcngConfig.setConfig (Config.create (new ConfigurationSourceProperties (new ClassPathResource ("toop-connector.elonia.integrationTest.properties"),
                                                                             StandardCharsets.UTF_8)));
-    PropertyConfigurator.configure (IntegrationTestMain.class.getResourceAsStream ("/log4j.properties"));
   }
 
   private static final Logger LOG = LoggerFactory.getLogger (IntegrationTestMain.class);

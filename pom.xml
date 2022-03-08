@@ -63,7 +63,8 @@
   </developers>
   
   <properties>
-    <log4j.version>2.17.1</log4j.version>
+    <log4j.version>2.17.2</log4j.version>
+    <jetty.version>9.4.45.v20220203</jetty.version>
   </properties>
 
   <dependencyManagement>
@@ -120,7 +121,7 @@
       <dependency>
         <groupId>com.helger.phive</groupId>
         <artifactId>phive-parent-pom</artifactId>
-        <version>7.2.2</version>
+        <version>7.2.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -141,7 +142,7 @@
       <dependency>
         <groupId>com.helger</groupId>
         <artifactId>ph-poi</artifactId>
-        <version>5.3.1</version>
+        <version>5.3.2</version>
       </dependency>
       <dependency>
         <groupId>eu.de4a</groupId>

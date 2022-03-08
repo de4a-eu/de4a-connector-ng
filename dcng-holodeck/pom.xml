@@ -76,13 +76,13 @@
     <!-- Test only -->
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
+      <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlet</artifactId>
-      <version>9.4.44.v20210927</version>
+      <version>${jetty.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
