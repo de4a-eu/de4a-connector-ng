@@ -28,7 +28,7 @@
   <packaging>war</packaging>
   <name>dcng-webapp-phase4-it1-im</name>
   <description>Contains the DE4A Connector NG Web Application - phase4, Iteration 1, IM pattern</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-webapp-phase4-it1-im</url>
+  <url>https://github.com/de4a-wp5/de4a-connector-ng/dcng-webapp-phase4-it1-im</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>
@@ -67,7 +67,7 @@
     </dependency>
     <dependency>
       <groupId>eu.de4a</groupId>
-      <artifactId>de4a-iem</artifactId>
+      <artifactId>de4a-canonical-evidences</artifactId>
     </dependency>
 
     <!-- Logging -->

@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>dcng-web-api</name>
   <description>Contains the DE4A Connector NG REST API implementations</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-web-api</url>
+  <url>https://github.com/de4a-wp5/de4a-connector-ng/dcng-web-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>

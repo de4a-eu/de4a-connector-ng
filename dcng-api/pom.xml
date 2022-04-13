@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>dcng-api</name>
   <description>Contains the DE4A Connector NG shared API</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-api</url>
+  <url>https://github.com/de4a-wp5/de4a-connector-ng/dcng-api</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
