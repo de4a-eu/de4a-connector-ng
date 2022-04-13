@@ -50,7 +50,8 @@ public class DcngRootServlet extends HttpServlet
   private static final Logger LOGGER = LoggerFactory.getLogger (DcngRootServlet.class);
 
   @Override
-  protected void doGet (@Nonnull final HttpServletRequest req, @Nonnull final HttpServletResponse resp) throws ServletException, IOException
+  protected void doGet (@Nonnull final HttpServletRequest req,
+                        @Nonnull final HttpServletResponse resp) throws ServletException, IOException
   {
     final String sContextPath = req.getServletContext ().getContextPath ();
     final String sCSS = "* { font-family: sans-serif; }" +
@@ -64,14 +65,18 @@ public class DcngRootServlet extends HttpServlet
     aSB.append ("<div>Build timestamp: ").append (CDcngVersion.BUILD_TIMESTAMP).append ("</div>");
     aSB.append ("<div>Current time: ").append (PDTFactory.getCurrentZonedDateTimeUTC ().toString ()).append ("</div>");
     aSB.append ("<div><a href='status'>Check /status</a></div>");
-    aSB.append ("<div><a href='https://github.com/de4a-at/de4a-connector-ng/' target='_blank'>Source code on GitHub</a></div>");
+    aSB.append ("<div><a href='https://github.com/de4a-wp5/de4a-connector-ng' target='_blank'>Source code on GitHub</a></div>");
 
     {
       aSB.append ("<h2>Registered Message Exchange implementations</h2>");
       for (final Map.Entry <String, IMessageExchangeSPI> aEntry : CollectionHelper.getSortedByKey (MessageExchangeManager.getAll ())
                                                                                   .entrySet ())
       {
-        aSB.append ("<div>ID <code>").append (aEntry.getKey ()).append ("</code> mapped to ").append (aEntry.getValue ()).append ("</div>");
+        aSB.append ("<div>ID <code>")
+           .append (aEntry.getKey ())
+           .append ("</code> mapped to ")
+           .append (aEntry.getValue ())
+           .append ("</div>");
       }
     }
 
