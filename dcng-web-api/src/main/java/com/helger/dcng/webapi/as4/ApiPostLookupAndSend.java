@@ -59,9 +59,9 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiPostLookendAndSend extends AbstractDcngApiInvoker
+public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
 {
-  public ApiPostLookendAndSend ()
+  public ApiPostLookupAndSend ()
   {}
 
   @Nonnull
