@@ -44,7 +44,7 @@ import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.incoming.MEIncomingException;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.rest.DCNGPayload;
-import com.helger.dcng.webapi.as4.ApiPostLookendAndSend;
+import com.helger.dcng.webapi.as4.ApiPostLookupAndSend;
 import com.helger.json.IJsonObject;
 import com.helger.json.serialize.JsonWriterSettings;
 import com.helger.xml.serialize.read.DOMReader;
@@ -91,14 +91,14 @@ public final class MockDO implements IMEIncomingHandler
 
       // Swap sender and receiver
       // Different response type
-      final IJsonObject aJson = ApiPostLookendAndSend.perform (aMessage.getReceiverID (),
-                                                               aMessage.getSenderID (),
-                                                               aMessage.getDocumentTypeID (),
-                                                               DcngConfig.getIdentifierFactory ()
-                                                                         .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
-                                                                                                   "response"),
-                                                               EMEProtocol.AS4.getTransportProfileID (),
-                                                               aPayloads);
+      final IJsonObject aJson = ApiPostLookupAndSend.perform (aMessage.getReceiverID (),
+                                                              aMessage.getSenderID (),
+                                                              aMessage.getDocumentTypeID (),
+                                                              DcngConfig.getIdentifierFactory ()
+                                                                        .createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
+                                                                                                  "response"),
+                                                              EMEProtocol.AS4.getTransportProfileID (),
+                                                              aPayloads);
       LOGGER.info ("Sending result:\n" + aJson.getAsJsonString (JsonWriterSettings.DEFAULT_SETTINGS_FORMATTED));
     });
     ExecutorServiceHelper.shutdownAndWaitUntilAllTasksAreFinished (aES);
@@ -156,7 +156,9 @@ public final class MockDO implements IMEIncomingHandler
     if (!"urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration".equals (aRequest.getCanonicalEvidenceTypeId ()))
     {
       DE4AKafkaClient.send (EErrorLevel.ERROR,
-                            "The CanonicalEvidenceType '" + aRequest.getCanonicalEvidenceTypeId () + "' is not supported");
+                            "The CanonicalEvidenceType '" +
+                                               aRequest.getCanonicalEvidenceTypeId () +
+                                               "' is not supported");
       return ESuccess.FAILURE;
     }
 
@@ -240,7 +242,9 @@ public final class MockDO implements IMEIncomingHandler
       {
         // TODO error message
         DE4AKafkaClient.send (EErrorLevel.ERROR,
-                              "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' is not supported");
+                              "The DRS company identifier '" +
+                                                 aCompany.getLegalPersonIdentifier () +
+                                                 "' is not supported");
         final ErrorListType aErrorList = new ErrorListType ();
         final ErrorType aError = new ErrorType ();
         aError.setCode ("12345");
@@ -251,7 +255,9 @@ public final class MockDO implements IMEIncomingHandler
       else
       {
         DE4AKafkaClient.send (EErrorLevel.INFO,
-                              "The DRS company identifier '" + aCompany.getLegalPersonIdentifier () + "' was found - building result");
+                              "The DRS company identifier '" +
+                                                aCompany.getLegalPersonIdentifier () +
+                                                "' was found - building result");
 
         // Copy whatever needs to be copied
         final CanonicalEvidenceType aCE = new CanonicalEvidenceType ();
@@ -281,7 +287,9 @@ public final class MockDO implements IMEIncomingHandler
             a.setAdminUnitL1 ("Austria");
             p.addRegisteredAddress (a);
           }
-          aCE.setAny (eu.de4a.iem.xml.de4a.t42.v0_6.DE4AT42Marshaller.legalEntity ().getAsDocument (p).getDocumentElement ());
+          aCE.setAny (eu.de4a.iem.xml.de4a.t42.v0_6.DE4AT42Marshaller.legalEntity ()
+                                                                     .getAsDocument (p)
+                                                                     .getDocumentElement ());
         }
         aResponse.setCanonicalEvidence (aCE);
       }
@@ -321,7 +329,8 @@ public final class MockDO implements IMEIncomingHandler
     {
       // Do something with it
       LOGGER.info ("Received unhandled XML:\n" +
-                   XMLWriter.getNodeAsString (aDoc, new XMLWriterSettings ().setIndent (EXMLSerializeIndent.INDENT_AND_ALIGN)));
+                   XMLWriter.getNodeAsString (aDoc,
+                                              new XMLWriterSettings ().setIndent (EXMLSerializeIndent.INDENT_AND_ALIGN)));
     }
   }
 
@@ -333,7 +342,10 @@ public final class MockDO implements IMEIncomingHandler
     {
       DE4AKafkaClient.send (EErrorLevel.ERROR,
                             "Failed to read content as XML. Content as UTF-8:\n" +
-                                               new String (aBytes.bytes (), aBytes.getOffset (), aBytes.size (), StandardCharsets.UTF_8));
+                                               new String (aBytes.bytes (),
+                                                           aBytes.getOffset (),
+                                                           aBytes.size (),
+                                                           StandardCharsets.UTF_8));
     }
     else
     {
@@ -355,7 +367,8 @@ public final class MockDO implements IMEIncomingHandler
     }
     else
     {
-      DE4AKafkaClient.send (EErrorLevel.ERROR, "Incoming message seems to be ill-formatted - too few payloads. Trying first one.");
+      DE4AKafkaClient.send (EErrorLevel.ERROR,
+                            "Incoming message seems to be ill-formatted - too few payloads. Trying first one.");
       final ByteArrayWrapper p = aMessage.payloads ().get (0).getData ();
       handleIncomingRequest (aMessage, p);
     }

@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger.dcng</groupId>
     <artifactId>dcng-parent-pom</artifactId>
-    <version>0.1.7-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
   </parent>
   <artifactId>dcng-core</artifactId>
   <packaging>bundle</packaging>
@@ -57,9 +57,13 @@
       <groupId>com.helger.dcng</groupId>
       <artifactId>dcng-api</artifactId>
     </dependency>
+    <!-- This version should work for iteration 2 as well.
+         Even though it is of course not nice to have different versions here.
+     -->
     <dependency>
       <groupId>eu.de4a</groupId>
       <artifactId>de4a-kafka-client</artifactId>
+      <version>0.1.11</version>
     </dependency>
     <dependency>
       <groupId>com.helger.web</groupId>

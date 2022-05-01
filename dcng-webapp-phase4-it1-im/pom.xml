@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger.dcng</groupId>
     <artifactId>dcng-parent-pom</artifactId>
-    <version>0.1.7-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
   </parent>
   <artifactId>dcng-webapp-phase4-it1-im</artifactId>
   <packaging>war</packaging>
@@ -51,6 +51,18 @@
       <email>ph(at)helger.com</email>
     </developer>
   </developers>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>eu.de4a</groupId>
+        <artifactId>de4a-commons-parent-pom</artifactId>
+        <version>0.1.11</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -67,7 +79,7 @@
     </dependency>
     <dependency>
       <groupId>eu.de4a</groupId>
-      <artifactId>de4a-canonical-evidences</artifactId>
+      <artifactId>de4a-iem</artifactId>
     </dependency>
 
     <!-- Logging -->
@@ -139,7 +151,7 @@
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.4.44.v20210927</version>
+        <version>${jetty.version}</version>
         <configuration>
           <scanIntervalSeconds>3</scanIntervalSeconds>
         </configuration>

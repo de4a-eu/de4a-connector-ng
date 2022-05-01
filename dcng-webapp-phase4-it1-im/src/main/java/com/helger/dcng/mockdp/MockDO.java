@@ -52,13 +52,16 @@ import com.helger.xml.serialize.write.EXMLSerializeIndent;
 import com.helger.xml.serialize.write.XMLWriter;
 import com.helger.xml.serialize.write.XMLWriterSettings;
 
-import eu.de4a.iem.cev.EDE4ACanonicalEvidenceType;
-import eu.de4a.iem.core.DE4ACoreMarshaller;
-import eu.de4a.iem.core.DE4AResponseDocumentHelper;
-import eu.de4a.iem.core.jaxb.common.CanonicalEvidenceType;
-import eu.de4a.iem.core.jaxb.common.ErrorType;
-import eu.de4a.iem.core.jaxb.common.LegalPersonIdentifierType;
+import eu.de4a.iem.jaxb.common.idtypes.LegalPersonIdentifierType;
+import eu.de4a.iem.jaxb.common.types.CanonicalEvidenceType;
+import eu.de4a.iem.jaxb.common.types.ErrorListType;
+import eu.de4a.iem.jaxb.common.types.ErrorType;
+import eu.de4a.iem.jaxb.common.types.RequestTransferEvidenceUSIIMDRType;
+import eu.de4a.iem.jaxb.common.types.ResponseTransferEvidenceType;
 import eu.de4a.iem.jaxb.w3.cv11.bc.LegalEntityLegalNameType;
+import eu.de4a.iem.xml.de4a.DE4AMarshaller;
+import eu.de4a.iem.xml.de4a.DE4AResponseDocumentHelper;
+import eu.de4a.iem.xml.de4a.EDE4ACanonicalEvidenceType;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
@@ -109,7 +112,7 @@ public final class MockDO implements IMEIncomingHandler
   {
     LOGGER.info ("Handling as DBA request");
 
-    final RequestTransferEvidenceUSIIMDRType aRequest = DE4ACoreMarshaller.drImRequestMarshaller ().read (aDoc);
+    final RequestTransferEvidenceUSIIMDRType aRequest = DE4AMarshaller.drImRequestMarshaller ().read (aDoc);
     if (aRequest == null)
     {
       DE4AKafkaClient.send (EErrorLevel.ERROR, "Passed request ist not a valid IM request");
@@ -286,14 +289,14 @@ public final class MockDO implements IMEIncomingHandler
             a.setAdminUnitL1 ("Austria");
             p.addRegisteredAddress (a);
           }
-          aCE.setAny (eu.de4a.iem.cev.de4a.t42.v0_6.DE4AT42Marshaller.legalEntity ()
+          aCE.setAny (eu.de4a.iem.xml.de4a.t42.v0_6.DE4AT42Marshaller.legalEntity ()
                                                                      .getAsDocument (p)
                                                                      .getDocumentElement ());
         }
         aResponse.setCanonicalEvidence (aCE);
       }
 
-    final DE4ACoreMarshaller <ResponseTransferEvidenceType> aMarshaller = DE4ACoreMarshaller.drImResponseMarshaller (EDE4ACanonicalEvidenceType.T42_COMPANY_INFO_V06);
+    final DE4AMarshaller <ResponseTransferEvidenceType> aMarshaller = DE4AMarshaller.drImResponseMarshaller (EDE4ACanonicalEvidenceType.T42_COMPANY_INFO_V06);
     LOGGER.info ("Message to be send back:\n" + aMarshaller.setFormattedOutput (true).getAsString (aResponse));
 
     _waitAndRunAsync (aMessage, aMarshaller.getAsBytes (aResponse));
