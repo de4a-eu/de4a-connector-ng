@@ -22,13 +22,13 @@
   <parent>
     <groupId>com.helger.dcng</groupId>
     <artifactId>dcng-parent-pom</artifactId>
-    <version>0.1.7-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
   </parent>
   <artifactId>dcng-webapp-phase4-it1-im</artifactId>
   <packaging>war</packaging>
   <name>dcng-webapp-phase4-it1-im</name>
   <description>Contains the DE4A Connector NG Web Application - phase4, Iteration 1, IM pattern</description>
-  <url>https://github.com/de4a-wp5/de4a-connector-ng/dcng-webapp-phase4-it1-im</url>
+  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-webapp-phase4-it1-im</url>
   <inceptionYear>2021</inceptionYear>
 
   <licenses>
@@ -67,7 +67,7 @@
     </dependency>
     <dependency>
       <groupId>eu.de4a</groupId>
-      <artifactId>de4a-canonical-evidences</artifactId>
+      <artifactId>de4a-iem</artifactId>
     </dependency>
 
     <!-- Logging -->
