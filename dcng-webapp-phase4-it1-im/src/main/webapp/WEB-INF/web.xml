@@ -23,7 +23,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          metadata-complete="false">
   <display-name>DE4A Connector NG</display-name>
-  <description>https://github.com/de4a-at/de4a-connector-ng</description>
+  <description>https://github.com/de4a-wp5/de4a-connector-ng</description>
 
   <session-config>
     <session-timeout>60</session-timeout>

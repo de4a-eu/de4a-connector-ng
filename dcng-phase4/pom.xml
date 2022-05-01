@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>dcng-phase4</name>
   <description>Contains the DE4A Connector NG phase4 Gateway</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-phase4</url>
+  <url>https://github.com/de4a-wp5/de4a-connector-ng/dcng-phase4</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>

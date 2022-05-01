@@ -19,7 +19,7 @@ package com.helger.dcng.webapi;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.helger.dcng.webapi.as4.ApiPostLookendAndSend;
+import com.helger.dcng.webapi.as4.ApiPostLookupAndSend;
 import com.helger.dcng.webapi.as4.ApiPostSend;
 import com.helger.dcng.webapi.smp.ApiGetSmpDocTypes;
 import com.helger.dcng.webapi.smp.ApiGetSmpEndpoints;
@@ -46,6 +46,6 @@ public final class DcngApiInit
 
     // AS4 stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/lookup/send"), new ApiPostLookendAndSend ()));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/lookup/send"), new ApiPostLookupAndSend ()));
   }
 }

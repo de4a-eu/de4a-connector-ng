@@ -28,7 +28,7 @@
   <packaging>bundle</packaging>
   <name>dcng-core</name>
   <description>Contains the DE4A Connector NG Core</description>
-  <url>https://github.com/de4a-at/de4a-connector-ng/dcng-core</url>
+  <url>https://github.com/de4a-wp5/de4a-connector-ng/dcng-core</url>
   <inceptionYear>2021</inceptionYear>
   
   <licenses>
