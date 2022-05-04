@@ -64,7 +64,7 @@ public class ApiGetSmpDocTypes extends AbstractDcngApiInvoker
       // Query SMP
       final ICommonsSortedMap <String, String> aSGHrefs = DcngApiHelper.querySMPServiceGroups (aParticipantID);
 
-      aJson.add (JSON_SUCCESS, true);
+      aJson.add (JSON_TAG_SUCCESS, true);
       aJson.addJson ("response",
                      SMPJsonResponse.convert (ESMPAPIType.OASIS_BDXR_V1, aParticipantID, aSGHrefs, DcngConfig.getIdentifierFactory ()));
     });

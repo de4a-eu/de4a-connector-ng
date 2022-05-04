@@ -89,11 +89,11 @@ public class ApiGetSmpEndpoints extends AbstractDcngApiInvoker
       // Add to response
       if (aSM != null)
       {
-        aJson.add (JSON_SUCCESS, true);
+        aJson.add (JSON_TAG_SUCCESS, true);
         aJson.addJson ("response", SMPJsonResponse.convert (aParticipantID, aDocTypeID, aSM));
       }
       else
-        aJson.add (JSON_SUCCESS, false);
+        aJson.add (JSON_TAG_SUCCESS, false);
     });
 
     return aJson;

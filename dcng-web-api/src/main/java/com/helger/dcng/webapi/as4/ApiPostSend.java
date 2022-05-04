@@ -121,7 +121,7 @@ public class ApiPostSend extends AbstractDcngApiInvoker
     CommonApiInvoker.invoke (aJson, () -> {
       // Main sending - throws Exception on error
       DcngApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
-      aJson.add (JSON_SUCCESS, true);
+      aJson.add (JSON_TAG_SUCCESS, true);
     });
 
     return aJson;

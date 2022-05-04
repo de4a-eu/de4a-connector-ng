@@ -45,7 +45,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  */
 public abstract class AbstractDcngApiInvoker implements IAPIExecutor
 {
-  protected static final String JSON_SUCCESS = "success";
+  public static final String JSON_TAG_SUCCESS = "success";
 
   /**
    * @param aRequestScope
@@ -91,7 +91,7 @@ public abstract class AbstractDcngApiInvoker implements IAPIExecutor
     aPUR.setJsonWriterSettings (new JsonWriterSettings ().setIndentEnabled (true));
     aPUR.json (aJson);
 
-    final boolean bSuccess = aJson.getAsBoolean (JSON_SUCCESS, false);
+    final boolean bSuccess = aJson.getAsBoolean (JSON_TAG_SUCCESS, false);
     if (!bSuccess)
       aPUR.setAllowContentOnStatusCode (true).setStatus (CHttp.HTTP_BAD_REQUEST);
     else
