@@ -56,14 +56,14 @@ public class DcngHttpClientSettings extends HttpClientSettings
       {
         setSSLContextTrustAll ();
         setHostnameVerifierVerifyAll ();
-        if (LOGGER.isDebugEnabled ())
-          LOGGER.debug ("Trusting all TLS configurations - not recommended for production");
+        LOGGER.warn ("Trusting all TLS configurations - not recommended for production");
       }
       catch (final GeneralSecurityException ex)
       {
-        throw new InitializationException (ex);
+        throw new InitializationException ("Failed to set SSL Context and Hostname verified", ex);
       }
 
+    // Set timeouts
     final int nConnectionTimeoutMS = DcngConfig.HTTP.getConnectionTimeoutMS ();
     if (nConnectionTimeoutMS >= 0)
       setConnectionTimeoutMS (nConnectionTimeoutMS);
