@@ -141,7 +141,7 @@
       <dependency>
         <groupId>eu.de4a.ial</groupId>
         <artifactId>ial-parent-pom</artifactId>
-        <version>0.1.3</version>
+        <version>0.1.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
