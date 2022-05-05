@@ -218,7 +218,6 @@
     <module>dcng-holodeck</module>
     <module>dcng-web-api</module>
     <module>dcng-webapp-phase4-it1-im</module>
-    <module>dcng-webapp-phase4-it1-usi</module>
   </modules>
 
   <build>
