@@ -22,14 +22,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.dcng.core.regrep.DcngRegRepHelper;
+import com.helger.dcng.core.regrep.DcngRegRepHelperIteration1;
 import com.helger.regrep.RegRep4Reader;
 import com.helger.regrep.RegRep4Writer;
 import com.helger.regrep.query.QueryRequest;
 import com.helger.regrep.query.QueryResponse;
 
 /**
- * Test class for class {@link DcngRegRepHelper}.
+ * Test class for class {@link DcngRegRepHelperIteration1}.
  *
  * @author Philip Helger
  */
@@ -40,7 +40,7 @@ public final class DcngRegRepHelperTest
   @Test
   public void testRequest ()
   {
-    final QueryRequest q = DcngRegRepHelper.wrapInQueryRequest ("dcid", "dcname", "pid");
+    final QueryRequest q = DcngRegRepHelperIteration1.wrapInQueryRequest ("dcid", "dcname", "pid");
     assertNotNull (q);
     final byte [] b = RegRep4Writer.queryRequest ().getAsBytes (q);
     assertNotNull (b);
@@ -54,7 +54,7 @@ public final class DcngRegRepHelperTest
   @Test
   public void testResponse ()
   {
-    final QueryResponse q = DcngRegRepHelper.wrapInQueryResponse ("dpid", "dpname");
+    final QueryResponse q = DcngRegRepHelperIteration1.wrapInQueryResponse ("dpid", "dpname");
     assertNotNull (q);
     final byte [] b = RegRep4Writer.queryResponse ().getAsBytes (q);
     assertNotNull (b);

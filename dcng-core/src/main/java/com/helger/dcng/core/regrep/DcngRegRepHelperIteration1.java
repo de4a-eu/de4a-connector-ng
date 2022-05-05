@@ -48,11 +48,11 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
  * @author Philip Helger
  */
 @Immutable
-public final class DcngRegRepHelper
+public final class DcngRegRepHelperIteration1
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperIteration1.class);
 
-  private DcngRegRepHelper ()
+  private DcngRegRepHelperIteration1 ()
   {}
 
   @Nonnull
@@ -145,7 +145,7 @@ public final class DcngRegRepHelper
   }
 
   @Nonnull
-  public static byte [] wrapInRegRepIteration1 (@Nonnull final String sContentID, @Nonnull final byte [] aXMLBytes)
+  public static byte [] wrapInRegRep (@Nonnull final String sContentID, @Nonnull final byte [] aXMLBytes)
   {
     ValueEnforcer.notNull (sContentID, "ContentID");
     ValueEnforcer.notNull (aXMLBytes, "XMLBytes");
@@ -160,12 +160,12 @@ public final class DcngRegRepHelper
     // TODO
     if (sContentID.contains ("Request"))
     {
-      final QueryRequest aRRReq = DcngRegRepHelper.wrapInQueryRequest ("who", "cares", "person");
+      final QueryRequest aRRReq = DcngRegRepHelperIteration1.wrapInQueryRequest ("who", "cares", "person");
       aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
     }
     else
     {
-      final QueryResponse aRRResp = DcngRegRepHelper.wrapInQueryResponse ("no", "body");
+      final QueryResponse aRRResp = DcngRegRepHelperIteration1.wrapInQueryResponse ("no", "body");
       aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
     }
     return aRegRepPayload;

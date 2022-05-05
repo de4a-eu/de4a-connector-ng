@@ -35,7 +35,7 @@ import com.helger.dcng.api.rest.DCNGOutgoingMessage;
 import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.api.DcngApiHelper;
-import com.helger.dcng.core.regrep.DcngRegRepHelper;
+import com.helger.dcng.core.regrep.DcngRegRepHelperIteration1;
 import com.helger.dcng.webapi.ApiParamException;
 import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
@@ -90,7 +90,7 @@ public class ApiPostSend extends AbstractDcngApiInvoker
     {
       if (nIndex == 0)
       {
-        final byte [] aRegRepPayload = DcngRegRepHelper.wrapInRegRepIteration1 (aPayload.getContentID (), aPayload.getValue ());
+        final byte [] aRegRepPayload = DcngRegRepHelperIteration1.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
 
         // RegRep should be first
         aMessage.addPayload (MEPayload.builder ()
