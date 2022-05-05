@@ -90,7 +90,7 @@ public class ApiPostSend extends AbstractDcngApiInvoker
     {
       if (nIndex == 0)
       {
-        final byte [] aRegRepPayload = DcngRegRepHelper.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
+        final byte [] aRegRepPayload = DcngRegRepHelper.wrapInRegRepIteration1 (aPayload.getContentID (), aPayload.getValue ());
 
         // RegRep should be first
         aMessage.addPayload (MEPayload.builder ()

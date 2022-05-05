@@ -145,7 +145,7 @@ public final class DcngRegRepHelper
   }
 
   @Nonnull
-  public static byte [] wrapInRegRep (@Nonnull final String sContentID, @Nonnull final byte [] aXMLBytes)
+  public static byte [] wrapInRegRepIteration1 (@Nonnull final String sContentID, @Nonnull final byte [] aXMLBytes)
   {
     ValueEnforcer.notNull (sContentID, "ContentID");
     ValueEnforcer.notNull (aXMLBytes, "XMLBytes");

@@ -60,7 +60,7 @@ public class DcngHttpClientSettings extends HttpClientSettings
       }
       catch (final GeneralSecurityException ex)
       {
-        throw new InitializationException ("Failed to set SSL Context and Hostname verified", ex);
+        throw new InitializationException ("Failed to set SSL Context or Hostname verifier", ex);
       }
 
     // Set timeouts

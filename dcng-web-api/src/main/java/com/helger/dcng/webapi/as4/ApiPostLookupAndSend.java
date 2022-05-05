@@ -151,7 +151,7 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
         {
           if (nIndex == 0)
           {
-            final byte [] aRegRepPayload = DcngRegRepHelper.wrapInRegRep (aPayload.getContentID (),
+            final byte [] aRegRepPayload = DcngRegRepHelper.wrapInRegRepIteration1 (aPayload.getContentID (),
                                                                           aPayload.getValue ());
 
             // RegRep should be first
