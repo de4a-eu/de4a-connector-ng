@@ -256,6 +256,28 @@ public final class DcngConfig
   }
 
   /**
+   * IAL related stuff
+   *
+   * @author Philip Helger
+   */
+  public static final class IAL
+  {
+    private IAL ()
+    {}
+
+    /**
+     * @return The base URL of the IAL client when using HTTP. May be
+     *         <code>null</code>.
+     * @since 0.2.4
+     */
+    @Nullable
+    public static String getIALUrl ()
+    {
+      return getConfig ().getAsString ("de4a.ial.url");
+    }
+  }
+
+  /**
    * SMP related settings.
    *
    * @author Philip Helger
@@ -369,7 +391,11 @@ public final class DcngConfig
           final String sManagementServiceURL = getConfig ().getAsString ("de4a.smp.sml.serviceurl");
           final boolean bClientCertificateRequired = getConfig ().getAsBoolean ("de4a.smp.sml.clientcert", false);
           // No need for a persistent ID here
-          ret = new SMLInfo (GlobalIDFactory.getNewStringID (), sDisplayName, sDNSZone, sManagementServiceURL, bClientCertificateRequired);
+          ret = new SMLInfo (GlobalIDFactory.getNewStringID (),
+                             sDisplayName,
+                             sDNSZone,
+                             sManagementServiceURL,
+                             bClientCertificateRequired);
         }
         // Remember in cache
         s_aCachedSMLInfo = ret;

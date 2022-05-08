@@ -22,6 +22,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.helger.commons.annotation.Nonempty;
+import com.helger.commons.collection.impl.ICommonsOrderedSet;
 import com.helger.commons.collection.impl.ICommonsSortedMap;
 import com.helger.commons.error.level.EErrorLevel;
 import com.helger.dcng.api.error.LoggingDcngErrorHandler;
@@ -36,6 +38,7 @@ import com.helger.peppolid.IProcessIdentifier;
 import com.helger.xsds.bdxr.smp1.EndpointType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
 
+import eu.de4a.ial.api.jaxb.ResponseLookupRoutingInformationType;
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
 /**
@@ -52,6 +55,24 @@ public final class DcngApiHelper
   private DcngApiHelper ()
   {}
 
+  @Nullable
+  public static ResponseLookupRoutingInformationType queryIAL (@Nonnull @Nonempty final ICommonsOrderedSet <String> aCanonicalObjectTypeIDs)
+  {
+    DE4AKafkaClient.send (EErrorLevel.INFO, () -> "Querying IAL for " + aCanonicalObjectTypeIDs);
+
+    return DcngApiConfig.getIALClient ().queryIAL (aCanonicalObjectTypeIDs);
+  }
+
+  @Nullable
+  public static ResponseLookupRoutingInformationType queryIAL (@Nonnull @Nonempty final ICommonsOrderedSet <String> aCanonicalObjectTypeIDs,
+                                                               @Nonnull @Nonempty final String sATUCode)
+  {
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "Querying IAL for " + aCanonicalObjectTypeIDs + " in '" + sATUCode + "'");
+
+    return DcngApiConfig.getIALClient ().queryIAL (aCanonicalObjectTypeIDs, sATUCode);
+  }
+
   /**
    * @param aParticipantID
    *        Participant ID to query. May not be <code>null</code>.
@@ -64,7 +85,8 @@ public final class DcngApiHelper
   {
     DE4AKafkaClient.send (EErrorLevel.INFO, () -> "Querying SMP service groups for " + aParticipantID.getURIEncoded ());
 
-    return DcngApiConfig.getDDServiceGroupHrefProvider ().getAllServiceGroupHrefs (aParticipantID, LoggingDcngErrorHandler.INSTANCE);
+    return DcngApiConfig.getDDServiceGroupHrefProvider ()
+                        .getAllServiceGroupHrefs (aParticipantID, LoggingDcngErrorHandler.INSTANCE);
   }
 
   /**
@@ -101,7 +123,10 @@ public final class DcngApiHelper
                                 "]");
 
     final ServiceMetadataType ret = DcngApiConfig.getDDServiceMetadataProvider ()
-                                                .getServiceMetadata (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
+                                                 .getServiceMetadata (aParticipantID,
+                                                                      aDocTypeID,
+                                                                      aProcessID,
+                                                                      sTransportProfile);
 
     if (ret == null)
       DE4AKafkaClient.send (EErrorLevel.WARN, "Found no matching SMP service metadata");
@@ -142,7 +167,8 @@ public final class DcngApiHelper
                                 " and " +
                                 sTransportProfile);
 
-    return DcngApiConfig.getDDServiceMetadataProvider ().getEndpoint (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
+    return DcngApiConfig.getDDServiceMetadataProvider ()
+                        .getEndpoint (aParticipantID, aDocTypeID, aProcessID, sTransportProfile);
   }
 
   /**

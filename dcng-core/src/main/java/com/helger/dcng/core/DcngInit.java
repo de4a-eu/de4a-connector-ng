@@ -79,7 +79,8 @@ public final class DcngInit
    * @throws InitializationException
    *         If any of the settings are totally bogus
    */
-  public static void initGlobally (@Nonnull final ServletContext aServletContext, @Nullable final IMEIncomingHandler aIncomingHandler)
+  public static void initGlobally (@Nonnull final ServletContext aServletContext,
+                                   @Nullable final IMEIncomingHandler aIncomingHandler)
   {
     if (!INITED.compareAndSet (false, true))
       throw new IllegalStateException ("DE4A Connector is already initialized");
@@ -148,7 +149,9 @@ public final class DcngInit
           // Consistency check - no protocol like "http://" or so may be present
           final IURLProtocol aProtocol = URLProtocolRegistry.getInstance ().getProtocol (sTrackerUrl);
           if (aProtocol != null)
-            throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" + aProtocol.getProtocol () + "'!");
+            throw new InitializationException ("The tracker URL MUST NOT start with a protocol like '" +
+                                               aProtocol.getProtocol () +
+                                               "'!");
         }
         DE4AKafkaSettings.defaultProperties ().put (ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, sTrackerUrl);
 
@@ -183,12 +186,19 @@ public final class DcngInit
       }
     }
 
+    // Check IAL configuration
+    {
+      if (StringHelper.hasNoText (DcngConfig.IAL.getIALUrl ()))
+        throw new InitializationException ("The IAL base URL must be configured.");
+    }
+
     // Init incoming message handler
     final IMEIncomingHandler aRealIncomingHandler = aIncomingHandler != null ? aIncomingHandler
                                                                              : DcngIncomingHandlerViaHttp.create (s_sLogPrefix);
     MessageExchangeManager.getConfiguredImplementation ().init (aServletContext, aRealIncomingHandler);
 
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> s_sLogPrefix + "DE4A Connector NG WebApp " + CDcngVersion.BUILD_VERSION + " started");
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> s_sLogPrefix + "DE4A Connector NG WebApp " + CDcngVersion.BUILD_VERSION + " started");
   }
 
   /**

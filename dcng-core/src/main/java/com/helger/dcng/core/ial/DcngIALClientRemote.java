@@ -27,13 +27,14 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
-import com.helger.commons.collection.impl.ICommonsSortedSet;
+import com.helger.commons.collection.impl.ICommonsOrderedSet;
 import com.helger.commons.error.SingleError;
 import com.helger.commons.error.list.ErrorList;
 import com.helger.commons.http.CHttpHeader;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.mime.CMimeType;
 import com.helger.commons.string.StringHelper;
+import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.ial.IIALClient;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
 import com.helger.http.AcceptMimeTypeList;
@@ -52,12 +53,12 @@ import eu.de4a.ial.api.jaxb.ResponseLookupRoutingInformationType;
  * @since 0.2.4
  */
 @Immutable
-public final class DcngIALClient implements IIALClient
+public final class DcngIALClientRemote implements IIALClient
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (DcngIALClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DcngIALClientRemote.class);
   private final String m_sBaseURL;
 
-  public DcngIALClient (@Nonnull @Nonempty final String sBaseURL)
+  public DcngIALClientRemote (@Nonnull @Nonempty final String sBaseURL)
   {
     ValueEnforcer.notEmpty (sBaseURL, "BaseURL");
     m_sBaseURL = sBaseURL;
@@ -71,7 +72,7 @@ public final class DcngIALClient implements IIALClient
   }
 
   @Nullable
-  public ResponseLookupRoutingInformationType queryIAL (@Nonnull @Nonempty final ICommonsSortedSet <String> aCanonicalObjectTypeIDs,
+  public ResponseLookupRoutingInformationType queryIAL (@Nonnull @Nonempty final ICommonsOrderedSet <String> aCanonicalObjectTypeIDs,
                                                         @Nullable final String sATUCode,
                                                         @Nonnull final ErrorList aErrorList)
   {
@@ -116,5 +117,12 @@ public final class DcngIALClient implements IIALClient
                                  .build ());
     }
     return null;
+  }
+
+  @Nonnull
+  public static DcngIALClientRemote createDefaultInstance ()
+  {
+    // Use the configured value as the base URL
+    return new DcngIALClientRemote (DcngConfig.IAL.getIALUrl ());
   }
 }
