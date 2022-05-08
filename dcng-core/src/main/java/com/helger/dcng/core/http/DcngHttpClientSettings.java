@@ -66,10 +66,18 @@ public class DcngHttpClientSettings extends HttpClientSettings
     // Set timeouts
     final int nConnectionTimeoutMS = DcngConfig.HTTP.getConnectionTimeoutMS ();
     if (nConnectionTimeoutMS >= 0)
+    {
       setConnectionTimeoutMS (nConnectionTimeoutMS);
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Using HTTP connection timeout from configuration for request");
+    }
 
     final int nReadTimeoutMS = DcngConfig.HTTP.getReadTimeoutMS ();
     if (nReadTimeoutMS >= 0)
+    {
       setSocketTimeoutMS (nReadTimeoutMS);
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Using HTTP read timeout from configuration for request");
+    }
   }
 }
