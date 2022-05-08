@@ -62,10 +62,6 @@
       <artifactId>de4a-kafka-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>eu.de4a.ial</groupId>
-      <artifactId>ial-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.helger.web</groupId>
       <artifactId>ph-xservlet</artifactId>
     </dependency>

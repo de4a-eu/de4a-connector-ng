@@ -18,51 +18,78 @@ package com.helger.dcng.core.ial;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.Immutable;
 
 import org.apache.http.client.methods.HttpGet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
 import com.helger.commons.collection.impl.ICommonsSortedSet;
-import com.helger.commons.error.level.EErrorLevel;
+import com.helger.commons.error.SingleError;
+import com.helger.commons.error.list.ErrorList;
 import com.helger.commons.http.CHttpHeader;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.mime.CMimeType;
 import com.helger.commons.string.StringHelper;
+import com.helger.dcng.api.ial.IIALClient;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
 import com.helger.http.AcceptMimeTypeList;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.response.ResponseHandlerByteArray;
+import com.helger.jaxb.validation.WrappedCollectingValidationEventHandler;
 
 import eu.de4a.ial.api.IALMarshaller;
 import eu.de4a.ial.api.jaxb.ResponseLookupRoutingInformationType;
-import eu.de4a.kafkaclient.DE4AKafkaClient;
 
-@NotThreadSafe
-public final class DcngIALClient
+/**
+ * Implementation of {@link IIALClient} that effectively performs an HTTP query
+ * on the IAL service.
+ *
+ * @author Philip Helger
+ * @since 0.2.4
+ */
+@Immutable
+public final class DcngIALClient implements IIALClient
 {
-  private DcngIALClient ()
-  {}
+  private static final Logger LOGGER = LoggerFactory.getLogger (DcngIALClient.class);
+  private final String m_sBaseURL;
+
+  public DcngIALClient (@Nonnull @Nonempty final String sBaseURL)
+  {
+    ValueEnforcer.notEmpty (sBaseURL, "BaseURL");
+    m_sBaseURL = sBaseURL;
+  }
+
+  @Nonnull
+  @Nonempty
+  public final String getBaseURL ()
+  {
+    return m_sBaseURL;
+  }
 
   @Nullable
-  public static ResponseLookupRoutingInformationType queryIAL (@Nonnull @Nonempty final ICommonsSortedSet <String> aCanonicalObjectTypeIDs,
-                                                               @Nullable final String sATUCode)
+  public ResponseLookupRoutingInformationType queryIAL (@Nonnull @Nonempty final ICommonsSortedSet <String> aCanonicalObjectTypeIDs,
+                                                        @Nullable final String sATUCode,
+                                                        @Nonnull final ErrorList aErrorList)
   {
     ValueEnforcer.notEmptyNoNullValue (aCanonicalObjectTypeIDs, "CanonicalObjectTypeIDs");
+    ValueEnforcer.notNull (aErrorList, "ErrorList");
 
-    final String sDestURL = FilenameHelper.getCleanConcatenatedUrlPath ("",
+    final String sDestURL = FilenameHelper.getCleanConcatenatedUrlPath (m_sBaseURL,
                                                                         "/api/provision/" +
-                                                                            StringHelper.imploder ()
-                                                                                        .source (aCanonicalObjectTypeIDs)
-                                                                                        .separator (',')
-                                                                                        .build () +
-                                                                            (StringHelper.hasText (sATUCode) ? "/" +
-                                                                                                               sATUCode
-                                                                                                             : ""));
+                                                                                    StringHelper.imploder ()
+                                                                                                .source (aCanonicalObjectTypeIDs)
+                                                                                                .separator (',')
+                                                                                                .build () +
+                                                                                    (StringHelper.hasText (sATUCode) ? "/" +
+                                                                                                                       sATUCode
+                                                                                                                     : ""));
 
-    // Main sending, using DCNG http settings
+    LOGGER.info ("Querying IAL via " + sDestURL);
+
     try (final HttpClientManager aHCM = HttpClientManager.create (new DcngHttpClientSettings ()))
     {
       final HttpGet aGet = new HttpGet (sDestURL);
@@ -71,19 +98,22 @@ public final class DcngIALClient
                                                .getAsHttpHeaderValue ());
       final byte [] aResult = aHCM.execute (aGet, new ResponseHandlerByteArray ());
 
-      DE4AKafkaClient.send (EErrorLevel.INFO,
-                            () -> "Queried IAL. Got " + ArrayHelper.getSize (aResult) + " bytes back");
+      LOGGER.info ("Queried IAL. Got " + ArrayHelper.getSize (aResult) + " bytes back");
 
       final ResponseLookupRoutingInformationType ret = IALMarshaller.idkResponseLookupRoutingInformationMarshaller ()
+                                                                    .setValidationEventHandlerFactory (x -> new WrappedCollectingValidationEventHandler (aErrorList).andThen (x))
                                                                     .read (aResult);
       if (ret == null)
-        DE4AKafkaClient.send (EErrorLevel.WARN, () -> "Failed to parse response of IAL query");
-
+        LOGGER.error ("Failed to parse response of IAL query");
       return ret;
     }
     catch (final Exception ex)
     {
-      DE4AKafkaClient.send (EErrorLevel.ERROR, () -> "Failed to query IAL at '" + sDestURL + "'", ex);
+      LOGGER.error ("Failed to query IAL at '" + sDestURL + "'", ex);
+      aErrorList.add (SingleError.builderError ()
+                                 .errorText ("Failed to query IAL at '" + sDestURL + "'")
+                                 .linkedException (ex)
+                                 .build ());
     }
     return null;
   }

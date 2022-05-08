@@ -77,6 +77,10 @@
       <groupId>com.helger.peppol</groupId>
       <artifactId>peppol-commons</artifactId>
     </dependency>
+    <dependency>
+      <groupId>eu.de4a.ial</groupId>
+      <artifactId>ial-api</artifactId>
+    </dependency>
     
     <dependency>
       <groupId>javax.servlet</groupId>
