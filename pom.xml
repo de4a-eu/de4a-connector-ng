@@ -141,9 +141,17 @@
       <dependency>
         <groupId>eu.de4a.ial</groupId>
         <artifactId>ial-parent-pom</artifactId>
-        <version>0.1.4</version>
+        <version>0.1.5</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!-- This version should work for iteration 1 and 2.
+           Even though it is of course not nice to have different versions here.
+       -->
+      <dependency>
+        <groupId>eu.de4a</groupId>
+        <artifactId>de4a-kafka-client</artifactId>
+        <version>0.2.4</version>
       </dependency>
       <dependency>
         <groupId>com.helger</groupId>

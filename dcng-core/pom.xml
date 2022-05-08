@@ -57,13 +57,13 @@
       <groupId>com.helger.dcng</groupId>
       <artifactId>dcng-api</artifactId>
     </dependency>
-    <!-- This version should work for iteration 2 as well.
-         Even though it is of course not nice to have different versions here.
-     -->
     <dependency>
       <groupId>eu.de4a</groupId>
       <artifactId>de4a-kafka-client</artifactId>
-      <version>0.1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>eu.de4a.ial</groupId>
+      <artifactId>ial-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.web</groupId>
