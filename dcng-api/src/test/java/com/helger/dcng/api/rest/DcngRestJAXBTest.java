@@ -55,7 +55,7 @@ public final class DcngRestJAXBTest
     final DCNGOutgoingMetadata md = new DCNGOutgoingMetadata ();
     md.setSenderID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
     md.setReceiverID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
+    md.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE, "CompanyRegistration:1.0"));
     md.setProcessID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
     md.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
     md.setEndpointURL ("https://target.example.org/as4");
@@ -97,7 +97,7 @@ public final class DcngRestJAXBTest
     final DCNGIncomingMetadata md = new DCNGIncomingMetadata ();
     md.setSenderID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:sender"));
     md.setReceiverID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:receiver"));
-    md.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration:1.0"));
+    md.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE, "CompanyRegistration:1.0"));
     md.setProcessID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
     m.setMetadata (md);
 

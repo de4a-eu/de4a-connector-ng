@@ -37,7 +37,7 @@ public class MainSendSmpGetEndpoints
   public static void main (final String [] args) throws IOException
   {
     final String sReceiverID = CIdentifier.getURIPercentEncoded (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:ro000000006");
-    final String sDocTypeID = CIdentifier.getURIPercentEncoded (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration");
+    final String sDocTypeID = CIdentifier.getURIPercentEncoded (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE, "CompanyRegistration");
 
     try (final HttpClientManager aHCM = new HttpClientManager ())
     {

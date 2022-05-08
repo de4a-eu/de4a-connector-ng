@@ -51,7 +51,7 @@ public final class MainSendRequestToNetherlands
       final DCNGOutgoingMetadata aMetadata = new DCNGOutgoingMetadata ();
       aMetadata.setSenderID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
       aMetadata.setReceiverID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9991:nl990000106"));
-      aMetadata.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME, "CompanyRegistration"));
+      aMetadata.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE, "CompanyRegistration"));
       aMetadata.setProcessID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
       // aMetadata.setPayloadType (DCNGPayloadType.REQUEST);
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
