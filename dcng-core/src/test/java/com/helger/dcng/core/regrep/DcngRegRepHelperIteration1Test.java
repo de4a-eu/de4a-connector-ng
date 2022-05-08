@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.helger.dcng.regrep;
+package com.helger.dcng.core.regrep;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.dcng.core.regrep.DcngRegRepHelperIteration1;
 import com.helger.regrep.RegRep4Reader;
 import com.helger.regrep.RegRep4Writer;
 import com.helger.regrep.query.QueryRequest;
@@ -33,9 +32,9 @@ import com.helger.regrep.query.QueryResponse;
  *
  * @author Philip Helger
  */
-public final class DcngRegRepHelperTest
+public final class DcngRegRepHelperIteration1Test
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperIteration1Test.class);
 
   @Test
   public void testRequest ()
