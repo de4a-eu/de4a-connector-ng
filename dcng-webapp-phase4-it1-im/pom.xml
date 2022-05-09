@@ -51,18 +51,6 @@
       <email>ph(at)helger.com</email>
     </developer>
   </developers>
-  
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>eu.de4a</groupId>
-        <artifactId>de4a-commons-parent-pom</artifactId>
-        <version>0.1.11</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -80,6 +68,8 @@
     <dependency>
       <groupId>eu.de4a</groupId>
       <artifactId>de4a-iem</artifactId>
+      <!-- Don't use dependencyManagement for this -->
+      <version>0.1.11</version>
     </dependency>
 
     <!-- Logging -->
