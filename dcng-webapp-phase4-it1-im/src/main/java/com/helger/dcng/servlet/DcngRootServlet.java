@@ -108,8 +108,11 @@ public class DcngRootServlet extends HttpServlet
                   "/api/smp/endpoints/iso6523-actorid-upis%3A%3A9915%3Ade4atest/urn:de4a-eu:CanonicalEvidenceType%3A%3ACompanyRegistration:1.0' target='_blank'>test me</a></div>");
 
       aSB.append ("<h3>Sending AS4</h3>");
-      aSB.append ("<div>POST /api/send</div>");
-      aSB.append ("<div>POST /api/lookup/send/</div>");
+      aSB.append ("<div>POST /api/it1/send</div>");
+      aSB.append ("<div>POST /api/it1/lookup/send/</div>");
+
+      aSB.append ("<div>POST /api/it2/send</div>");
+      aSB.append ("<div>POST /api/it2/lookup/send/</div>");
     }
 
     aSB.append ("</body></html>");
