@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
 import com.helger.commons.error.level.EErrorLevel;
-import com.helger.commons.mime.MimeTypeParser;
 import com.helger.commons.string.StringHelper;
 import com.helger.dcng.api.dd.IDDServiceMetadataProvider;
 import com.helger.dcng.api.me.model.MEMessage;
@@ -35,7 +34,7 @@ import com.helger.dcng.api.rest.DCNGOutgoingMessage;
 import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.api.DcngApiHelper;
-import com.helger.dcng.core.regrep.DcngRegRepHelperIteration1;
+import com.helger.dcng.core.regrep.DcngRegRepHelperIt2;
 import com.helger.dcng.webapi.ApiParamException;
 import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
@@ -59,7 +58,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
+public class ApiPostLookupAndSendIt2 extends AbstractDcngApiInvoker
 {
   public static final String JSON_TAG_SENDER_ID = "senderid";
   public static final String JSON_TAG_RECEIVER_ID = "receiverid";
@@ -67,7 +66,7 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
   public static final String JSON_TAG_RESULT_LOOKUP = "lookup-results";
   public static final String JSON_TAG_RESULT_SEND = "sending-results";
 
-  public ApiPostLookupAndSend ()
+  public ApiPostLookupAndSendIt2 ()
   {}
 
   @Nonnull
@@ -76,7 +75,7 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
                                      @Nonnull final IDocumentTypeIdentifier aDocumentTypeID,
                                      @Nonnull final IProcessIdentifier aProcessID,
                                      @Nonnull final String sTransportProfile,
-                                     @Nonnull final Iterable <DCNGPayload> aPayloads)
+                                     @Nonnull final DCNGPayload aPayload)
   {
     // Start response
     final IJsonObject aJson = new JsonObject ();
@@ -95,7 +94,7 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
       // Query SMP
       {
         final IJsonObject aJsonSMP = new JsonObject ();
-        // Main query
+        // Remote SMP query
         final ServiceMetadataType aSM = DcngApiHelper.querySMPServiceMetadata (aReceiverID,
                                                                                aDocumentTypeID,
                                                                                aProcessID,
@@ -104,6 +103,7 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
         {
           aJsonSMP.addJson (JSON_TAG_RESPONSE, SMPJsonResponse.convert (aReceiverID, aDocumentTypeID, aSM));
 
+          // Search SMP results for matches
           final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM, aProcessID, sTransportProfile);
           if (aEndpoint != null)
           {
@@ -144,33 +144,21 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
       {
         final IJsonObject aJsonSending = new JsonObject ();
 
-        // Add payloads
+        // Wrap in RegRep
+        final byte [] aRegRepPayload = DcngRegRepHelperIt2.wrapInRegRep (true, aPayload.getValue ());
+
+        // Add payload
         final MEMessage.Builder aMessage = MEMessage.builder ();
-        int nIndex = 0;
-        for (final DCNGPayload aPayload : aPayloads)
-        {
-          if (nIndex == 0)
-          {
-            final byte [] aRegRepPayload = DcngRegRepHelperIteration1.wrapInRegRep (aPayload.getContentID (),
-                                                                          aPayload.getValue ());
+        aMessage.addPayload (MEPayload.builder ()
+                                      .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
+                                      .contentID (MEPayload.createRandomContentID ())
+                                      .data (aRegRepPayload));
 
-            // RegRep should be first
-            aMessage.addPayload (MEPayload.builder ()
-                                          .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
-                                          .contentID (MEPayload.createRandomContentID ())
-                                          .data (aRegRepPayload));
-          }
-
-          aMessage.addPayload (MEPayload.builder ()
-                                        .mimeType (MimeTypeParser.parseMimeType (aPayload.getMimeType ()))
-                                        .contentID (StringHelper.getNotEmpty (aPayload.getContentID (),
-                                                                              MEPayload.createRandomContentID ()))
-                                        .data (aPayload.getValue ()));
-          nIndex++;
-        }
+        // Trigger main sending with the chosen AS4 implementation
         DcngApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
         aJsonSending.add (JSON_TAG_SUCCESS, true);
 
+        // Remember sending stuff
         aJson.addJson (JSON_TAG_RESULT_SEND, aJsonSending);
         bOverallSuccess = true;
       }
@@ -180,6 +168,7 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
     });
 
     return aJson;
+
   }
 
   @Override
@@ -193,6 +182,8 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
                                                          .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
+    if (aOutgoingMsg.getPayloadCount () != 1)
+      throw new ApiParamException ("Exactly one 'OutgoingMessage/Payload' element is required");
 
     // These fields MUST not be present here - they are filled while we go
     if (StringHelper.hasText (aOutgoingMsg.getMetadata ().getEndpointURL ()))
@@ -209,6 +200,6 @@ public class ApiPostLookupAndSend extends AbstractDcngApiInvoker
                     aRoutingInfoBase.getDocumentTypeID (),
                     aRoutingInfoBase.getProcessID (),
                     aRoutingInfoBase.getTransportProtocol (),
-                    aOutgoingMsg.getPayload ());
+                    aOutgoingMsg.getPayloadAtIndex (0));
   }
 }

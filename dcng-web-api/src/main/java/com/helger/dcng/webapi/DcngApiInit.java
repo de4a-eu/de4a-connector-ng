@@ -19,8 +19,10 @@ package com.helger.dcng.webapi;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.helger.dcng.webapi.as4.ApiPostLookupAndSend;
-import com.helger.dcng.webapi.as4.ApiPostSend;
+import com.helger.dcng.webapi.as4.ApiPostLookupAndSendIt1;
+import com.helger.dcng.webapi.as4.ApiPostLookupAndSendIt2;
+import com.helger.dcng.webapi.as4.ApiPostSendIt1;
+import com.helger.dcng.webapi.as4.ApiPostSendIt2;
 import com.helger.dcng.webapi.smp.ApiGetSmpDocTypes;
 import com.helger.dcng.webapi.smp.ApiGetSmpEndpoints;
 import com.helger.photon.api.APIDescriptor;
@@ -42,10 +44,13 @@ public final class DcngApiInit
   {
     // SMP stuff
     aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/doctypes/{pid}"), ApiGetSmpDocTypes.class));
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/endpoints/{pid}/{doctypeid}"), ApiGetSmpEndpoints.class));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.get ("/smp/endpoints/{pid}/{doctypeid}"),
+                                                 ApiGetSmpEndpoints.class));
 
     // AS4 stuff
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/send"), ApiPostSend.class));
-    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/lookup/send"), new ApiPostLookupAndSend ()));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/it1/send"), ApiPostSendIt1.class));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/it1/lookup/send"), new ApiPostLookupAndSendIt1 ()));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/it2/send"), ApiPostSendIt2.class));
+    aAPIRegistry.registerAPI (new APIDescriptor (APIPath.post ("/it2/lookup/send"), new ApiPostLookupAndSendIt2 ()));
   }
 }

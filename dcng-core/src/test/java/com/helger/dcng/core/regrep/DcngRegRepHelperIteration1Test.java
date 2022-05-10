@@ -28,7 +28,7 @@ import com.helger.regrep.query.QueryRequest;
 import com.helger.regrep.query.QueryResponse;
 
 /**
- * Test class for class {@link DcngRegRepHelperIteration1}.
+ * Test class for class {@link DcngRegRepHelperIt1}.
  *
  * @author Philip Helger
  */
@@ -39,7 +39,7 @@ public final class DcngRegRepHelperIteration1Test
   @Test
   public void testRequest ()
   {
-    final QueryRequest q = DcngRegRepHelperIteration1.wrapInQueryRequest ("dcid", "dcname", "pid");
+    final QueryRequest q = DcngRegRepHelperIt1.wrapInQueryRequest ("dcid", "dcname", "pid");
     assertNotNull (q);
     final byte [] b = RegRep4Writer.queryRequest ().getAsBytes (q);
     assertNotNull (b);
@@ -53,7 +53,7 @@ public final class DcngRegRepHelperIteration1Test
   @Test
   public void testResponse ()
   {
-    final QueryResponse q = DcngRegRepHelperIteration1.wrapInQueryResponse ("dpid", "dpname");
+    final QueryResponse q = DcngRegRepHelperIt1.wrapInQueryResponse ("dpid", "dpname");
     assertNotNull (q);
     final byte [] b = RegRep4Writer.queryResponse ().getAsBytes (q);
     assertNotNull (b);

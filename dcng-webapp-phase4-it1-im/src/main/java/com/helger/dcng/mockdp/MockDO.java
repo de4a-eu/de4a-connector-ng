@@ -44,7 +44,7 @@ import com.helger.dcng.api.me.incoming.IMEIncomingHandler;
 import com.helger.dcng.api.me.incoming.MEIncomingException;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.rest.DCNGPayload;
-import com.helger.dcng.webapi.as4.ApiPostLookupAndSend;
+import com.helger.dcng.webapi.as4.ApiPostLookupAndSendIt1;
 import com.helger.json.IJsonObject;
 import com.helger.json.serialize.JsonWriterSettings;
 import com.helger.xml.serialize.read.DOMReader;
@@ -93,7 +93,7 @@ public final class MockDO implements IMEIncomingHandler
 
       // Swap sender and receiver
       // Different response type
-      final IJsonObject aJson = ApiPostLookupAndSend.perform (aMessage.getReceiverID (),
+      final IJsonObject aJson = ApiPostLookupAndSendIt1.perform (aMessage.getReceiverID (),
                                                               aMessage.getSenderID (),
                                                               aMessage.getDocumentTypeID (),
                                                               DcngConfig.getIdentifierFactory ()

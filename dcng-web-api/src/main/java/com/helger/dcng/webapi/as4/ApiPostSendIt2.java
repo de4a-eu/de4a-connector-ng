@@ -25,7 +25,6 @@ import javax.annotation.Nonnull;
 import com.helger.commons.annotation.Nonempty;
 import com.helger.commons.collection.ArrayHelper;
 import com.helger.commons.error.level.EErrorLevel;
-import com.helger.commons.mime.MimeTypeParser;
 import com.helger.commons.string.StringHelper;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.model.MEPayload;
@@ -35,7 +34,7 @@ import com.helger.dcng.api.rest.DCNGOutgoingMessage;
 import com.helger.dcng.api.rest.DCNGPayload;
 import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.api.DcngApiHelper;
-import com.helger.dcng.core.regrep.DcngRegRepHelperIteration1;
+import com.helger.dcng.core.regrep.DcngRegRepHelperIt2;
 import com.helger.dcng.webapi.ApiParamException;
 import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
@@ -53,7 +52,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
-public class ApiPostSend extends AbstractDcngApiInvoker
+public class ApiPostSendIt2 extends AbstractDcngApiInvoker
 {
   @Override
   public IJsonObject invokeAPI (@Nonnull final IAPIDescriptor aAPIDescriptor,
@@ -62,9 +61,12 @@ public class ApiPostSend extends AbstractDcngApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ()
+                                                         .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
+    if (aOutgoingMsg.getPayloadCount () != 1)
+      throw new ApiParamException ("Exactly one 'OutgoingMessage/Payload' element is required");
 
     // These fields are optional in the XSD but required here
     if (StringHelper.hasNoText (aOutgoingMsg.getMetadata ().getEndpointURL ()))
@@ -85,27 +87,15 @@ public class ApiPostSend extends AbstractDcngApiInvoker
 
     // Add payloads
     final MEMessage.Builder aMessage = MEMessage.builder ();
-    int nIndex = 0;
-    for (final DCNGPayload aPayload : aOutgoingMsg.getPayload ())
-    {
-      if (nIndex == 0)
-      {
-        final byte [] aRegRepPayload = DcngRegRepHelperIteration1.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
+    final DCNGPayload aPayload = aOutgoingMsg.getPayloadAtIndex (0);
+    final byte [] aRegRepPayload = DcngRegRepHelperIt2.wrapInRegRep (true, aPayload.getValue ());
 
-        // RegRep should be first
-        aMessage.addPayload (MEPayload.builder ()
-                                      .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
-                                      .contentID (MEPayload.createRandomContentID ())
-                                      .data (aRegRepPayload));
-        DE4AKafkaClient.send (EErrorLevel.INFO, "Successfully added RegRep dummy");
-      }
-
-      aMessage.addPayload (MEPayload.builder ()
-                                    .mimeType (MimeTypeParser.safeParseMimeType (aPayload.getMimeType ()))
-                                    .contentID (StringHelper.getNotEmpty (aPayload.getContentID (), MEPayload.createRandomContentID ()))
-                                    .data (aPayload.getValue ()));
-      nIndex++;
-    }
+    // RegRep should be first
+    aMessage.addPayload (MEPayload.builder ()
+                                  .mimeType (CRegRep4.MIME_TYPE_EBRS_XML)
+                                  .contentID (MEPayload.createRandomContentID ())
+                                  .data (aRegRepPayload));
+    DE4AKafkaClient.send (EErrorLevel.INFO, "Successfully added RegRep dummy");
 
     // Start response
     final IJsonObject aJson = new JsonObject ();

@@ -48,18 +48,19 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
  * @author Philip Helger
  */
 @Immutable
-public final class DcngRegRepHelperIteration1
+public final class DcngRegRepHelperIt1
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperIteration1.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperIt1.class);
 
-  private DcngRegRepHelperIteration1 ()
+  private DcngRegRepHelperIt1 ()
   {}
 
   @Nonnull
   private static Element _createAgent (final String sID, final String sName)
   {
     final Document d = XMLFactory.newDocument ();
-    final Element eAgent = (Element) d.appendChild (d.createElementNS ("https://semic.org/sa/cv/cagv/agent-2.0.0#", "Agent"));
+    final Element eAgent = (Element) d.appendChild (d.createElementNS ("https://semic.org/sa/cv/cagv/agent-2.0.0#",
+                                                                       "Agent"));
     final Element eID = (Element) eAgent.appendChild (d.createElementNS ("https://data.europe.eu/semanticassets/ns/cv/common/cbc_v2.0.0#",
                                                                          "id"));
     eID.setAttribute ("schemeID", "EIDAS");
@@ -80,11 +81,14 @@ public final class DcngRegRepHelperIteration1
                                                                                     "PersonID"));
     ePersonID.setAttribute ("schemeID", "EIDAS");
     ePersonID.appendChild (d.createTextNode (sPersonID));
-    eCorePerson.appendChild (d.createElementNS ("http://www.w3.org/ns/corevocabulary/BasicComponents", "PersonFamilyName"))
+    eCorePerson.appendChild (d.createElementNS ("http://www.w3.org/ns/corevocabulary/BasicComponents",
+                                                "PersonFamilyName"))
                .appendChild (d.createTextNode ("XXXX"));
-    eCorePerson.appendChild (d.createElementNS ("http://www.w3.org/ns/corevocabulary/BasicComponents", "PersonGivenName"))
+    eCorePerson.appendChild (d.createElementNS ("http://www.w3.org/ns/corevocabulary/BasicComponents",
+                                                "PersonGivenName"))
                .appendChild (d.createTextNode ("ZZZZZ"));
-    eCorePerson.appendChild (d.createElementNS ("http://www.w3.org/ns/corevocabulary/BasicComponents", "PersonBirthDate"))
+    eCorePerson.appendChild (d.createElementNS ("http://www.w3.org/ns/corevocabulary/BasicComponents",
+                                                "PersonBirthDate"))
                .appendChild (d.createTextNode ("1900-01-01"));
     return eCorePerson;
   }
@@ -108,14 +112,17 @@ public final class DcngRegRepHelperIteration1
     ret.setId ("c4369c4d-740e-4b64-80f0-7b209a66d629");
     ret.getResponseOption ().setReturnType ("LeafClassWithRepositoryItem");
     ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue ("toop-edm:v2.1").build ());
-    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime").setValue (PDTFactory.getCurrentLocalDateTime ()).build ());
+    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime")
+                                   .setValue (PDTFactory.getCurrentLocalDateTime ())
+                                   .build ());
     ret.addSlot (new SlotBuilder ().setName ("DataConsumer").setValue (_createAgent (sDCID, sDCName)).build ());
     {
       final QueryType aQuery = new QueryType ();
       aQuery.setQueryDefinition ("ConceptQuery");
       aQuery.addSlot (new SlotBuilder ().setName ("NaturalPerson").setValue (_createCorePerson (sPersonID)).build ());
       aQuery.addSlot (new SlotBuilder ().setName ("ConceptRequestList")
-                                        .setValue (ERegRepCollectionType.SET, SlotHelper.createSlotValue (_createConcept ()))
+                                        .setValue (ERegRepCollectionType.SET,
+                                                   SlotHelper.createSlotValue (_createConcept ()))
                                         .build ());
       ret.setQuery (aQuery);
     }
@@ -128,7 +135,9 @@ public final class DcngRegRepHelperIteration1
     final QueryResponse ret = RegRepHelper.createEmptyQueryResponse (ERegRepResponseStatus.SUCCESS);
     ret.setRequestId ("c4369c4d-740e-4b64-80f0-7b209a66d629");
     ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue ("toop-edm:v2.1").build ());
-    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime").setValue (PDTFactory.getCurrentLocalDateTime ()).build ());
+    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime")
+                                   .setValue (PDTFactory.getCurrentLocalDateTime ())
+                                   .build ());
     ret.addSlot (new SlotBuilder ().setName ("DataProvider").setValue (_createAgent (sDPID, sDPName)).build ());
 
     {
@@ -136,7 +145,8 @@ public final class DcngRegRepHelperIteration1
       final RegistryObjectType aRO = new RegistryObjectType ();
       aRO.setId ("341341341-740e-4b64-80f0-3153513529");
       aRO.addSlot (new SlotBuilder ().setName ("ConceptValues")
-                                     .setValue (ERegRepCollectionType.SET, SlotHelper.createSlotValue (_createConcept ()))
+                                     .setValue (ERegRepCollectionType.SET,
+                                                SlotHelper.createSlotValue (_createConcept ()))
                                      .build ());
       aROList.addRegistryObject (aRO);
       ret.setRegistryObjectList (aROList);
@@ -150,22 +160,22 @@ public final class DcngRegRepHelperIteration1
     ValueEnforcer.notNull (sContentID, "ContentID");
     ValueEnforcer.notNull (aXMLBytes, "XMLBytes");
 
-    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes, new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
+    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes,
+                                                new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
     if (aDoc == null)
       throw new IllegalStateException ("Failed to parse first payload as XML");
 
     LOGGER.info ("Wrapping object with Content ID '" + sContentID + "' into RegRep");
 
     final byte [] aRegRepPayload;
-    // TODO
     if (sContentID.contains ("Request"))
     {
-      final QueryRequest aRRReq = DcngRegRepHelperIteration1.wrapInQueryRequest ("who", "cares", "person");
+      final QueryRequest aRRReq = wrapInQueryRequest ("who", "cares", "person");
       aRegRepPayload = RegRep4Writer.queryRequest ().setFormattedOutput (true).getAsBytes (aRRReq);
     }
     else
     {
-      final QueryResponse aRRResp = DcngRegRepHelperIteration1.wrapInQueryResponse ("no", "body");
+      final QueryResponse aRRResp = wrapInQueryResponse ("no", "body");
       aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
     }
     return aRegRepPayload;
