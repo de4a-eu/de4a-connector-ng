@@ -35,7 +35,7 @@ public final class DcngIdentifierFactoryTest
     final DcngIdentifierFactory aIF = DcngIdentifierFactory.INSTANCE;
 
     final IParticipantIdentifier aPI1 = aIF.createParticipantIdentifier (null, "iso6523-actorid-upis::9999:elonia");
-    final IParticipantIdentifier aPI2 = aIF.createParticipantIdentifier ("iso6523-actorid-upis", "9999:elonia");
+    final IParticipantIdentifier aPI2 = aIF.createParticipantIdentifier (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9999:elonia");
     assertNotEquals (aPI1.getURIEncoded (), aPI2.getURIEncoded ());
   }
 }

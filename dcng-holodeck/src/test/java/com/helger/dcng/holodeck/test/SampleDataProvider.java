@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.commons.mime.CMimeType;
 import com.helger.dcng.api.DcngConfig;
+import com.helger.dcng.api.DcngIdentifierFactory;
 import com.helger.dcng.api.me.model.MEMessage;
 import com.helger.dcng.api.me.outgoing.IMERoutingInformation;
 import com.helger.dcng.api.me.outgoing.MERoutingInformation;
@@ -86,13 +87,14 @@ public class SampleDataProvider
   public static IMERoutingInformation createGatewayRoutingMetadata (final String targetURL, final X509Certificate targetCert)
   {
     final IIdentifierFactory aIF = DcngConfig.getIdentifierFactory ();
-    final IMERoutingInformation metadata = new MERoutingInformation (aIF.createParticipantIdentifier ("iso6523-actorid-upis",
+    final IMERoutingInformation metadata = new MERoutingInformation (aIF.createParticipantIdentifier (DcngIdentifierFactory.PARTICIPANT_SCHEME,
                                                                                                       "0088:123456"),
-                                                                     aIF.createParticipantIdentifier ("iso6523-actorid-upis",
+                                                                     aIF.createParticipantIdentifier (DcngIdentifierFactory.PARTICIPANT_SCHEME,
                                                                                                       "0099:123456"),
-                                                                     aIF.createDocumentTypeIdentifier ("urn:de4a-eu:CanonicalEvidenceType",
+                                                                     aIF.createDocumentTypeIdentifier (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE,
                                                                                                        "CompanyRegistration:1.0"),
-                                                                     aIF.createProcessIdentifier ("urn:de4a-eu:MessageType", "request"),
+                                                                     aIF.createProcessIdentifier (DcngIdentifierFactory.PROCESS_SCHEME,
+                                                                                                  "request"),
                                                                      ESMPTransportProfile.TRANSPORT_PROFILE_BDXR_AS4.getID (),
                                                                      targetURL,
                                                                      targetCert);
