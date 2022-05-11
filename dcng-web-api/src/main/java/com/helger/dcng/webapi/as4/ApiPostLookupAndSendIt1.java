@@ -40,14 +40,12 @@ import com.helger.dcng.webapi.ApiParamException;
 import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
 import com.helger.json.IJsonObject;
-import com.helger.json.JsonObject;
 import com.helger.peppolid.IDocumentTypeIdentifier;
 import com.helger.peppolid.IParticipantIdentifier;
 import com.helger.peppolid.IProcessIdentifier;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.regrep.CRegRep4;
 import com.helger.security.certificate.CertificateHelper;
-import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 import com.helger.xsds.bdxr.smp1.EndpointType;
 import com.helger.xsds.bdxr.smp1.ServiceMetadataType;
@@ -71,43 +69,32 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
   {}
 
   @Nonnull
-  public static IJsonObject perform (@Nonnull final IParticipantIdentifier aSenderID,
-                                     @Nonnull final IParticipantIdentifier aReceiverID,
-                                     @Nonnull final IDocumentTypeIdentifier aDocumentTypeID,
-                                     @Nonnull final IProcessIdentifier aProcessID,
-                                     @Nonnull final String sTransportProfile,
-                                     @Nonnull final Iterable <DCNGPayload> aPayloads)
+  public static LookupAndSendingResult perform (@Nonnull final IParticipantIdentifier aSenderID,
+                                                @Nonnull final IParticipantIdentifier aReceiverID,
+                                                @Nonnull final IDocumentTypeIdentifier aDocumentTypeID,
+                                                @Nonnull final IProcessIdentifier aProcessID,
+                                                @Nonnull final String sTransportProfile,
+                                                @Nonnull final Iterable <DCNGPayload> aPayloads)
   {
     // Start response
-    final IJsonObject aJson = new JsonObject ();
-    {
-      aJson.add (JSON_TAG_SENDER_ID, aSenderID.getURIEncoded ());
-      aJson.add (JSON_TAG_RECEIVER_ID, aReceiverID.getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aDocumentTypeID.getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_PROCESS_ID, aProcessID.getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, sTransportProfile);
-    }
+    final LookupAndSendingResult ret = new LookupAndSendingResult (aSenderID, aReceiverID, aDocumentTypeID, aProcessID, sTransportProfile);
 
-    CommonApiInvoker.invoke (aJson, () -> {
+    CommonApiInvoker.invoke (ret, () -> {
       boolean bOverallSuccess = false;
       MERoutingInformation aRoutingInfo = null;
 
       // Query SMP
       {
-        final IJsonObject aJsonSMP = new JsonObject ();
         // Main query
-        final ServiceMetadataType aSM = DcngApiHelper.querySMPServiceMetadata (aReceiverID,
-                                                                               aDocumentTypeID,
-                                                                               aProcessID,
-                                                                               sTransportProfile);
+        final ServiceMetadataType aSM = DcngApiHelper.querySMPServiceMetadata (aReceiverID, aDocumentTypeID, aProcessID, sTransportProfile);
         if (aSM != null)
         {
-          aJsonSMP.addJson (JSON_TAG_RESPONSE, SMPJsonResponse.convert (aReceiverID, aDocumentTypeID, aSM));
+          ret.setLookupServiceMetadata (aSM);
 
           final EndpointType aEndpoint = IDDServiceMetadataProvider.getEndpoint (aSM, aProcessID, sTransportProfile);
           if (aEndpoint != null)
           {
-            aJsonSMP.add (SMPJsonResponse.JSON_ENDPOINT_REFERENCE, aEndpoint.getEndpointURI ());
+            ret.setLookupEndpointURL (aEndpoint.getEndpointURI ());
             aRoutingInfo = new MERoutingInformation (aSenderID,
                                                      aReceiverID,
                                                      aDocumentTypeID,
@@ -131,19 +118,15 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
           }
 
           // Only if a match was found
-          aJsonSMP.add (JSON_TAG_SUCCESS, aRoutingInfo != null);
+          ret.setLookupSuccess (aRoutingInfo != null);
         }
         else
-          aJsonSMP.add (JSON_TAG_SUCCESS, false);
-
-        aJson.addJson (JSON_TAG_RESULT_LOOKUP, aJsonSMP);
+          ret.setLookupSuccess (false);
       }
 
       // Read for AS4 sending?
       if (aRoutingInfo != null)
       {
-        final IJsonObject aJsonSending = new JsonObject ();
-
         // Add payloads
         final MEMessage.Builder aMessage = MEMessage.builder ();
         int nIndex = 0;
@@ -151,8 +134,7 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
         {
           if (nIndex == 0)
           {
-            final byte [] aRegRepPayload = DcngRegRepHelperIt1.wrapInRegRep (aPayload.getContentID (),
-                                                                             aPayload.getValue ());
+            final byte [] aRegRepPayload = DcngRegRepHelperIt1.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
 
             // RegRep should be first
             aMessage.addPayload (MEPayload.builder ()
@@ -163,23 +145,20 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
 
           aMessage.addPayload (MEPayload.builder ()
                                         .mimeType (MimeTypeParser.parseMimeType (aPayload.getMimeType ()))
-                                        .contentID (StringHelper.getNotEmpty (aPayload.getContentID (),
-                                                                              MEPayload.createRandomContentID ()))
+                                        .contentID (StringHelper.getNotEmpty (aPayload.getContentID (), MEPayload.createRandomContentID ()))
                                         .data (aPayload.getValue ()));
           nIndex++;
         }
         DcngApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
-        aJsonSending.add (JSON_TAG_SUCCESS, true);
-
-        aJson.addJson (JSON_TAG_RESULT_SEND, aJsonSending);
+        ret.setSendingSuccess (true);
         bOverallSuccess = true;
       }
 
       // Overall success
-      aJson.add (JSON_TAG_SUCCESS, bOverallSuccess);
+      ret.setSuccess (bOverallSuccess);
     });
 
-    return aJson;
+    return ret;
   }
 
   @Override
@@ -189,8 +168,7 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ()
-                                                         .read (aRequestScope.getRequest ().getInputStream ());
+    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
@@ -209,6 +187,6 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
                     aRoutingInfoBase.getDocumentTypeID (),
                     aRoutingInfoBase.getProcessID (),
                     aRoutingInfoBase.getTransportProtocol (),
-                    aOutgoingMsg.getPayload ());
+                    aOutgoingMsg.getPayload ()).getAsJson ();
   }
 }

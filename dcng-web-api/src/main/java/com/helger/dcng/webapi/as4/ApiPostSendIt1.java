@@ -40,10 +40,8 @@ import com.helger.dcng.webapi.ApiParamException;
 import com.helger.dcng.webapi.helper.AbstractDcngApiInvoker;
 import com.helger.dcng.webapi.helper.CommonApiInvoker;
 import com.helger.json.IJsonObject;
-import com.helger.json.JsonObject;
 import com.helger.photon.api.IAPIDescriptor;
 import com.helger.regrep.CRegRep4;
-import com.helger.smpclient.json.SMPJsonResponse;
 import com.helger.web.scope.IRequestWebScopeWithoutResponse;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
@@ -108,22 +106,22 @@ public class ApiPostSendIt1 extends AbstractDcngApiInvoker
     }
 
     // Start response
-    final IJsonObject aJson = new JsonObject ();
-    {
-      aJson.add ("senderid", aRoutingInfo.getSenderID ().getURIEncoded ());
-      aJson.add ("receiverid", aRoutingInfo.getReceiverID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, aRoutingInfo.getDocumentTypeID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_PROCESS_ID, aRoutingInfo.getProcessID ().getURIEncoded ());
-      aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, aRoutingInfo.getTransportProtocol ());
-      aJson.add (SMPJsonResponse.JSON_ENDPOINT_REFERENCE, aRoutingInfo.getEndpointURL ());
-    }
+    final LookupAndSendingResult ret = new LookupAndSendingResult (aRoutingInfo.getSenderID (),
+                                                                   aRoutingInfo.getReceiverID (),
+                                                                   aRoutingInfo.getDocumentTypeID (),
+                                                                   aRoutingInfo.getProcessID (),
+                                                                   aRoutingInfo.getTransportProtocol ());
 
-    CommonApiInvoker.invoke (aJson, () -> {
+    ret.setLookupSuccess (true);
+    ret.setLookupEndpointURL (aRoutingInfo.getEndpointURL ());
+
+    CommonApiInvoker.invoke (ret, () -> {
       // Main sending - throws Exception on error
       DcngApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
-      aJson.add (JSON_TAG_SUCCESS, true);
+      ret.setSendingSuccess (true);
+      ret.setSuccess (true);
     });
 
-    return aJson;
+    return ret.getAsJson ();
   }
 }

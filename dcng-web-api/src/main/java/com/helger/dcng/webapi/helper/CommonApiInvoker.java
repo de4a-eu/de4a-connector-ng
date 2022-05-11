@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 import com.helger.commons.callback.IThrowingRunnable;
 import com.helger.commons.datetime.PDTFactory;
 import com.helger.commons.timing.StopWatch;
+import com.helger.dcng.webapi.as4.LookupAndSendingResult;
 import com.helger.json.IJsonObject;
 import com.helger.phive.json.PhiveJsonHelper;
 
@@ -34,9 +35,28 @@ public final class CommonApiInvoker
   private CommonApiInvoker ()
   {}
 
+  public static void invoke (@Nonnull final LookupAndSendingResult aResult, @Nonnull final IThrowingRunnable <Exception> r)
+  {
+    final ZonedDateTime aInvocationDT = PDTFactory.getCurrentZonedDateTimeUTC ();
+    final StopWatch aSW = StopWatch.createdStarted ();
+    try
+    {
+      r.run ();
+    }
+    catch (final Exception ex)
+    {
+      aResult.setSuccess (false);
+      aResult.setException (ex);
+    }
+    aSW.stop ();
+
+    aResult.setInvocationDT (aInvocationDT);
+    aResult.setDurationMS (aSW.getMillis ());
+  }
+
   public static void invoke (@Nonnull final IJsonObject aJson, @Nonnull final IThrowingRunnable <Exception> r)
   {
-    final ZonedDateTime aQueryDT = PDTFactory.getCurrentZonedDateTimeUTC ();
+    final ZonedDateTime aInvocationDT = PDTFactory.getCurrentZonedDateTimeUTC ();
     final StopWatch aSW = StopWatch.createdStarted ();
     try
     {
@@ -45,11 +65,11 @@ public final class CommonApiInvoker
     catch (final Exception ex)
     {
       aJson.add (AbstractDcngApiInvoker.JSON_TAG_SUCCESS, false);
-      aJson.addJson ("exception", PhiveJsonHelper.getJsonStackTrace (ex));
+      aJson.addJson (LookupAndSendingResult.JSON_TAG_EXCEPTION, PhiveJsonHelper.getJsonStackTrace (ex));
     }
     aSW.stop ();
 
-    aJson.add ("invocationDateTime", DateTimeFormatter.ISO_ZONED_DATE_TIME.format (aQueryDT));
-    aJson.add ("invocationDurationMillis", aSW.getMillis ());
+    aJson.add (LookupAndSendingResult.JSON_TAG_INVOCATION_DATE_TIME, DateTimeFormatter.ISO_ZONED_DATE_TIME.format (aInvocationDT));
+    aJson.add (LookupAndSendingResult.JSON_TAG_INVOCATION_DURATION_MILLIS, aSW.getMillis ());
   }
 }
