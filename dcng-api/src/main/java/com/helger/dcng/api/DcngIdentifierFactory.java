@@ -36,7 +36,8 @@ public final class DcngIdentifierFactory implements IIdentifierFactory
   public static final String PARTICIPANT_SCHEME = "iso6523-actorid-upis";
   public static final String PROCESS_SCHEME = "urn:de4a-eu:MessageType";
 
-  public static final DcngIdentifierFactory INSTANCE = new DcngIdentifierFactory ();
+  // Use DcngConfig.getIdentifierFactory () for access
+  static final DcngIdentifierFactory INSTANCE = new DcngIdentifierFactory ();
 
   private DcngIdentifierFactory ()
   {}
@@ -65,11 +66,9 @@ public final class DcngIdentifierFactory implements IIdentifierFactory
 
   @Override
   @Nullable
-  public SimpleDocumentTypeIdentifier createDocumentTypeIdentifier (@Nullable final String sScheme,
-                                                                    @Nullable final String sValue)
+  public SimpleDocumentTypeIdentifier createDocumentTypeIdentifier (@Nullable final String sScheme, @Nullable final String sValue)
   {
-    final String sRealValue = _nullNotEmptyTrimmed (isDocumentTypeIdentifierCaseInsensitive (sScheme) ? getUnifiedValue (sValue)
-                                                                                                      : sValue);
+    final String sRealValue = _nullNotEmptyTrimmed (isDocumentTypeIdentifierCaseInsensitive (sScheme) ? getUnifiedValue (sValue) : sValue);
     if (sRealValue == null)
       return null;
     return new SimpleDocumentTypeIdentifier (_nullNotEmptyTrimmed (sScheme), sRealValue);
@@ -90,11 +89,9 @@ public final class DcngIdentifierFactory implements IIdentifierFactory
 
   @Override
   @Nullable
-  public SimpleParticipantIdentifier createParticipantIdentifier (@Nullable final String sScheme,
-                                                                  @Nullable final String sValue)
+  public SimpleParticipantIdentifier createParticipantIdentifier (@Nullable final String sScheme, @Nullable final String sValue)
   {
-    final String sRealValue = _nullNotEmptyTrimmed (isParticipantIdentifierCaseInsensitive (sScheme) ? getUnifiedValue (sValue)
-                                                                                                     : sValue);
+    final String sRealValue = _nullNotEmptyTrimmed (isParticipantIdentifierCaseInsensitive (sScheme) ? getUnifiedValue (sValue) : sValue);
     if (sRealValue == null)
       return null;
     return new SimpleParticipantIdentifier (_nullNotEmptyTrimmed (sScheme), sRealValue);
@@ -117,8 +114,7 @@ public final class DcngIdentifierFactory implements IIdentifierFactory
   @Nullable
   public SimpleProcessIdentifier createProcessIdentifier (@Nullable final String sScheme, @Nullable final String sValue)
   {
-    final String sRealValue = _nullNotEmptyTrimmed (isProcessIdentifierCaseInsensitive (sScheme) ? getUnifiedValue (sValue)
-                                                                                                 : sValue);
+    final String sRealValue = _nullNotEmptyTrimmed (isProcessIdentifierCaseInsensitive (sScheme) ? getUnifiedValue (sValue) : sValue);
     if (sRealValue == null)
       return null;
     return new SimpleProcessIdentifier (_nullNotEmptyTrimmed (sScheme), sRealValue);
