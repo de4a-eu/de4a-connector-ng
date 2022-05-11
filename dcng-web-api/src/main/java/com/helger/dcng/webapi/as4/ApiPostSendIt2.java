@@ -107,7 +107,7 @@ public class ApiPostSendIt2 extends AbstractDcngApiInvoker
       // Main sending - throws Exception on error
       DcngApiHelper.sendAS4Message (aRoutingInfo, aMessage.build ());
       ret.setSendingSuccess (true);
-      ret.setSuccess (true);
+      ret.setOverallSuccess (true);
     });
 
     return ret.getAsJson ();

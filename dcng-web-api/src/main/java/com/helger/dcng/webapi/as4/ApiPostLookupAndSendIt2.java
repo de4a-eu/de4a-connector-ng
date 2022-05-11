@@ -140,7 +140,7 @@ public class ApiPostLookupAndSendIt2 extends AbstractDcngApiInvoker
       }
 
       // Overall success
-      ret.setSuccess (bOverallSuccess);
+      ret.setOverallSuccess (bOverallSuccess);
     });
 
     return ret;

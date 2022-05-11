@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.string.StringHelper;
@@ -34,11 +35,14 @@ public class LookupAndSendingResult
   private final IDocumentTypeIdentifier m_aDocumentTypeID;
   private final IProcessIdentifier m_aProcessID;
   private final String m_sTransportProfile;
-  private String m_sLookupEndpointURL;
+
   private ServiceMetadataType m_aLookupSM;
+  private String m_sLookupEndpointURL;
   private boolean m_bLookupSuccess = false;
+
   private boolean m_bSendingSuccess = false;
-  private boolean m_bSuccess = false;
+
+  private boolean m_bOverallSuccess = false;
   private Exception m_aException;
   private ZonedDateTime m_aInvocationDT;
   private long m_nDurationMS = -1;
@@ -56,14 +60,36 @@ public class LookupAndSendingResult
     m_sTransportProfile = sTransportProfile;
   }
 
-  public void setLookupEndpointURL (final String s)
+  @Nullable
+  public ServiceMetadataType getLookupServiceMetadata ()
+  {
+    return m_aLookupSM;
+  }
+
+  public boolean hasLookupServiceMetadata ()
+  {
+    return m_aLookupSM != null;
+  }
+
+  public void setLookupServiceMetadata (@Nullable final ServiceMetadataType aSM)
+  {
+    m_aLookupSM = aSM;
+  }
+
+  @Nullable
+  public String getLookupEndpointURL ()
+  {
+    return m_sLookupEndpointURL;
+  }
+
+  public void setLookupEndpointURL (@Nullable final String s)
   {
     m_sLookupEndpointURL = s;
   }
 
-  public void setLookupServiceMetadata (final ServiceMetadataType aSM)
+  public boolean isLookupSuccess ()
   {
-    m_aLookupSM = aSM;
+    return m_bLookupSuccess;
   }
 
   public void setLookupSuccess (final boolean b)
@@ -71,29 +97,56 @@ public class LookupAndSendingResult
     m_bLookupSuccess = b;
   }
 
+  public boolean isSendingSuccess ()
+  {
+    return m_bSendingSuccess;
+  }
+
   public void setSendingSuccess (final boolean b)
   {
     m_bSendingSuccess = b;
   }
 
-  public boolean isSuccess ()
+  public boolean isOverallSuccess ()
   {
-    return m_bSuccess;
+    return m_bOverallSuccess;
   }
 
-  public void setSuccess (final boolean b)
+  public void setOverallSuccess (final boolean b)
   {
-    m_bSuccess = b;
+    m_bOverallSuccess = b;
   }
 
-  public void setException (final Exception ex)
+  @Nullable
+  public Exception getException ()
+  {
+    return m_aException;
+  }
+
+  public boolean hasException ()
+  {
+    return m_aException != null;
+  }
+
+  public void setException (@Nullable final Exception ex)
   {
     m_aException = ex;
   }
 
-  public void setInvocationDT (final ZonedDateTime aInvocationDT)
+  @Nullable
+  public ZonedDateTime getInvocationDT ()
+  {
+    return m_aInvocationDT;
+  }
+
+  public void setInvocationDT (@Nullable final ZonedDateTime aInvocationDT)
   {
     m_aInvocationDT = aInvocationDT;
+  }
+
+  public long getDurationMS ()
+  {
+    return m_nDurationMS;
   }
 
   public void setDurationMS (final long n)
@@ -110,7 +163,7 @@ public class LookupAndSendingResult
     aJson.add (SMPJsonResponse.JSON_DOCUMENT_TYPE_ID, m_aDocumentTypeID.getURIEncoded ());
     aJson.add (SMPJsonResponse.JSON_PROCESS_ID, m_aProcessID.getURIEncoded ());
     aJson.add (SMPJsonResponse.JSON_TRANSPORT_PROFILE, m_sTransportProfile);
-    aJson.add (AbstractDcngApiInvoker.JSON_TAG_SUCCESS, m_bSuccess);
+    aJson.add (AbstractDcngApiInvoker.JSON_TAG_SUCCESS, m_bOverallSuccess);
 
     // Remember lookup stuff
     {

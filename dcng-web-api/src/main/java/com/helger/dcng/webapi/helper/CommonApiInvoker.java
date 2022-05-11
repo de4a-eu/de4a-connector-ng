@@ -45,7 +45,7 @@ public final class CommonApiInvoker
     }
     catch (final Exception ex)
     {
-      aResult.setSuccess (false);
+      aResult.setOverallSuccess (false);
       aResult.setException (ex);
     }
     aSW.stop ();
