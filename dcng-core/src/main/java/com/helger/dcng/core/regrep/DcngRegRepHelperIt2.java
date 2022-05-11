@@ -19,6 +19,7 @@ package com.helger.dcng.core.regrep;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
@@ -27,15 +28,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.collection.CollectionHelper;
 import com.helger.commons.datetime.PDTFactory;
+import com.helger.commons.io.IHasByteArray;
 import com.helger.regrep.ERegRepResponseStatus;
+import com.helger.regrep.RegRep4Reader;
 import com.helger.regrep.RegRep4Writer;
 import com.helger.regrep.RegRepHelper;
 import com.helger.regrep.query.QueryRequest;
 import com.helger.regrep.query.QueryResponse;
+import com.helger.regrep.rim.AnyValueType;
 import com.helger.regrep.rim.QueryType;
 import com.helger.regrep.rim.RegistryObjectListType;
 import com.helger.regrep.rim.RegistryObjectType;
+import com.helger.regrep.rim.SlotType;
+import com.helger.regrep.rim.ValueType;
 import com.helger.regrep.slot.SlotBuilder;
 import com.helger.xml.EXMLParserFeature;
 import com.helger.xml.serialize.read.DOMReader;
@@ -49,6 +56,8 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
 @Immutable
 public final class DcngRegRepHelperIt2
 {
+  private static final String QUERY_DEFINITION = "DE4AQueryIt2";
+  private static final String QUERY_SLOT_NAME = "DE4AQuery";
   private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperIt2.class);
 
   private DcngRegRepHelperIt2 ()
@@ -62,13 +71,11 @@ public final class DcngRegRepHelperIt2
     ret.getResponseOption ().setReturnType ("LeafClassWithRepositoryItem");
     // Value must match value from CIEM
     ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue ("de4a-iem-v2").build ());
-    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime")
-                                   .setValue (PDTFactory.getCurrentLocalDateTime ())
-                                   .build ());
+    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime").setValue (PDTFactory.getCurrentLocalDateTime ()).build ());
     {
       final QueryType aQuery = new QueryType ();
-      aQuery.setQueryDefinition ("DE4AQueryIt2");
-      aQuery.addSlot (new SlotBuilder ().setName ("DE4AQuery").setValue (aPayload).build ());
+      aQuery.setQueryDefinition (QUERY_DEFINITION);
+      aQuery.addSlot (new SlotBuilder ().setName (QUERY_SLOT_NAME).setValue (aPayload).build ());
       ret.setQuery (aQuery);
     }
     return ret;
@@ -80,9 +87,7 @@ public final class DcngRegRepHelperIt2
     final QueryResponse ret = RegRepHelper.createEmptyQueryResponse (ERegRepResponseStatus.SUCCESS);
     ret.setRequestId (sRequestID);
     ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue ("de4a-iem-v2").build ());
-    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime")
-                                   .setValue (PDTFactory.getCurrentLocalDateTime ())
-                                   .build ());
+    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime").setValue (PDTFactory.getCurrentLocalDateTime ()).build ());
 
     {
       final RegistryObjectListType aROList = new RegistryObjectListType ();
@@ -100,8 +105,7 @@ public final class DcngRegRepHelperIt2
   {
     ValueEnforcer.notNull (aXMLBytes, "XMLBytes");
 
-    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes,
-                                                new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
+    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes, new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
     if (aDoc == null)
       throw new IllegalStateException ("Failed to parse payload as XML");
 
@@ -120,5 +124,62 @@ public final class DcngRegRepHelperIt2
       aRegRepPayload = RegRep4Writer.queryResponse ().setFormattedOutput (true).getAsBytes (aRRResp);
     }
     return aRegRepPayload;
+  }
+
+  @Nullable
+  public static Element extractPayload (@Nonnull final IHasByteArray aData)
+  {
+    final QueryRequest aQuery = RegRep4Reader.queryRequest ().read (aData.bytes (), aData.getOffset (), aData.size ());
+    if (aQuery != null)
+      return extractPayload (aQuery);
+
+    LOGGER.error ("The provided bytes could not be interpreted to a supported RegRep object.");
+    return null;
+  }
+
+  @Nullable
+  public static Element extractPayload (@Nonnull final QueryRequest aQueryRequest)
+  {
+    ValueEnforcer.notNull (aQueryRequest, "QueryRequest");
+
+    final QueryType aQuery = aQueryRequest.getQuery ();
+    if (aQuery != null)
+    {
+      if (QUERY_DEFINITION.equals (aQuery.getQueryDefinition ()))
+      {
+        final SlotType aSlot = CollectionHelper.findFirst (aQuery.getSlot (), x -> QUERY_SLOT_NAME.equals (x.getName ()));
+        if (aSlot != null)
+        {
+          final ValueType aSlotValue = aSlot.getSlotValue ();
+          if (aSlotValue instanceof AnyValueType)
+          {
+            final Object aAny = ((AnyValueType) aSlotValue).getAny ();
+            if (aAny instanceof Element)
+            {
+              return (Element) aAny;
+            }
+
+            LOGGER.error ("Provided RegRep Query element contains a slot with name '" +
+                          QUERY_SLOT_NAME +
+                          "' that has an unsupported AnyValue content.");
+          }
+          else
+            LOGGER.error ("Provided RegRep Query element contains a slot with name '" +
+                          QUERY_SLOT_NAME +
+                          "' that has the wrong value type.");
+        }
+        else
+          LOGGER.error ("Provided RegRep Query element does not contain a slot with name '" + QUERY_SLOT_NAME + "'.");
+      }
+      else
+        LOGGER.error ("Provided RegRep Query element uses the wrong Query definition '" +
+                      aQuery.getQueryDefinition () +
+                      ". Was expecting '" +
+                      QUERY_DEFINITION +
+                      "'.");
+    }
+    else
+      LOGGER.error ("Provided RegRep query has no 'Query' element");
+    return null;
   }
 }
