@@ -152,7 +152,7 @@
       <dependency>
         <groupId>eu.de4a</groupId>
         <artifactId>de4a-kafka-client</artifactId>
-        <version>0.2.6</version>
+        <version>0.2.7</version>
       </dependency>
       <dependency>
         <groupId>com.helger</groupId>
