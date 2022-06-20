@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>1.11.4</version>
+    <version>1.11.5</version>
   </parent>
   <groupId>com.helger.dcng</groupId>
   <artifactId>dcng-parent-pom</artifactId>
@@ -108,7 +108,7 @@
       <dependency>
         <groupId>com.helger.peppol</groupId>
         <artifactId>peppol-commons-parent-pom</artifactId>
-        <version>8.7.4</version>
+        <version>8.7.5</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
