@@ -313,6 +313,16 @@ public final class DcngConfig
     }
 
     /**
+     * @return <code>true</code> if SMP clients should trust all TLS
+     *         certificates, <code>false</code> to explicitly enumerate them.
+     * @since 0.2.6
+     */
+    public static boolean isTLSTrustAll ()
+    {
+      return getConfig ().getAsBoolean ("de4a.smp.tls.trustall", false);
+    }
+
+    /**
      * Get a static endpoint URL to use. This method is ONLY available for BRIS
      * and effectively works around the SMP lookup by providing a constant
      * result. This value is only used if it is not empty and if the static

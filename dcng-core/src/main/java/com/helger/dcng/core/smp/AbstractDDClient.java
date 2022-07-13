@@ -17,12 +17,17 @@
 package com.helger.dcng.core.smp;
 
 import java.net.URI;
+import java.security.GeneralSecurityException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.exception.InitializationException;
 import com.helger.commons.url.URLHelper;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
@@ -51,6 +56,8 @@ import com.helger.xsds.bdxr.smp1.SignedServiceMetadataType;
  */
 public abstract class AbstractDDClient
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (AbstractDDClient.class);
+
   protected AbstractDDClient ()
   {}
 
@@ -71,8 +78,28 @@ public abstract class AbstractDDClient
       final URI aSMPURI = DcngConfig.SMP.getStaticSMPUrl ();
       ret = new BDXRClientReadOnly (aSMPURI);
     }
+
     if (DcngConfig.SMP.isUseGlobalHttpSettings ())
+    {
+      if (LOGGER.isDebugEnabled ())
+        LOGGER.debug ("Copying global DCNG HTTP client settings to SMP client");
       ret.httpClientSettings ().setAllFrom (new DcngHttpClientSettings ());
+    }
+
+    if (DcngConfig.SMP.isTLSTrustAll ())
+    {
+      try
+      {
+        ret.httpClientSettings ().setSSLContextTrustAll ();
+        ret.httpClientSettings ().setHostnameVerifierVerifyAll ();
+        LOGGER.warn ("Trusting all TLS configurations for SMP client - not recommended for production");
+      }
+      catch (final GeneralSecurityException ex)
+      {
+        throw new InitializationException ("Failed to set SSL Context or Hostname verifier for SMP client", ex);
+      }
+    }
+
     return ret;
   }
 
