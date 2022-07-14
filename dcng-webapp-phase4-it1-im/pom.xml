@@ -69,7 +69,7 @@
       <groupId>eu.de4a</groupId>
       <artifactId>de4a-iem</artifactId>
       <!-- Don't use dependencyManagement for this -->
-      <version>0.1.11</version>
+      <version>0.1.12</version>
     </dependency>
 
     <!-- Logging -->
