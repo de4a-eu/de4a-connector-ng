@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.commons.exception.InitializationException;
 import com.helger.commons.url.URLHelper;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
@@ -96,7 +95,7 @@ public abstract class AbstractDDClient
       }
       catch (final GeneralSecurityException ex)
       {
-        throw new InitializationException ("Failed to set SSL Context or Hostname verifier for SMP client", ex);
+        throw new IllegalStateException ("Failed to set SSL Context or Hostname verifier for SMP client", ex);
       }
     }
 
