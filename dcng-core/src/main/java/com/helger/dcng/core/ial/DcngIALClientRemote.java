@@ -101,7 +101,7 @@ public final class DcngIALClientRemote implements IIALClient
 
       LOGGER.info ("Queried IAL. Got " + ArrayHelper.getSize (aResult) + " bytes back");
 
-      final ResponseLookupRoutingInformationType ret = IALMarshaller.idkResponseLookupRoutingInformationMarshaller ()
+      final ResponseLookupRoutingInformationType ret = IALMarshaller.responseLookupRoutingInformationMarshaller ()
                                                                     .setValidationEventHandlerFactory (x -> new WrappedCollectingValidationEventHandler (aErrorList).andThen (x))
                                                                     .read (aResult);
       if (ret == null)
