@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.helger.dcng</groupId>
     <artifactId>dcng-parent-pom</artifactId>
-    <version>0.2.9-SNAPSHOT</version>
+    <version>0.2.9</version>
   </parent>
   <artifactId>dcng-phase4</artifactId>
   <packaging>bundle</packaging>
