@@ -20,8 +20,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.annotation.Nonempty;
@@ -42,6 +43,7 @@ import com.helger.dcng.api.rest.DcngRestJAXB;
 import com.helger.dcng.core.http.DcngHttpClientSettings;
 import com.helger.httpclient.HttpClientManager;
 import com.helger.httpclient.response.ResponseHandlerByteArray;
+import com.helger.xml.serialize.write.XMLWriterSettings;
 
 import eu.de4a.kafkaclient.DE4AKafkaClient;
 
@@ -57,7 +59,8 @@ public final class DcngDPTriggerViaHttp
   {}
 
   @Nonnull
-  private static ESuccess _forwardMessage (@Nonnull final DCNGIncomingMessage aMsg, @Nonnull @Nonempty final String sDestURL)
+  private static ESuccess _forwardMessage (@Nonnull final DCNGIncomingMessage aMsg,
+                                           @Nonnull @Nonempty final String sDestURL)
   {
     ValueEnforcer.notNull (aMsg, "Msg");
     ValueEnforcer.notEmpty (sDestURL, "Destination URL");
@@ -74,17 +77,21 @@ public final class DcngDPTriggerViaHttp
     if (aPayload == null)
       throw new IllegalStateException ();
 
-    DE4AKafkaClient.send (EErrorLevel.INFO, () -> "Sending inbound message to '" + sDestURL + "' with " + aPayload.length + " bytes");
+    DE4AKafkaClient.send (EErrorLevel.INFO,
+                          () -> "Sending inbound message to '" + sDestURL + "' with " + aPayload.length + " bytes");
 
     // Main sending, using DCNG http settings
     try (final HttpClientManager aHCM = HttpClientManager.create (new DcngHttpClientSettings ()))
     {
       final HttpPost aPost = new HttpPost (sDestURL);
-      aPost.setEntity (new ByteArrayEntity (aPayload));
+      aPost.setEntity (new ByteArrayEntity (aPayload,
+                                            ContentType.APPLICATION_XML.withCharset (XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)));
       final byte [] aResult = aHCM.execute (aPost, new ResponseHandlerByteArray ());
 
       DE4AKafkaClient.send (EErrorLevel.INFO,
-                            () -> "Sending inbound message was successful. Got " + ArrayHelper.getSize (aResult) + " bytes back");
+                            () -> "Sending inbound message was successful. Got " +
+                                  ArrayHelper.getSize (aResult) +
+                                  " bytes back");
       return ESuccess.SUCCESS;
     }
     catch (final Exception ex)
@@ -142,7 +149,9 @@ public final class DcngDPTriggerViaHttp
     final DCNGIncomingMessage aMsg = new DCNGIncomingMessage ();
     aMsg.setMetadata (_createMetadata (aRequest));
     for (final MEPayload aPayload : aRequest.payloads ())
-      aMsg.addPayload (_createPayload (aPayload.getData ().bytes (), aPayload.getContentID (), aPayload.getMimeType ()));
+      aMsg.addPayload (_createPayload (aPayload.getData ().bytes (),
+                                       aPayload.getContentID (),
+                                       aPayload.getMimeType ()));
     return _forwardMessage (aMsg, sDestURL);
   }
 }

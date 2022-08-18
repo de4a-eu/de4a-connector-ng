@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.client.HttpResponseException;
+import org.apache.hc.client5.http.HttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +101,8 @@ public class ApiExceptionMapper extends AbstractAPIExceptionMapper
     }
 
     if (LOGGER.isDebugEnabled ())
-      LOGGER.debug ("Received unhandled Exception of type " + (aThrowable != null ? aThrowable.getClass ().getName () : "null"));
+      LOGGER.debug ("Received unhandled Exception of type " +
+                    (aThrowable != null ? aThrowable.getClass ().getName () : "null"));
 
     // We don't know that exception
     return EHandled.UNHANDLED;

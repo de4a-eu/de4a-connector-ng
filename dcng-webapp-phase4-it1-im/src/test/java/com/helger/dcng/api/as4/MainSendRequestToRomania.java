@@ -18,12 +18,13 @@ package com.helger.dcng.api.as4;
 
 import java.io.IOException;
 
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.CGlobal;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.io.stream.StreamHelper;
 import com.helger.commons.mime.CMimeType;
@@ -50,8 +51,10 @@ public final class MainSendRequestToRomania
     {
       final DCNGOutgoingMetadata aMetadata = new DCNGOutgoingMetadata ();
       aMetadata.setSenderID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9915:de4atest"));
-      aMetadata.setReceiverID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME, "9991:ro000000006"));
-      aMetadata.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE, "CompanyRegistration"));
+      aMetadata.setReceiverID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PARTICIPANT_SCHEME,
+                                                          "9991:ro000000006"));
+      aMetadata.setDocTypeID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.DOCTYPE_SCHEME_CANONICAL_EVIDENCE,
+                                                         "CompanyRegistration"));
       aMetadata.setProcessID (DcngRestJAXB.createDCNGID (DcngIdentifierFactory.PROCESS_SCHEME, "request"));
       // aMetadata.setPayloadType (DCNGPayloadType.REQUEST);
       aMetadata.setTransportProtocol (EMEProtocol.AS4.getTransportProfileID ());
@@ -67,11 +70,12 @@ public final class MainSendRequestToRomania
 
     LOGGER.info (DcngRestJAXB.outgoingMessage ().getAsString (aOM));
 
-    try (final HttpClientManager aHCM = HttpClientManager.create (new HttpClientSettings ().setSocketTimeoutMS ((int) (30 *
-                                                                                                                       CGlobal.MILLISECONDS_PER_SECOND))))
+    final HttpClientSettings aHCS = new HttpClientSettings ().setResponseTimeout (Timeout.ofSeconds (30));
+    try (final HttpClientManager aHCM = HttpClientManager.create (aHCS))
     {
       final HttpPost aPost = new HttpPost ("http://localhost:9092/api/lookup/send");
-      aPost.setEntity (new ByteArrayEntity (DcngRestJAXB.outgoingMessage ().getAsBytes (aOM)));
+      aPost.setEntity (new ByteArrayEntity (DcngRestJAXB.outgoingMessage ().getAsBytes (aOM),
+                                            ContentType.APPLICATION_XML));
       final IJson aJson = aHCM.execute (aPost, new ResponseHandlerJson ());
       LOGGER.info (new JsonWriter (new JsonWriterSettings ().setIndentEnabled (true)).writeAsString (aJson));
     }

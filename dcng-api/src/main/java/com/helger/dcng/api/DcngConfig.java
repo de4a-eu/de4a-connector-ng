@@ -170,13 +170,13 @@ public final class DcngConfig
       return getConfig ().getAsBoolean ("http.tls.trustall", false);
     }
 
-    public static int getConnectionTimeoutMS ()
+    public static int getConnectTimeoutMS ()
     {
       // -1 = system default
       return getConfig ().getAsInt ("http.connection-timeout", -1);
     }
 
-    public static int getReadTimeoutMS ()
+    public static int getResponseTimeoutMS ()
     {
       // -1 = system default
       return getConfig ().getAsInt ("http.read-timeout", -1);

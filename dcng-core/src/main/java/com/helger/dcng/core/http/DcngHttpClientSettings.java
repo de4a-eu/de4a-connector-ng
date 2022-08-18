@@ -18,7 +18,8 @@ package com.helger.dcng.core.http;
 
 import java.security.GeneralSecurityException;
 
-import org.apache.http.HttpHost;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,20 +65,20 @@ public class DcngHttpClientSettings extends HttpClientSettings
       }
 
     // Set timeouts
-    final int nConnectionTimeoutMS = DcngConfig.HTTP.getConnectionTimeoutMS ();
-    if (nConnectionTimeoutMS >= 0)
+    final int nConnectTimeoutMS = DcngConfig.HTTP.getConnectTimeoutMS ();
+    if (nConnectTimeoutMS >= 0)
     {
-      setConnectionTimeoutMS (nConnectionTimeoutMS);
+      setConnectTimeout (Timeout.ofMilliseconds (nConnectTimeoutMS));
       if (LOGGER.isDebugEnabled ())
-        LOGGER.debug ("Using HTTP connection timeout from configuration for request");
+        LOGGER.debug ("Using HTTP connection timeout from configuration");
     }
 
-    final int nReadTimeoutMS = DcngConfig.HTTP.getReadTimeoutMS ();
-    if (nReadTimeoutMS >= 0)
+    final int nResponseTimeoutMS = DcngConfig.HTTP.getResponseTimeoutMS ();
+    if (nResponseTimeoutMS >= 0)
     {
-      setSocketTimeoutMS (nReadTimeoutMS);
+      setResponseTimeout (Timeout.ofMilliseconds (nResponseTimeoutMS));
       if (LOGGER.isDebugEnabled ())
-        LOGGER.debug ("Using HTTP read timeout from configuration for request");
+        LOGGER.debug ("Using HTTP response timeout from configuration");
     }
   }
 }
