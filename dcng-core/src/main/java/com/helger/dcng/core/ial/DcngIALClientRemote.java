@@ -89,7 +89,8 @@ public final class DcngIALClientRemote implements IIALClient
                                                                                                                        sATUCode
                                                                                                                      : ""));
 
-    LOGGER.info ("Querying IAL via " + sDestURL);
+    if (LOGGER.isInfoEnabled ())
+      LOGGER.info ("Querying IAL via '" + sDestURL + "'");
 
     try (final HttpClientManager aHCM = HttpClientManager.create (new DcngHttpClientSettings ()))
     {
@@ -99,7 +100,11 @@ public final class DcngIALClientRemote implements IIALClient
                                                .getAsHttpHeaderValue ());
       final byte [] aResult = aHCM.execute (aGet, new ResponseHandlerByteArray ());
 
-      LOGGER.info ("Queried IAL. Got " + ArrayHelper.getSize (aResult) + " bytes back");
+      if (LOGGER.isInfoEnabled ())
+        LOGGER.info ("Queried IAL. Got " + ArrayHelper.getSize (aResult) + " bytes back");
+
+      if (aResult == null)
+        return null;
 
       final ResponseLookupRoutingInformationType ret = IALMarshaller.responseLookupRoutingInformationMarshaller ()
                                                                     .setValidationEventHandlerFactory (x -> new WrappedCollectingValidationEventHandler (aErrorList).andThen (x))
