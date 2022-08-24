@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.io.stream.NonBlockingBufferedReader;
-import com.helger.config.Config;
+import com.helger.config.fallback.ConfigWithFallback;
 import com.helger.config.source.res.ConfigurationSourceProperties;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.me.model.MEMessage;
@@ -54,8 +54,8 @@ public class IntegrationTestMain
 {
   static
   {
-    DcngConfig.setConfig (Config.create (new ConfigurationSourceProperties (new ClassPathResource ("toop-connector.elonia.integrationTest.properties"),
-                                                                            StandardCharsets.UTF_8)));
+    DcngConfig.setConfig (new ConfigWithFallback (new ConfigurationSourceProperties (new ClassPathResource ("toop-connector.elonia.integrationTest.properties"),
+                                                                                     StandardCharsets.UTF_8)));
   }
 
   private static final Logger LOG = LoggerFactory.getLogger (IntegrationTestMain.class);
@@ -126,19 +126,22 @@ public class IntegrationTestMain
         break;
     }
 
-    DcngConfig.setConfig (Config.create (new ConfigurationSourceProperties (new ClassPathResource (targetConfiguration),
-                                                                            StandardCharsets.UTF_8)));
+    DcngConfig.setConfig (new ConfigWithFallback (new ConfigurationSourceProperties (new ClassPathResource (targetConfiguration),
+                                                                                     StandardCharsets.UTF_8)));
   }
 
   /**
    * Send a message from one side to the other
    */
-  private static void sendMessage (final DeliveryWatcher deliveryWatcher, final EActingSide actingSide, final String recivingSideURL)
+  private static void sendMessage (final DeliveryWatcher deliveryWatcher,
+                                   final EActingSide actingSide,
+                                   final String recivingSideURL)
   {
     deliveryWatcher.reset ();
 
     // set the address of the receiving gateway to t
-    final IMERoutingInformation gatewayRoutingMetadata = SampleDataProvider.createGatewayRoutingMetadata (actingSide, recivingSideURL);
+    final IMERoutingInformation gatewayRoutingMetadata = SampleDataProvider.createGatewayRoutingMetadata (actingSide,
+                                                                                                          recivingSideURL);
     final MEMessage meMessage = SampleDataProvider.createSampleMessage ();
 
     try

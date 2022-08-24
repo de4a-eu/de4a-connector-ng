@@ -55,6 +55,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>com.helger.commons</groupId>
+        <artifactId>ph-commons-parent-pom</artifactId>
+        <version>${ph-commons.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>com.helger.phase4</groupId>
         <artifactId>phase4-parent-pom</artifactId>
         <version>${phase4.version}</version>
@@ -65,6 +72,10 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>com.helger.commons</groupId>
+      <artifactId>ph-config</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.helger.dcng</groupId>
       <artifactId>dcng-api</artifactId>

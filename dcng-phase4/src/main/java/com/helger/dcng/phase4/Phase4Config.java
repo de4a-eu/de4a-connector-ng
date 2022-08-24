@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.helger.config.IConfig;
+import com.helger.config.fallback.IConfigWithFallback;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.DcngConfig.WebApp;
 import com.helger.phase4.crypto.AS4CryptoFactoryProperties;
@@ -41,7 +41,7 @@ public final class Phase4Config
   {}
 
   @Nonnull
-  private static IConfig _getConfig ()
+  private static IConfigWithFallback _getConfig ()
   {
     return DcngConfig.getConfig ();
   }
@@ -139,7 +139,8 @@ public final class Phase4Config
   @Nonnull
   public static EKeyStoreType getKeyStoreType ()
   {
-    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (_getConfig ().getAsString ("phase4.keystore.type"), EKeyStoreType.JKS);
+    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (_getConfig ().getAsString ("phase4.keystore.type"),
+                                                            EKeyStoreType.JKS);
   }
 
   /**
@@ -188,7 +189,8 @@ public final class Phase4Config
   @Nonnull
   public static EKeyStoreType getTrustStoreType ()
   {
-    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (_getConfig ().getAsString ("phase4.truststore.type"), EKeyStoreType.JKS);
+    return EKeyStoreType.getFromIDCaseInsensitiveOrDefault (_getConfig ().getAsString ("phase4.truststore.type"),
+                                                            EKeyStoreType.JKS);
   }
 
   /**

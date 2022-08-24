@@ -66,6 +66,7 @@
     <jetty.version>9.4.48.v20220622</jetty.version>
     <log4j.version>2.18.0</log4j.version>
     <phase4.version>1.4.0</phase4.version>
+    <ph-commons.version>10.2.0</ph-commons.version>
   </properties>
 
   <dependencyManagement>
@@ -73,7 +74,7 @@
       <dependency>
         <groupId>com.helger.commons</groupId>
         <artifactId>ph-commons-parent-pom</artifactId>
-        <version>10.1.8</version>
+        <version>${ph-commons.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

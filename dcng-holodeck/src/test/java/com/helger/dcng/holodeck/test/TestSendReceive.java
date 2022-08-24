@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.concurrent.ThreadHelper;
 import com.helger.commons.io.resource.ClassPathResource;
 import com.helger.commons.url.URLHelper;
-import com.helger.config.Config;
+import com.helger.config.fallback.ConfigWithFallback;
 import com.helger.config.source.res.ConfigurationSourceProperties;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.dcng.api.error.EDcngErrorCode;
@@ -55,8 +55,8 @@ public class TestSendReceive
 {
   static
   {
-    DcngConfig.setConfig (Config.create (new ConfigurationSourceProperties (new ClassPathResource ("toop-connector.elonia.unitTest.properties"),
-                                                                            StandardCharsets.UTF_8)));
+    DcngConfig.setConfig (new ConfigWithFallback (new ConfigurationSourceProperties (new ClassPathResource ("toop-connector.elonia.unitTest.properties"),
+                                                                                     StandardCharsets.UTF_8)));
   }
 
   // this must be created after the above level setting statement
@@ -88,7 +88,8 @@ public class TestSendReceive
     BackendServletContainer.createServletOn (backendURL.getPort (), backendURL.getPath ());
     GWMocServletContainer.createServletOn (gwURL.getPort (), gwURL.getPath ());
     ScopeAwareTestSetup.setupScopeTests ();
-    gatewayRoutingMetadata = SampleDataProvider.createGatewayRoutingMetadata (EActingSide.DC, MEMHolodeckConfig.getMEMAS4Endpoint ());
+    gatewayRoutingMetadata = SampleDataProvider.createGatewayRoutingMetadata (EActingSide.DC,
+                                                                              MEMHolodeckConfig.getMEMAS4Endpoint ());
     sampleMessage = SampleDataProvider.createSampleMessage ();
     final IMessageHandler handler = meMessage1 -> LOG.info ("hooray! I Got a message");
     MEMDelegate.getInstance ().registerMessageHandler (handler);

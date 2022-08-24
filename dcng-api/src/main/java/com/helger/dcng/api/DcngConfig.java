@@ -34,9 +34,9 @@ import com.helger.commons.debug.GlobalDebug;
 import com.helger.commons.id.factory.GlobalIDFactory;
 import com.helger.commons.string.StringHelper;
 import com.helger.commons.url.URLHelper;
-import com.helger.config.Config;
 import com.helger.config.ConfigFactory;
-import com.helger.config.IConfig;
+import com.helger.config.fallback.ConfigWithFallback;
+import com.helger.config.fallback.IConfigWithFallback;
 import com.helger.config.source.MultiConfigurationValueProvider;
 import com.helger.peppol.sml.ESML;
 import com.helger.peppol.sml.ISMLInfo;
@@ -56,7 +56,7 @@ public final class DcngConfig
   private static final SimpleReadWriteLock RW_LOCK = new SimpleReadWriteLock ();
 
   @GuardedBy ("RW_LOCK")
-  private static IConfig s_aConfig;
+  private static IConfigWithFallback s_aConfig;
 
   static
   {
@@ -70,7 +70,7 @@ public final class DcngConfig
    * @return The configuration file. Never <code>null</code>.
    */
   @Nonnull
-  public static IConfig getConfig ()
+  public static IConfigWithFallback getConfig ()
   {
     return RW_LOCK.readLockedGet ( () -> s_aConfig);
   }
@@ -81,7 +81,7 @@ public final class DcngConfig
    * @param aConfig
    *        The config to be set. May not be <code>null</code>.
    */
-  public static void setConfig (@Nonnull final IConfig aConfig)
+  public static void setConfig (@Nonnull final IConfigWithFallback aConfig)
   {
     ValueEnforcer.notNull (aConfig, "Config");
     RW_LOCK.writeLocked ( () -> s_aConfig = aConfig);
@@ -93,8 +93,7 @@ public final class DcngConfig
   public static void setDefaultConfig ()
   {
     final MultiConfigurationValueProvider aMCSVP = ConfigFactory.createDefaultValueProvider ();
-    final IConfig aConfig = Config.create (aMCSVP);
-    setConfig (aConfig);
+    setConfig (new ConfigWithFallback (aMCSVP));
   }
 
   @Nonnull
@@ -224,14 +223,7 @@ public final class DcngConfig
     @Nullable
     public static String getTrackerUrlTCP ()
     {
-      String ret = getConfig ().getAsString ("de4a.tracker.url.tcp");
-      if (ret == null)
-      {
-        // Legacy name
-        ret = getConfig ().getAsString ("de4a.tracker.url");
-        LOGGER.warn ("Do not use the property 'de4a.tracker.url' anymore. Use 'de4a.tracker.url.tcp' and 'de4a.tracker.url.http' instead.");
-      }
-      return ret;
+      return getConfig ().getAsStringOrFallback ("de4a.tracker.url.tcp", "de4a.tracker.url");
     }
 
     /**
