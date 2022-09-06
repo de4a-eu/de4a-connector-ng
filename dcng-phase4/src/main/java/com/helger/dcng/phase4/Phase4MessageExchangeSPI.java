@@ -179,7 +179,11 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = DcngPMode.createDCNGMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
+      final PMode aPMode = DcngPMode.createDCNGMode ("AnyInitiatorID",
+                                                     "AnyResponderID",
+                                                     "AnyResponderAddress",
+                                                     "DE4A_PMODE",
+                                                     false);
       aPMode.setPayloadService (new PModePayloadService (EAS4CompressionMode.GZIP));
       aPMode.getReceptionAwareness ().setRetry (false);
       aPModeMgr.createOrUpdatePMode (aPMode);
@@ -195,7 +199,8 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     final String sIncomingDumpPath = Phase4Config.getDumpPathIncoming ();
     if (StringHelper.hasText (sIncomingDumpPath))
     {
-      LOGGER.info ("Dumping incoming phase4 AS4 messages to '" + sIncomingDumpPath + "'");
+      if (LOGGER.isInfoEnabled ())
+        LOGGER.info ("Dumping incoming phase4 AS4 messages to '" + sIncomingDumpPath + "'");
       AS4DumpManager.setIncomingDumper (new AS4IncomingDumperFileBased ( (aMessageMetadata,
                                                                           aHttpHeaderMap) -> new File (_getTargetFolder (sIncomingDumpPath),
                                                                                                        AS4IncomingDumperFileBased.IFileProvider.getFilename (aMessageMetadata))));
@@ -205,7 +210,8 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     final String sOutgoingDumpPath = Phase4Config.getDumpPathOutgoing ();
     if (StringHelper.hasText (sOutgoingDumpPath))
     {
-      LOGGER.info ("Dumping outgoing phase4 AS4 messages to '" + sOutgoingDumpPath + "'");
+      if (LOGGER.isInfoEnabled ())
+        LOGGER.info ("Dumping outgoing phase4 AS4 messages to '" + sOutgoingDumpPath + "'");
       AS4DumpManager.setOutgoingDumper (new AS4OutgoingDumperFileBased ( (eMsgMode,
                                                                           sMessageID,
                                                                           nTry) -> new File (_getTargetFolder (sOutgoingDumpPath),
@@ -269,12 +275,14 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     }
     else
     {
-      LOGGER.error ("[phase4] Failed to send message: " + eRet);
+      if (LOGGER.isErrorEnabled ())
+        LOGGER.error ("[phase4] Failed to send message: " + eRet);
       throw new MEOutgoingException (EDcngErrorCode.ME_001, aKeeper.get ());
     }
   }
 
-  public void sendOutgoing (@Nonnull final IMERoutingInformation aRoutingInfo, @Nonnull final MEMessage aMessage) throws MEOutgoingException
+  public void sendOutgoing (@Nonnull final IMERoutingInformation aRoutingInfo,
+                            @Nonnull final MEMessage aMessage) throws MEOutgoingException
   {
     LOGGER.info ("[phase4] sendOutgoing");
     _sendOutgoing (m_aCF, aRoutingInfo, aMessage);
