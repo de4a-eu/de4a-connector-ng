@@ -228,6 +228,9 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
   {
     final X509Certificate aTheirCert = aRoutingInfo.getCertificate ();
 
+    // TODO in phase4 1.4.1 or later - use callback to transfer details out
+    final AS4RawResponseConsumerWriteToFile aRRFH = new AS4RawResponseConsumerWriteToFile ();
+
     final CEFUserMessageBuilder aBuilder = new CEFUserMessageBuilder ().httpClientFactory (new DcngHttpClientSettings ())
                                                                        .cryptoFactory (aCF)
                                                                        .senderParticipantID (aRoutingInfo.getSenderID ())
@@ -243,7 +246,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
                                                                                                                                   .getName ()))
                                                                        .toRole (DcngPMode.PARTY_ROLE)
                                                                        .useOriginalSenderFinalRecipientTypeAttr (false)
-                                                                       .rawResponseConsumer (new AS4RawResponseConsumerWriteToFile ())
+                                                                       .rawResponseConsumer (aRRFH)
                                                                        .endpointDetailProvider (new AS4EndpointDetailProviderConstant (aRoutingInfo.getCertificate (),
                                                                                                                                        aRoutingInfo.getEndpointURL ()));
 
