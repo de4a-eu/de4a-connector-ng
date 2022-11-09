@@ -65,7 +65,7 @@
   <properties>
     <jetty.version>9.4.49.v20220914</jetty.version>
     <log4j.version>2.19.0</log4j.version>
-    <phase4.version>1.4.0</phase4.version>
+    <phase4.version>1.4.1</phase4.version>
     <ph-commons.version>10.2.1</ph-commons.version>
   </properties>
 
@@ -143,7 +143,7 @@
       <dependency>
         <groupId>eu.de4a.ial</groupId>
         <artifactId>ial-parent-pom</artifactId>
-        <version>0.1.8</version>
+        <version>0.1.9</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
