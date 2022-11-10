@@ -179,11 +179,7 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
 
     final IPModeManager aPModeMgr = MetaAS4Manager.getPModeMgr ();
     {
-      final PMode aPMode = DcngPMode.createDCNGMode ("AnyInitiatorID",
-                                                     "AnyResponderID",
-                                                     "AnyResponderAddress",
-                                                     "DE4A_PMODE",
-                                                     false);
+      final PMode aPMode = DcngPMode.createDCNGMode ("AnyInitiatorID", "AnyResponderID", "AnyResponderAddress", "DE4A_PMODE", false);
       aPMode.setPayloadService (new PModePayloadService (EAS4CompressionMode.GZIP));
       aPMode.getReceptionAwareness ().setRetry (false);
       aPModeMgr.createOrUpdatePMode (aPMode);
@@ -284,10 +280,9 @@ public class Phase4MessageExchangeSPI implements IMessageExchangeSPI
     }
   }
 
-  public void sendOutgoing (@Nonnull final IMERoutingInformation aRoutingInfo,
-                            @Nonnull final MEMessage aMessage) throws MEOutgoingException
+  public void sendOutgoing (@Nonnull final IMERoutingInformation aRoutingInfo, @Nonnull final MEMessage aMessage) throws MEOutgoingException
   {
-    LOGGER.info ("[phase4] sendOutgoing");
+    LOGGER.info ("[phase4] sendOutgoing to '" + aRoutingInfo.getEndpointURL () + "'");
     _sendOutgoing (m_aCF, aRoutingInfo, aMessage);
   }
 
