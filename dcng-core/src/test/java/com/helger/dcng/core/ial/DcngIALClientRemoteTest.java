@@ -43,9 +43,9 @@ public final class DcngIALClientRemoteTest
     final DcngIALClientRemote aClient = DcngIALClientRemote.createDefaultInstance ();
     final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration"));
     assertNotNull (ret);
+    LOGGER.info ("Result: " + ret);
     assertFalse (ret.hasErrorEntries ());
     assertTrue (ret.hasResponseItemEntries ());
-    LOGGER.info ("Result: " + ret);
   }
 
   @Test
@@ -55,9 +55,9 @@ public final class DcngIALClientRemoteTest
     final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration"),
                                                                        "AT1");
     assertNotNull (ret);
+    LOGGER.info ("Result: " + ret);
     assertFalse (ret.hasErrorEntries ());
     assertTrue (ret.hasResponseItemEntries ());
-    LOGGER.info ("Result: " + ret);
   }
 
   @Test
@@ -67,8 +67,8 @@ public final class DcngIALClientRemoteTest
     final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration"),
                                                                        "AT122");
     assertNotNull (ret);
+    LOGGER.info ("Result: " + ret);
     assertTrue (ret.hasErrorEntries ());
     assertFalse (ret.hasResponseItemEntries ());
-    LOGGER.info ("Result: " + ret);
   }
 }
