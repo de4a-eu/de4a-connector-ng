@@ -66,7 +66,7 @@
     <jetty.version>9.4.49.v20220914</jetty.version>
     <log4j.version>2.19.0</log4j.version>
     <phase4.version>1.4.1</phase4.version>
-    <ph-commons.version>10.2.1</ph-commons.version>
+    <ph-commons.version>10.2.2</ph-commons.version>
   </properties>
 
   <dependencyManagement>
@@ -102,7 +102,7 @@
       <dependency>
         <groupId>com.helger.schematron</groupId>
         <artifactId>ph-schematron-parent-pom</artifactId>
-        <version>6.3.3</version>
+        <version>6.3.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -130,7 +130,7 @@
       <dependency>
         <groupId>com.helger.phive.rules</groupId>
         <artifactId>phive-rules-parent-pom</artifactId>
-        <version>2.1.16</version>
+        <version>2.1.17</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
