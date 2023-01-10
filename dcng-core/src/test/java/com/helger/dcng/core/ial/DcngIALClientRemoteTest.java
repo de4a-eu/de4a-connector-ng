@@ -41,7 +41,7 @@ public final class DcngIALClientRemoteTest
   public void testBasicNoATU ()
   {
     final DcngIALClientRemote aClient = DcngIALClientRemote.createDefaultInstance ();
-    final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration"));
+    final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration:1.0"));
     assertNotNull (ret);
     LOGGER.info ("Result: " + ret);
     assertFalse (ret.hasErrorEntries ());
@@ -52,7 +52,7 @@ public final class DcngIALClientRemoteTest
   public void testBasicWithATU ()
   {
     final DcngIALClientRemote aClient = DcngIALClientRemote.createDefaultInstance ();
-    final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration"),
+    final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration:1.0"),
                                                                        "AT1");
     assertNotNull (ret);
     LOGGER.info ("Result: " + ret);
@@ -64,7 +64,7 @@ public final class DcngIALClientRemoteTest
   public void testBasicWithATUNotFound ()
   {
     final DcngIALClientRemote aClient = DcngIALClientRemote.createDefaultInstance ();
-    final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration"),
+    final ResponseLookupRoutingInformationType ret = aClient.queryIAL (new CommonsLinkedHashSet <> ("urn:de4a-eu:CanonicalEvidenceType::CompanyRegistration:1.0"),
                                                                        "AT122");
     assertNotNull (ret);
     LOGGER.info ("Result: " + ret);
