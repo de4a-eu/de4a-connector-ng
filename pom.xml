@@ -26,7 +26,7 @@
   </parent>
   <groupId>com.helger.dcng</groupId>
   <artifactId>dcng-parent-pom</artifactId>
-  <version>0.2.13-SNAPSHOT</version>
+  <version>0.2.13</version>
   <packaging>pom</packaging>
   <name>dcng-parent-pom</name>
   <description>Base POM to build the DE4A Connector NG (DCNG) projects</description>
@@ -45,7 +45,7 @@
     <connection>scm:git:git@github.com:de4a-at/de4a-connector-ng.git</connection>
     <developerConnection>scm:git:git@github.com:de4a-at/de4a-connector-ng.git</developerConnection>
     <url>http://github.com/de4a-at/de4a-connector-ng</url>
-    <tag>HEAD</tag>
+    <tag>dcng-parent-pom-0.2.13</tag>
   </scm>
 
   <organization>
