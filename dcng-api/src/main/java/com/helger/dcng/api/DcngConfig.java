@@ -139,6 +139,23 @@ public final class DcngConfig
     private HTTP ()
     {}
 
+    public static boolean isTLSTrustAll ()
+    {
+      return getConfig ().getAsBoolean ("http.tls.trustall", false);
+    }
+
+    public static int getConnectTimeoutMS ()
+    {
+      // -1 = system default
+      return getConfig ().getAsInt ("http.connection-timeout", -1);
+    }
+
+    public static int getResponseTimeoutMS ()
+    {
+      // -1 = system default
+      return getConfig ().getAsInt ("http.read-timeout", -1);
+    }
+
     public static boolean isProxyServerEnabled ()
     {
       return getConfig ().getAsBoolean ("http.proxy.enabled", false);
@@ -164,21 +181,16 @@ public final class DcngConfig
       return getConfig ().getAsString ("http.proxy.non-proxy");
     }
 
-    public static boolean isTLSTrustAll ()
+    @Nullable
+    public static String getProxyUserName ()
     {
-      return getConfig ().getAsBoolean ("http.tls.trustall", false);
+      return getConfig ().getAsString ("http.proxy.username");
     }
 
-    public static int getConnectTimeoutMS ()
+    @Nullable
+    public static String getProxyPassword ()
     {
-      // -1 = system default
-      return getConfig ().getAsInt ("http.connection-timeout", -1);
-    }
-
-    public static int getResponseTimeoutMS ()
-    {
-      // -1 = system default
-      return getConfig ().getAsInt ("http.read-timeout", -1);
+      return getConfig ().getAsString ("http.proxy.password");
     }
   }
 

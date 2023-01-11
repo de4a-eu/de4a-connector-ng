@@ -18,12 +18,15 @@ package com.helger.dcng.core.http;
 
 import java.security.GeneralSecurityException;
 
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.commons.collection.ArrayHelper;
 import com.helger.commons.exception.InitializationException;
+import com.helger.commons.string.StringHelper;
 import com.helger.dcng.api.DcngConfig;
 import com.helger.httpclient.HttpClientSettings;
 
@@ -43,6 +46,15 @@ public class DcngHttpClientSettings extends HttpClientSettings
     if (DcngConfig.HTTP.isProxyServerEnabled ())
     {
       setProxyHost (new HttpHost (DcngConfig.HTTP.getProxyServerAddress (), DcngConfig.HTTP.getProxyServerPort ()));
+
+      final String sUser = DcngConfig.HTTP.getProxyUserName ();
+      final String sPassword = DcngConfig.HTTP.getProxyPassword ();
+      if (StringHelper.hasText (sUser))
+      {
+        setProxyCredentials (new UsernamePasswordCredentials (sUser,
+                                                              sPassword == null ? ArrayHelper.EMPTY_CHAR_ARRAY
+                                                                                : sPassword.toCharArray ()));
+      }
 
       // Non-proxy hosts
       addNonProxyHostsFromPipeString (DcngConfig.HTTP.getProxyServerNonProxyHosts ());
