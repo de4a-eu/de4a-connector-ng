@@ -57,6 +57,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
+@Deprecated
 public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
 {
   public static final String JSON_TAG_SENDER_ID = "senderid";
@@ -77,7 +78,11 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
                                                 @Nonnull final Iterable <DCNGPayload> aPayloads)
   {
     // Start response
-    final LookupAndSendingResult ret = new LookupAndSendingResult (aSenderID, aReceiverID, aDocumentTypeID, aProcessID, sTransportProfile);
+    final LookupAndSendingResult ret = new LookupAndSendingResult (aSenderID,
+                                                                   aReceiverID,
+                                                                   aDocumentTypeID,
+                                                                   aProcessID,
+                                                                   sTransportProfile);
 
     CommonApiInvoker.invoke (ret, () -> {
       boolean bOverallSuccess = false;
@@ -86,7 +91,10 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
       // Query SMP
       {
         // Main query
-        final ServiceMetadataType aSM = DcngApiHelper.querySMPServiceMetadata (aReceiverID, aDocumentTypeID, aProcessID, sTransportProfile);
+        final ServiceMetadataType aSM = DcngApiHelper.querySMPServiceMetadata (aReceiverID,
+                                                                               aDocumentTypeID,
+                                                                               aProcessID,
+                                                                               sTransportProfile);
         if (aSM != null)
         {
           ret.setLookupServiceMetadata (aSM);
@@ -134,7 +142,8 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
         {
           if (nIndex == 0)
           {
-            final byte [] aRegRepPayload = DcngRegRepHelperIt1.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
+            final byte [] aRegRepPayload = DcngRegRepHelperIt1.wrapInRegRep (aPayload.getContentID (),
+                                                                             aPayload.getValue ());
 
             // RegRep should be first
             aMessage.addPayload (MEPayload.builder ()
@@ -145,7 +154,8 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
 
           aMessage.addPayload (MEPayload.builder ()
                                         .mimeType (MimeTypeParser.parseMimeType (aPayload.getMimeType ()))
-                                        .contentID (StringHelper.getNotEmpty (aPayload.getContentID (), MEPayload.createRandomContentID ()))
+                                        .contentID (StringHelper.getNotEmpty (aPayload.getContentID (),
+                                                                              MEPayload.createRandomContentID ()))
                                         .data (aPayload.getValue ()));
           nIndex++;
         }
@@ -168,7 +178,8 @@ public class ApiPostLookupAndSendIt1 extends AbstractDcngApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ()
+                                                         .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 

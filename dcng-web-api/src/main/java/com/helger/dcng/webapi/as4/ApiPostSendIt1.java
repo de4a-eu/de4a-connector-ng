@@ -51,6 +51,7 @@ import eu.de4a.kafkaclient.DE4AKafkaClient;
  *
  * @author Philip Helger
  */
+@Deprecated
 public class ApiPostSendIt1 extends AbstractDcngApiInvoker
 {
   @Override
@@ -60,7 +61,8 @@ public class ApiPostSendIt1 extends AbstractDcngApiInvoker
                                 @Nonnull final IRequestWebScopeWithoutResponse aRequestScope) throws IOException
   {
     // Read the payload as XML
-    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ().read (aRequestScope.getRequest ().getInputStream ());
+    final DCNGOutgoingMessage aOutgoingMsg = DcngRestJAXB.outgoingMessage ()
+                                                         .read (aRequestScope.getRequest ().getInputStream ());
     if (aOutgoingMsg == null)
       throw new ApiParamException ("Failed to interpret the message body as an 'OutgoingMessage'");
 
@@ -88,7 +90,8 @@ public class ApiPostSendIt1 extends AbstractDcngApiInvoker
     {
       if (nIndex == 0)
       {
-        final byte [] aRegRepPayload = DcngRegRepHelperIt1.wrapInRegRep (aPayload.getContentID (), aPayload.getValue ());
+        final byte [] aRegRepPayload = DcngRegRepHelperIt1.wrapInRegRep (aPayload.getContentID (),
+                                                                         aPayload.getValue ());
 
         // RegRep should be first
         aMessage.addPayload (MEPayload.builder ()
@@ -100,7 +103,8 @@ public class ApiPostSendIt1 extends AbstractDcngApiInvoker
 
       aMessage.addPayload (MEPayload.builder ()
                                     .mimeType (MimeTypeParser.safeParseMimeType (aPayload.getMimeType ()))
-                                    .contentID (StringHelper.getNotEmpty (aPayload.getContentID (), MEPayload.createRandomContentID ()))
+                                    .contentID (StringHelper.getNotEmpty (aPayload.getContentID (),
+                                                                          MEPayload.createRandomContentID ()))
                                     .data (aPayload.getValue ()));
       nIndex++;
     }
