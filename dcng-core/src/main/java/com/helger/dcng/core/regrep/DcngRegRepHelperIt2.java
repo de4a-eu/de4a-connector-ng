@@ -56,6 +56,8 @@ import com.helger.xml.serialize.read.DOMReaderSettings;
 @Immutable
 public final class DcngRegRepHelperIt2
 {
+  public static final String SPECIFICATION_ID = "de4a-iem-v2";
+
   private static final String QUERY_DEFINITION = "DE4AQueryIt2";
   private static final String QUERY_SLOT_NAME = "DE4AQuery";
   private static final Logger LOGGER = LoggerFactory.getLogger (DcngRegRepHelperIt2.class);
@@ -70,8 +72,10 @@ public final class DcngRegRepHelperIt2
     ret.setId (UUID.randomUUID ().toString ());
     ret.getResponseOption ().setReturnType ("LeafClassWithRepositoryItem");
     // Value must match value from CIEM
-    ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue ("de4a-iem-v2").build ());
-    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime").setValue (PDTFactory.getCurrentLocalDateTime ()).build ());
+    ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue (SPECIFICATION_ID).build ());
+    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime")
+                                   .setValue (PDTFactory.getCurrentLocalDateTime ())
+                                   .build ());
     {
       final QueryType aQuery = new QueryType ();
       aQuery.setQueryDefinition (QUERY_DEFINITION);
@@ -86,8 +90,10 @@ public final class DcngRegRepHelperIt2
   {
     final QueryResponse ret = RegRepHelper.createEmptyQueryResponse (ERegRepResponseStatus.SUCCESS);
     ret.setRequestId (sRequestID);
-    ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue ("de4a-iem-v2").build ());
-    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime").setValue (PDTFactory.getCurrentLocalDateTime ()).build ());
+    ret.addSlot (new SlotBuilder ().setName ("SpecificationIdentifier").setValue (SPECIFICATION_ID).build ());
+    ret.addSlot (new SlotBuilder ().setName ("IssueDateTime")
+                                   .setValue (PDTFactory.getCurrentLocalDateTime ())
+                                   .build ());
 
     {
       final RegistryObjectListType aROList = new RegistryObjectListType ();
@@ -105,7 +111,8 @@ public final class DcngRegRepHelperIt2
   {
     ValueEnforcer.notNull (aXMLBytes, "XMLBytes");
 
-    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes, new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
+    final Document aDoc = DOMReader.readXMLDOM (aXMLBytes,
+                                                new DOMReaderSettings ().setFeatureValues (EXMLParserFeature.AVOID_XML_ATTACKS));
     if (aDoc == null)
       throw new IllegalStateException ("Failed to parse payload as XML");
 
@@ -147,7 +154,8 @@ public final class DcngRegRepHelperIt2
     {
       if (QUERY_DEFINITION.equals (aQuery.getQueryDefinition ()))
       {
-        final SlotType aSlot = CollectionHelper.findFirst (aQuery.getSlot (), x -> QUERY_SLOT_NAME.equals (x.getName ()));
+        final SlotType aSlot = CollectionHelper.findFirst (aQuery.getSlot (),
+                                                           x -> QUERY_SLOT_NAME.equals (x.getName ()));
         if (aSlot != null)
         {
           final ValueType aSlotValue = aSlot.getSlotValue ();
