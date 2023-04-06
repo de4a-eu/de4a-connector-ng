@@ -64,10 +64,10 @@
   </developers>
   
   <properties>
-    <jetty.version>9.4.50.v20221201</jetty.version>
-    <log4j.version>2.19.0</log4j.version>
-    <phase4.version>1.4.2</phase4.version>
-    <ph-commons.version>10.2.2</ph-commons.version>
+    <jetty.version>9.4.51.v20230217</jetty.version>
+    <log4j.version>2.20.0</log4j.version>
+    <phase4.version>1.4.3</phase4.version>
+    <ph-commons.version>10.2.3</ph-commons.version>
   </properties>
 
   <dependencyManagement>
@@ -110,14 +110,14 @@
       <dependency>
         <groupId>com.helger.peppol</groupId>
         <artifactId>peppol-commons-parent-pom</artifactId>
-        <version>8.8.2</version>
+        <version>8.8.4</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>com.helger.photon</groupId>
         <artifactId>ph-oton-parent-pom</artifactId>
-        <version>8.4.3</version>
+        <version>8.4.5</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -131,7 +131,7 @@
       <dependency>
         <groupId>com.helger.phive.rules</groupId>
         <artifactId>phive-rules-parent-pom</artifactId>
-        <version>2.1.18</version>
+        <version>2.1.19</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -144,7 +144,7 @@
       <dependency>
         <groupId>eu.de4a.ial</groupId>
         <artifactId>ial-parent-pom</artifactId>
-        <version>0.1.9</version>
+        <version>0.1.12</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -154,7 +154,7 @@
       <dependency>
         <groupId>eu.de4a</groupId>
         <artifactId>de4a-kafka-client</artifactId>
-        <version>0.2.13</version>
+        <version>0.2.14</version>
       </dependency>
       <dependency>
         <groupId>com.helger</groupId>
